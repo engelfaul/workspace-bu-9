@@ -58,8 +58,5 @@
 <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_ConsultaPadronCliente" type="4"/>
 <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_ConsultaPadronCliente_MsgSet" type="4"/>
 </workingSet>
-<workingSet editPageId="com.ibm.etools.mft.navigator.BrokerWorkingSet.AppLib" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1510090539775_17" label="[prueba]" name="[prueba]">
-<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/prueba" type="4"/>
-</workingSet>
 <workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1508362099584_10" label="Conjunto de trabajo de ventana" name="Aggregate for window 1508362099584"/>
 </workingSetManager>
