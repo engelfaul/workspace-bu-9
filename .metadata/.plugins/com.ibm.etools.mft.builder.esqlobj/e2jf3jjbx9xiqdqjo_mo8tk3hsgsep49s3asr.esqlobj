@@ -1,0 +1,32 @@
+CREATE FUNCTION setHomologatedDescription ( IN idCanal			CHARACTER,
+											IN idHomologacion	CHARACTER,
+											IN valorEntrada		CHARACTER,
+											IN inputDescrip		CHARACTER,
+											IN refHomologView	REFERENCE
+											 ) RETURNS CHARACTER
+BEGIN		
+	
+	--Se carga en memoria la vista de homologación en caché si aún no está
+	IF CARDINALITY(refHomologView.row[]) = 0 THEN
+		CALL loadHomologView(idCanal, refHomologView);
+	END IF;
+	
+	DECLARE resultDescription	CHARACTER VACIO;
+	
+	DECLARE resultObligatorio	CHARACTER isHomologRequired(idCanal, idHomologacion, refHomologView);
+	DECLARE valorHomologado		CHARACTER getHomolog       (idCanal, idHomologacion, valorEntrada, refHomologView);  		
+	
+	IF (resultObligatorio = OBLIGATORIO AND valorHomologado IS NULL) THEN
+		--Genera una excepción controlada para el escenario Error de Ejecución en el ESB.
+		THROW USER EXCEPTION CATALOG 'BIPv700' MESSAGE 2951 VALUES(VALOR_OBLIGATORIO_NOENCONTRADO);
+	ELSEIF valorHomologado IS NOT NULL THEN
+		--Si exise la homologación solicitada
+		SET resultDescription	= valorHomologado;
+	ELSE			
+		--Enviar la descripción sin homologar cuando -no sea obligatorio- y -no exista la homologación-
+		SET resultDescription	= inputDescrip;
+	END IF;
+		
+	RETURN resultDescription;	
+	
+END;

@@ -1,0 +1,902 @@
+BROKER SCHEMA com.davivienda.utils
+
+
+ /*
+ *	Module name: RestoreEnvironment
+ *	Purpose: Recupera el Environment del flujo por donde pasó la petición
+ *				hacia el backend. El Environment se encuentra en un XML (ReturnedMessage).
+ */
+CREATE COMPUTE MODULE RestoreEnvironment
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- dejar pasar el mensaje de respuesta
+		SET OutputRoot = InputRoot;
+		
+		-- restaurar Environment
+		SET Environment = InputLocalEnvironment.XMLNSC.ReturnedMessage.Variables;	
+		
+		RETURN TRUE;
+	END;
+
+	
+END MODULE;
+
+ /*
+ *	Module name: StoreEnvironment
+ *	Purpose: Almacena en un XML (ReturnedMessage) el Environment 
+ *				del flujo por donde esta pasando el mensaje que viene de cualquier
+ *				canal habilitado.
+ */
+CREATE COMPUTE MODULE StoreEnvironment
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		IF EXISTS(Environment.Variables.CurrentTransConfig.Synchronous[]) AND CAST(Environment.Variables.CurrentTransConfig.Synchronous AS BOOLEAN) = FALSE THEN
+			RETURN FALSE;
+		ELSEIF EXISTS(Environment.Variables.CurrentTransConfig.Synchronous[]) AND CAST(Environment.Variables.CurrentTransConfig.Synchronous AS BOOLEAN) = TRUE THEN
+			CALL CopyMessageHeaders();
+			SET OutputRoot.XMLNSC.ReturnedMessage.Variables = Environment;		
+			RETURN TRUE;
+		ELSE
+			CALL CopyMessageHeaders();
+			SET OutputRoot.XMLNSC.ReturnedMessage.Variables = Environment;		
+			RETURN TRUE;
+		END IF;
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+	
+END MODULE;
+
+
+ /*
+ *	Module name: StoreEnvironmentIntoMessage
+ *	Purpose: Almacena en un XML el Environment 
+ *			del flujo por donde esta pasando el mensaje.
+ */
+CREATE COMPUTE MODULE StoreEnvironmentIntoMessage
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		--Mantener el correlId
+		CALL CopyMessageHeaders();
+		SET OutputRoot.XMLNSC = Environment;		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;	
+END MODULE;
+
+
+/****************************************************************
+ * 	FUNCTION generateCorrelID
+ *	genera una secuencia BLOB para ser utilizada como correlID
+ *  RETURN CorrelId : BLOB de 24 bytes con un CorrelId aleatorio
+****************************************************************/
+CREATE FUNCTION generateCorrelID() 
+	RETURNS BLOB 
+BEGIN
+	
+	DECLARE uuidBlob01 BLOB UUIDASBLOB ;
+
+	DECLARE uuidBlob02 BLOB UUIDASBLOB ;
+	
+	RETURN SUBSTRING(uuidBlob01 || uuidBlob02 FROM 1 FOR 24);
+	
+END;
+
+/****************************************************************************
+ * FUNCTION getLastExceptionDetail
+ * Un procedimiento que obtendrá los detalles de la última excepción de un mensaje
+ * IN InputTree: La lista de excepciones entrante
+ * OUT messageNumber: El último número de mensaje
+ * OUT messageText: La concatenación de los Inserts del último padre del mensaje.
+ * OUT parentName: Nombre del último padre del mensaje
+ * OUT catlgName: Catálogo del último padre del mensaje
+ *****************************************************************************/
+CREATE PROCEDURE getLastExceptionDetail(IN InputTree REFERENCE,OUT messageNumber INTEGER,
+OUT messageText CHARACTER, OUT parentName CHARACTER, OUT catlgName CHARACTER)	
+   BEGIN
+   	DECLARE ptrException REFERENCE TO InputTree.*[1];
+   	-- seguir con el bucle mientras actúan los desplazamientos al hijo de la lista de excepciones 
+		WHILE lastmove(ptrException) DO
+  			-- recorrer el árbol hasta el último hijo
+			MOVE ptrException LASTCHILD;
+		END WHILE;
+		MOVE ptrException PARENT;
+		MOVE ptrException PARENT;
+		
+		SET parentName = FIELDNAME(ptrException);
+		SET messageNumber = ptrException.Number;
+   		SET messageText = '';
+   		SET catlgName = FIELDVALUE(ptrException.Catalog);		
+   		
+   		DECLARE ptrExceptionInserts REFERENCE TO ptrException.Insert[1];
+		
+		DECLARE i INTEGER 1;
+		WHILE lastmove(ptrExceptionInserts) DO
+			-- almacenar los valores actuales para el texto
+				SET messageText = messageText || ' Insert ' || CAST(i AS CHARACTER) || ':' || ptrExceptionInserts.Text || '.';
+			SET i = i+1;
+			-- ahora continuar con el siguiente hermano
+			MOVE ptrExceptionInserts NEXTSIBLING;			
+		END WHILE;
+   END;
+   
+/****************************************************************
+ * 	FUNCTION pushRTQ
+ *	inserta en el routingStack la cola de respuesta del adaptador
+ *	de tecnología
+ *	IN header : esbXML : Header en donde se insertará la cola de respuesta
+ *	IN queue : cola de respuesta para el adaptador de tecnología
+ * 	IN correlId : correlationId del mensaje del que se obtiene la cola de respuesta
+ *	IN messageId : messageId del mensaje del que se obtiene la cola de respuesta
+****************************************************************/
+CREATE PROCEDURE pushRTQ (IN header REFERENCE, IN queue CHARACTER, IN correlId BLOB, IN messageId BLOB)
+BEGIN
+	IF queue IS NOT null THEN
+		IF header.internalRoutingData.routingStack IS null THEN
+			CREATE FIELD header.internalRoutingData.routingStack;
+		END IF;
+		DECLARE cursor REFERENCE TO header.internalRoutingData.routingStack;
+
+		SET cursor.replyToLocation = queue;
+		--SET cursor.replyToAddress = queue;
+		SET cursor.correlationId = correlId;
+		SET cursor.messageId = messageId;
+	END IF;
+END;
+
+/****************************************************************
+ * 	FUNCTION PopRTQ
+ *	obtiene del routingStack la cola de respuesta del adaptador
+ *	de tecnología
+ *	IN header : esbXML : Header en donde se insertará la cola de respuesta
+ *	OUT queue : cola de respuesta para el adaptador de tecnología
+ * 	OUT queueMgr : QM de la cola de respuesta
+****************************************************************/
+CREATE PROCEDURE PopRTQ (IN header REFERENCE, OUT queue CHARACTER, OUT queueMgr CHARACTER)
+BEGIN
+	DECLARE cursor REFERENCE TO header.internalRoutingData.routingStack;
+	
+	SET queue = cursor.replyToLocation;
+	
+END;
+
+/****************************************************************
+ * 	FUNCTION SetDestinationListAssociated
+ *	configura en el LocalEnvironment la cola de respuesta del servicio asociado
+ *	IN header : esbXML : Header en donde se insertará la cola de respuesta
+ *	IN txCode : codigo del servicio asociado
+ *	INOUT lcEnv : referencia al LocalEnvironment
+****************************************************************/
+CREATE PROCEDURE SetDestinationListAssociated (IN header REFERENCE, IN txCode CHARACTER, INOUT lcEnv REFERENCE)
+BEGIN
+	-- referencia al endpoint del requestData
+	DECLARE endpoint REFERENCE TO header.requestData.endpointReference;
+	-- referencia al ID del canal
+	DECLARE systemId CHARACTER FIELDVALUE(header.systemId);
+	-- referencia al arbol de destino de MQ
+	CREATE FIELD lcEnv.Destination.MQ.DestinationData;
+	DECLARE lcEnvMq REFERENCE TO lcEnv.Destination.MQ.DestinationData[1];
+	
+	-- obtener los datos de la cola del servicio
+	DECLARE responseQueue ROW THE(SELECT asvc.associatedRoutingData.responseQueueEndpoint
+								FROM endpoint.associatedService[] as asvc
+									WHERE asvc.associatedServiceId = txCode AND asvc.associatedSystemId = systemId);
+	
+	-- pasar la lista de destino
+	SET lcEnvMq.queueName = responseQueue.responseQueueEndpoint.queueName;
+			
+END;
+
+/****************************************************************
+ * 	FUNCTION SetDestinationListHd
+ *	configura en el LocalEnvironment la cola de respuesta del servicio
+ *	IN header : esbXML : Header en donde se insertará la cola de respuesta
+ *	INOUT lcEnv : referencia al LocalEnvironment
+****************************************************************/
+CREATE PROCEDURE SetDestinationListHd (IN header REFERENCE, INOUT lcEnv REFERENCE)
+BEGIN
+	-- referencia al endpoint del requestData
+	DECLARE endpoint REFERENCE TO header.requestData.endpointReference;
+	-- referencia al arbol de destino de MQ
+	CREATE FIELD lcEnv.Destination.MQ.DestinationData;
+	DECLARE lcEnvMq REFERENCE TO lcEnv.Destination.MQ.DestinationData[1];
+	
+	-- pasar la lista de destino
+	SET lcEnvMq.queueName = endpoint.routingData.responseQueueEndpoint.queueName;		
+		
+END;
+
+/****************************************************************
+ * 	FUNCTION SetDestinationListHdrRes
+ *	configura en el LocalEnvironment la cola de respuesta del servicio
+ *	IN header : esbXML : Header en donde se insertará la cola de respuesta
+ *	INOUT lcEnv : referencia al LocalEnvironment
+****************************************************************/
+CREATE PROCEDURE SetDestinationListHdRes (IN header REFERENCE, INOUT lcEnv REFERENCE)
+BEGIN
+	-- referencia al endpoint del requestData
+	DECLARE endpoint REFERENCE TO header.requestData.endpointReference;
+	-- referencia al arbol de destino de MQ
+	CREATE FIELD lcEnv.Destination.MQ.DestinationData;
+	DECLARE lcEnvMq REFERENCE TO lcEnv.Destination.MQ.DestinationData[1];
+	
+	-- pasar la lista de destino
+	SET lcEnvMq.queueName = endpoint.principalsrv.routingData.outputQueueEndpoint.outputQueue;		
+	DECLARE lcEnvMq1 CHARACTER '';
+END;
+
+
+/****************************************************************
+ * 	FUNCTION SetDestinationListHdrResEnviroment
+ *	configura en el LocalEnvironment la cola de respuesta del servicio
+ *	IN refEnvVar : esbXML : Enviroment en donde se tomara la cola de replytoQueue 
+ *	IN refHeaderIn : esbXML : referncia del Header en donde se tomara
+ *							 la cola de replytoQueue en caso d eno existir en el enviroment
+ *	INOUT lcEnv : referencia al LocalEnvironment
+****************************************************************/
+CREATE PROCEDURE SetDestinationListHdrResEnviroment (IN refEnvVar REFERENCE, INOUT lcEnv REFERENCE, IN refHeaderIn REFERENCE)
+BEGIN
+	-- referencia al endpoint del requestData
+	-- referencia al arbol de destino de MQ
+	CREATE FIELD lcEnv.Destination.MQ.DestinationData;
+	DECLARE lcEnvMq REFERENCE TO lcEnv.Destination.MQ.DestinationData[1];
+	
+	-- pasar la lista de destino
+	SET lcEnvMq.queueName = refEnvVar.firstReplyToQueue;
+	IF refEnvVar.firstReplyToQueue IS NULL THEN
+		SET lcEnvMq.queueName = refHeaderIn.internalRoutingData.replyToQueue.queueName;
+	END IF;
+			
+	DECLARE lcEnvMq1 CHARACTER '';
+END;
+
+/****************************************************************
+ * 	FUNCTION SetDestinationList
+ *	configura en el LocalEnvironment la cola de respuesta del servicio
+ *	IN queueName : nombre de la cola
+ * 	IN qMgrName ; nombre del Queue Manager
+ *	INOUT lcEnv : referencia al LocalEnvironment
+****************************************************************/
+CREATE PROCEDURE SetDestinationList (IN queueName CHARACTER, IN qMgrName CHARACTER, INOUT lcEnv REFERENCE )
+BEGIN
+	-- referencia al arbol de destino de MQ
+	CREATE FIELD lcEnv.Destination.MQ.DestinationData;
+	DECLARE lcEnvMq REFERENCE TO lcEnv.Destination.MQ.DestinationData[1];
+	
+	-- pasar la lista de destino
+	SET lcEnvMq.queueName = queueName;		
+		
+END;
+
+
+/****************************************************************
+ * 	FUNCTION GetFieldXPath
+ *	obtiene el valor de un campo 
+ *	IN TreeReference : arbol en donde se va a buscar el campo
+ * 	IN FieldPath : ruta del campo en el arbol de referencia.
+ *				los campos deben estar separados por punto
+ *	RETURN : valor del campo. vacio si el campo no se encuentra 
+ *			en el árbol
+****************************************************************/
+CREATE FUNCTION GetFieldXPath(IN TreeReference REFERENCE, IN FieldPath CHARACTER ) RETURNS CHARACTER
+BEGIN
+		-- carácter de separador del FieldPath
+		DECLARE separator 	CHARACTER '.';
+		-- constante de la posición inicial
+		DECLARE ini 		INTEGER 1;
+		-- posición del separador inicial
+		DECLARE posi 		INTEGER position(separator IN FieldPath);
+		
+		WHILE posi <> 0 DO
+			
+			DECLARE token 	CHARACTER SUBSTRING(FieldPath from ini for posi - ini);
+			MOVE TreeReference FIRSTCHILD TYPE Name NAMESPACE * NAME token;
+			SET FieldPath = SUBSTRING(FieldPath FROM posi+1);
+			SET posi = POSITION(separator IN FieldPath);
+		
+		END WHILE;
+		
+		RETURN FIELDVALUE(TreeReference.*:{FieldPath});		
+		
+END;
+
+/****************************************************************
+ * 	FUNCTION GetTreeXPath
+ *	obtiene el valor de un campo 
+ *	IN TreeReference : arbol en donde se va a retornar el árbol
+ * 	IN FieldPath : ruta del campo en el arbol de referencia.
+ *				los campos deben estar separados por punto
+****************************************************************/
+CREATE FUNCTION GetTreeXPath(INOUT TreeReference REFERENCE, IN FieldPath CHARACTER )
+BEGIN
+		-- carácter de separador del FieldPath
+		DECLARE separator CHARACTER '.';
+		-- representación del árbol de referencia
+		DECLARE cursor    	ROW TreeReference;
+		-- constante de la posición inicial
+		DECLARE ini 		INTEGER 1;
+		-- posición del separador inicial
+		DECLARE posi INTEGER position(separator IN FieldPath);
+		
+		WHILE posi <> 0 DO
+			
+			DECLARE token 	CHARACTER SUBSTRING(FieldPath from ini for posi - ini);
+			MOVE TreeReference FIRSTCHILD TYPE Name NAMESPACE * NAME token;
+			SET FieldPath = SUBSTRING(FieldPath FROM posi+1);
+			SET posi = POSITION(separator IN FieldPath);
+		
+		END WHILE;
+		
+		MOVE TreeReference FIRSTCHILD TYPE Name NAMESPACE * NAME FieldPath;
+		
+END;
+
+/****************************************************************
+ * 	PROCEDURE getFileXorMsgValue
+ *	obtiene el valor de un campo de un archivo de configuración
+ *  o del mensaje que ingresa dependiendo si está habilitado
+ *  leerlo del archivo.
+ *	IN refInclude  : referencia al elemento que inidica se habilita
+ * 	IN refElemName : referencia al elemento que tiene el valor
+ *                   en el archivo de configuración.
+ *  IN sourcePayload: referencia al arbol del mensaje que ingresa
+ *	IN xPath	   : ruta que indica el campo requerido en el
+ *					 arbol con al carga útil. Cada campo debe estar
+ *                   separado por punto.
+ *  INOUT refTarget : referencia al campo de destino.
+****************************************************************/
+CREATE PROCEDURE getFileXorMsgValue(IN refInclude 	 REFERENCE,
+									IN refElemName 	 REFERENCE,
+									IN sourcePayload REFERENCE,
+									IN xPath 		 CHARACTER,
+									INOUT refTarget	 REFERENCE ) 
+	BEGIN
+		DECLARE result	CHARACTER;
+	--Si existe y está habilitado tomar ServiceId del archivo de configuración
+		IF LASTMOVE(refInclude) AND CAST(refInclude AS BOOLEAN) THEN
+			--Si está habilitado en el archivo de configuración tomarlo de allí.
+			SET result = refElemName;
+		ELSE
+			--De lo contrario obtenerlo del mensaje ingresado al ESB
+			CALL GetFieldXPathNS(sourcePayload, xPath)  INTO result;
+		END IF;
+		
+		IF result IS NULL THEN
+			SET refTarget VALUE	= NULL;
+		ELSE
+			SET refTarget = result;
+		END IF;
+	END;
+	
+
+/****************************************************************
+ * 	FUNCTION GetFieldXPathNS
+ *	obtiene el valor de un campo incluso si tiene namespace
+ *	IN TreeReference : arbol en donde se va a buscar el campo
+ * 	IN FieldPath : ruta del campo en el arbol de referencia.
+ *				los campos deben estar separados por punto
+ *	RETURN : valor del campo. vacio si el campo no se encuentra 
+ *			en el árbol
+****************************************************************/
+CREATE FUNCTION GetFieldXPathNS(IN TreeReference REFERENCE, IN FieldPath CHARACTER ) RETURNS CHARACTER
+BEGIN
+		-- carácter de separador del FieldPath
+		DECLARE separator 	CHARACTER '.';
+		-- constante de la posición inicial
+		DECLARE ini 		INTEGER 1;
+		-- posición del separador inicial
+		DECLARE posi 		INTEGER position(separator IN FieldPath);
+		
+		WHILE posi <> 0 DO
+			
+			DECLARE token 	CHARACTER SUBSTRING(FieldPath from ini for posi - ini);
+			
+			IF token = '*' THEN
+				SET token	= FIELDNAME(TreeReference.*[<]);				
+			END IF;			
+			
+			MOVE TreeReference FIRSTCHILD TYPE Name NAMESPACE * NAME token;
+			SET FieldPath = SUBSTRING(FieldPath FROM posi+1);
+			SET posi = POSITION(separator IN FieldPath);
+		
+		END WHILE;
+		
+		RETURN FIELDVALUE(TreeReference.*:{FieldPath});		
+		
+END;
+
+/****************************************************************
+* FUNCTION getConsecutive: 
+* Obtiene el consecutivo de la metadata			
+*	
+* Parameters:
+* IN:  		REFERENCE refInMsg 		 - Referencia al header del mensaje de entrada.
+* RETURN: 	Integer Consecutivo 	 - Entero con el consecutivo
+*
+*****************************************************************/
+
+CREATE FUNCTION getConsecutive (IN refHeaderIn REFERENCE ) RETURNS INTEGER
+ BEGIN
+ 	
+ 	 DECLARE consecutivo		INTEGER -1;		
+		-- Traer el consecutivo generado
+	 DECLARE refProp REFERENCE TO refHeaderIn.messageContext;
+		
+	   DECLARE prop ROW
+		THE (SELECT prop
+				FROM refProp.property[] AS prop
+					WHERE prop.key = 'Consecutivo_gen');	
+		
+	SET consecutivo		= prop.value;
+	
+	IF consecutivo = -1  THEN
+			Throw Exception CATALOG 'ESB' MESSAGE 3112 VALUES ('Error en Consecutivo');
+	END IF;
+ 	
+ 	RETURN consecutivo;
+ 	
+ END;
+
+
+/****************************************************************
+ * 	FUNCTION RemoveAllNamespace
+ *	Remueve todos los namespaces que pueda tener un mensaje
+ *	IN InputTree : Árbol que corresponde al mensaje de entrada
+ *	RETURN : Mensaje de entrada sin namespace
+****************************************************************/
+
+CREATE FUNCTION RemoveAllNamespace (IN refInputTree REFERENCE)
+BEGIN
+    DECLARE cursor		 	 BOOLEAN FALSE;
+    DECLARE flag 			 INTEGER 1;
+    
+	SET refInputTree.(XMLNSC.Element)*[1].*:schemaLocation = NULL;
+	DECLARE I1 INTEGER CARDINALITY(refInputTree.(XMLNSC.Element)*[1].(XMLNSC.NamespaceDecl)*[]);
+	DECLARE I2 INTEGER 1;
+	WHILE I2 <= I1 DO
+		SET refInputTree.(XMLNSC.Element)*[1].(XMLNSC.NamespaceDecl)*[1] = NULL;
+		SET I2 = I2 + 1;
+	END WHILE;	 
+	
+	-- Se recorre todo el árbol, para evaluar donde hay namespaces y removerlos
+	WHILE flag <> 0 DO 
+		IF cursor = FALSE THEN 
+			MOVE refInputTree FIRSTCHILD;
+		 	IF LASTMOVE(refInputTree) THEN
+				SET flag = flag + 1;
+				SET refInputTree.(XMLNSC.NamespaceDecl)* = NULL;
+				SET refInputTree NAMESPACE = '';
+		 	ELSE
+		 		MOVE refInputTree NEXTSIBLING;
+			 	IF LASTMOVE(refInputTree) THEN
+					SET cursor = FALSE;
+					SET refInputTree.(XMLNSC.NamespaceDecl)* = NULL;
+					SET refInputTree NAMESPACE = '';
+			 	ELSE
+					SET flag = flag - 1;
+					MOVE refInputTree PARENT;		 		
+					SET cursor = TRUE;
+				END IF;
+		 	END IF;	
+		ELSE
+			MOVE refInputTree NEXTSIBLING;
+		 	IF LASTMOVE(refInputTree) THEN
+				SET cursor = FALSE;
+				SET refInputTree.(XMLNSC.NamespaceDecl)* = NULL;
+				SET refInputTree NAMESPACE = '';
+		 	ELSE
+				SET flag = flag - 1;
+				MOVE refInputTree PARENT;		 		
+				SET cursor = TRUE;
+			END IF;
+		END IF;
+	END WHILE;
+END;
+
+/****************************************************************
+ * 	FUNCTION RemoveNamespace
+ *	Remueve los namespaces que pueda tener un mensaje
+ *	IN InputTree : Árbol que corresponde al mensaje de entrada
+ * 	IN oldNamespace : Namespace del mensaje 
+ *	RETURN : Mensaje de entrada sin namespace
+****************************************************************/
+
+CREATE FUNCTION RemoveNamespace (In refInputTree REFERENCE, In oldNamespace CHARACTER)
+BEGIN
+
+    DECLARE namespaceReplace CHARACTER '';
+    DECLARE cursor		 	 BOOLEAN FALSE;
+    DECLARE flag 			 INTEGER 1;
+    
+	SET refInputTree.(XMLNSC.Element)*[1].*:schemaLocation = NULL;
+	DECLARE I1 INTEGER CARDINALITY(refInputTree.(XMLNSC.Element)*[1].(XMLNSC.NamespaceDecl)*[]);
+	DECLARE I2 INTEGER 1;
+	WHILE I2 <= I1 DO
+		SET refInputTree.(XMLNSC.Element)*[1].(XMLNSC.NamespaceDecl)*[1] = NULL;
+		SET I2 = I2 + 1;
+	END WHILE;	 
+	
+	-- Se recorre todo el árbol, para evaluar donde hay namespaces y removerlos
+	
+	WHILE flag <> 0 DO 
+		IF cursor = FALSE THEN 
+			MOVE refInputTree FirstChild;
+		 	IF LASTMOVE(refInputTree) = TRUE THEN
+				SET flag = flag + 1;
+				CALL ReplaceNamespace(refInputTree, oldNamespace, namespaceReplace);
+		 	ELSE
+		 		MOVE refInputTree NEXTSIBLING;
+			 	IF LASTMOVE(refInputTree) = TRUE THEN
+					CALL ReplaceNamespace(refInputTree, oldNamespace, namespaceReplace);
+					SET cursor = FALSE;
+			 	ELSE
+					SET flag = flag - 1;
+					Move refInputTree PARENT;		 		
+					SET cursor = TRUE;
+				END IF;
+		 	END IF;	
+		ELSE
+			MOVE refInputTree NEXTSIBLING;
+		 	IF LASTMOVE(refInputTree) = TRUE THEN
+				CALL ReplaceNamespace(refInputTree, oldNamespace, namespaceReplace);
+				SET cursor = FALSE;
+		 	ELSE
+				SET flag = flag - 1;
+				Move refInputTree PARENT;		 		
+				SET cursor = TRUE;
+			END IF;
+		END IF;
+	END WHILE;
+END;
+
+/****************************************************************
+ * 	FUNCTION ReplaceNamespace
+ *	Reemplaza el namespace original por uno dado en el 
+ *  parámetro de entrada
+ *	IN refInputField : Campo que se va a tratar
+ * 	IN oldNamespace : Namespace del mensaje original
+ *  IN newNamespace : Namespace nuevo
+ *	RETURN : Campo sin namespace
+****************************************************************/
+
+CREATE FUNCTION ReplaceNamespace(IN refInputField REFERENCE, In oldNamespace CHARACTER, In newNamespace CHARACTER)
+BEGIN
+	SET refInputField.(XMLNSC.NamespaceDecl)* = NULL;
+	-- Se verifica si el campo tiene el namespace de entrada y
+	-- se reemplaza por el que se le indique
+	IF ( FIELDTYPE(refInputField) IS NOT NULL ) THEN
+		
+		IF FIELDNAMESPACE(refInputField) IN (oldNamespace) THEN 
+			SET refInputField NAMESPACE = newNamespace;
+			SET refInputField.(XMLNSC.NamespaceDecl)* = NULL;			
+		END IF;
+		
+    END IF;
+    
+END;
+	
+	
+/****************************************************************
+ * 	FUNCTION RemoveEspCharacter
+ *	Remueve los equivalentes de los caracteres especiales
+ *	IN InputTree : Árbol que corresponde al mensaje de entrada
+ * 	RETURN : Mensaje de entrada con caracteres esp en XML
+****************************************************************/
+
+CREATE FUNCTION RemoveEspCharacter (IN refInputTree REFERENCE, INOUT refOutputTree REFERENCE)
+BEGIN
+
+	DECLARE blobmsgin BLOB ASBITSTREAM(refInputTree);
+	
+	DECLARE apos   CHARACTER;
+
+	SET apos 	=  CAST(CAST(x'27' AS BLOB CCSID 1208 ENCODING 546) AS CHAR CCSID 1208 ENCODING 546);
+	
+	SET blobmsgin = REPLACE (blobmsgin,CAST('&amp;gt;' AS BLOB CCSID 819),CAST('>' AS BLOB CCSID 819));
+	SET blobmsgin = REPLACE (blobmsgin,CAST('&amp;apos;' AS BLOB CCSID 819),CAST(apos AS BLOB CCSID 819));
+	SET blobmsgin = REPLACE (blobmsgin,CAST('&amp;quot;' AS BLOB CCSID 819),CAST('"' AS BLOB CCSID 819));
+	
+	CREATE LASTCHILD OF refOutputTree DOMAIN ('XMLNSC') PARSE (blobmsgin);
+	
+	SET refInputTree VALUE = NULL;
+	
+END;
+	
+/****************************************************************
+ * 	FUNCTION evalChild
+ *	Si el campo no tiene hijos lo envia a hacer el reemplazo
+ *  de los caracteres especiales
+ *	IN InputTree : Campo a evaluar
+ * 	RETURN : Referencia con el campo actualizado
+****************************************************************/	
+	
+CREATE FUNCTION noChild (IN refInputField REFERENCE)
+BEGIN
+	
+	DECLARE  value  CHARACTER;	
+	SET value = FIELDVALUE (refInputField);		 	
+	IF (value <> '') THEN
+	   CALL ReplaceCharacter(refInputField);
+	END IF;			            
+END;	
+	
+/****************************************************************
+ * 	FUNCTION ReplaceCharacter
+ *	Si el campo contiene un equivalente a caracter especial
+ *  lo reemplaza
+ *  IN InputTree : Campo a evaluar
+ * 	RETURN : Referencia con el campo actualizado
+****************************************************************/	
+CREATE FUNCTION ReplaceCharacter(IN refInputField REFERENCE)
+BEGIN
+	
+	DECLARE apos   CHARACTER;
+
+	SET apos 	=  CAST(CAST(x'27' AS BLOB CCSID 1208 ENCODING 546) AS CHAR CCSID 1208 ENCODING 546);
+
+	SET refInputField = REPLACE (refInputField,'&gt;','>');
+	SET refInputField = REPLACE (refInputField,'&apos;',apos);
+	SET refInputField = REPLACE (refInputField,'&quot;','"');
+
+END;
+
+/****************************************************************
+ * 	FUNCTION SetDestinationListBasicAssociated
+ *	configura en el LocalEnvironment la cola de respuesta del servicio asociado
+ *	IN header : esbXML : Header en donde se insertará la cola de respuesta
+ *	IN serviceId : codigo del servicio asociado
+ *	INOUT lcEnv : referencia al LocalEnvironment
+****************************************************************/
+CREATE PROCEDURE SetDestinationListBasicAssociated (IN header REFERENCE, IN serviceId CHARACTER, INOUT lcEnv REFERENCE)
+BEGIN
+	-- referencia al endpoint del requestData
+	DECLARE endpoint REFERENCE TO header.requestData.endpointReference;
+	-- referencia al ID del canal
+	DECLARE systemId CHARACTER FIELDVALUE(header.systemId);
+	-- referencia al arbol de destino de MQ
+	CREATE FIELD lcEnv.Destination.MQ.DestinationData;
+	DECLARE lcEnvMq REFERENCE TO lcEnv.Destination.MQ.DestinationData[1];
+	
+	IF endpoint.serviceId = serviceId THEN
+		-- pasar la lista de destino
+		SET lcEnvMq.queueName = endpoint.routingData.responseQueueEndpoint.queueName;
+	ELSE
+		-- obtener los datos de la cola del servicio
+		DECLARE responseQueue ROW THE(SELECT asvc.associatedRoutingData.responseQueueEndpoint
+								FROM endpoint.associatedService[] as asvc
+									WHERE asvc.associatedServiceId = serviceId AND asvc.associatedSystemId = systemId);
+	
+	-- pasar la lista de destino
+	SET lcEnvMq.queueName = responseQueue.responseQueueEndpoint.queueName;
+	
+	END IF;		
+END;
+
+/****************************************************************
+* FUNCTION pushFacadeResp: 
+* Graba la cola de respuesta de la fachada en la metadata			
+*	
+* Parameters:
+* INOUT:  REFERENCE refHeader		- Referencia al header de la metadata del ESB.
+* IN:     CHARACTER queueFacadeResp - Nombre de cola de respuesta de la fachada.
+*
+*****************************************************************/
+
+CREATE PROCEDURE pushFacadeResp (INOUT refHeader REFERENCE, IN queueFacadeResp CHARACTER)
+ BEGIN
+ 	--grabar consecutivo en el messageContext del mensaje
+ 	CREATE FIELD refHeader.messageContext;		
+	DECLARE refProp REFERENCE TO refHeader.messageContext;
+	CREATE LASTCHILD OF refProp NAME 'property'; 
+	MOVE refProp LASTCHILD;		
+	
+	SET refProp.key   = 'FacadeResp';
+	SET refProp.value = queueFacadeResp; 	
+ END;
+
+
+/****************************************************************
+* FUNCTION pullFacadeResp: 
+* Obtiene de la metadata la cola de respuesta de la fachada.			
+*	
+* Parameters:
+* INOUT:   REFERENCE refHeader		 - Referencia al header de la metadata del ESB.
+* RETURNS: CHARACTER queueFacadeResp - Nombre de cola de respuesta de la fachada.
+*
+*****************************************************************/
+
+CREATE FUNCTION pullFacadeResp (INOUT refHeader REFERENCE) RETURNS CHARACTER
+ BEGIN
+ 	DECLARE queueFacadeResp		CHARACTER '';		
+		-- Traer la cola de respuesta de la fachada
+	 DECLARE refProp REFERENCE TO refHeader.messageContext;
+		
+	   DECLARE prop ROW
+		THE (SELECT prop
+				FROM refProp.property[] AS prop
+					WHERE prop.key = 'FacadeResp');	
+		
+	SET queueFacadeResp		= prop.value;
+ 	
+ 	RETURN queueFacadeResp; 	
+ END;
+
+
+/****************************************************************
+* FUNCTION AddPropertyContext: 
+* Adiciona una propiedad en el messageContext de la metadata			
+*	
+* Parameters:
+* INOUT:  REFERENCE refHeader		- Referencia al header de la metadata del ESB.
+* IN:     CHARACTER key             - Nombre de la propiedad.
+* IN:     CHARACTER value           - Valor de la propiedad.
+*
+*****************************************************************/
+CREATE PROCEDURE AddPropertyContext (INOUT refHeader REFERENCE, IN key CHARACTER, IN value CHARACTER)
+ BEGIN
+ 	--Crear nueva propiedad
+ 	CREATE FIELD refHeader.messageContext;		
+	DECLARE refProp REFERENCE TO refHeader.messageContext;
+	CREATE LASTCHILD OF refProp NAME 'property'; 
+	MOVE refProp LASTCHILD;
+			
+	--Establecer nombre y valor
+	SET refProp.key   = key;
+	SET refProp.value = value; 	
+ END;
+
+
+/****************************************************************
+* FUNCTION getPropertyContext: 
+* Obtiene de la metadata una propiedad del messageContext.
+*	
+* Parameters:
+* IN: REFERENCE refHeader	- Referencia al header de la metadata del ESB.
+* IN: CHARACTER key 		- Nombre de la propiedad en el messageContext.
+* RETURNS: CHARACTER		- Valor de la propiedad.
+*
+*****************************************************************/
+CREATE FUNCTION getPropertyContext (IN refHeader REFERENCE, IN key CHARACTER) RETURNS CHARACTER
+ BEGIN	
+	DECLARE refProp REFERENCE TO refHeader.messageContext;
+	
+	--Obtener la propiedad deseada
+	DECLARE prop ROW THE (	SELECT prop
+							FROM refProp.property[] AS prop
+							WHERE prop.key = key);
+							
+	--Obtener el valor de la propiedad deseada	
+	DECLARE value CHARACTER FIELDVALUE(prop.value);
+ 	
+ 	RETURN value; 
+ END;
+ 
+ /*
+ *	Module name: ResetCache
+ *	Purpose: Inicializa las variables de caché 
+ *				 
+ */
+CREATE COMPUTE MODULE ResetCache
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN		
+		SET HOMOLOGATION_TABLE	= NULL;		
+		RETURN FALSE;
+	END;		
+END MODULE;
+
+/****************************************************************
+* FUNCTION Split: 
+* Obtiene los datos de una URI
+*	
+* Parameters:
+* S: CHARACTER refIn	- Referencia al mensaje de la carga util
+* Env: REFERENCE 		- Aqui se definira el arbol Array de salida
+* Delim: CHARACTER		- Operador delimitante para separar una URI por niveles
+*
+*****************************************************************/
+CREATE PROCEDURE Split (IN S CHARACTER, IN Env REFERENCE, IN Delim CHARACTER) 
+BEGIN 
+   DECLARE P INTEGER; 
+   DECLARE Idx INTEGER 1;
+   SET Env.Split = NULL;     
+   REPEAT 
+      SET P = POSITION(Delim IN S); 
+      IF P = 0 THEN 
+         SET Env.Split.Array[Idx] = S; 
+      ELSE 
+         SET Env.Split.Array[Idx] = LEFT(S, P - 1); 
+         SET S = SUBSTRING(S FROM P + LENGTH(Delim)); 
+         SET Idx = Idx + 1; 
+      END IF; 
+   UNTIL P = 0        
+   END REPEAT; 
+END;
+
+
+/****************************************************************
+ * 	FUNCTION SetDestinationListAssociateServiceResponse
+ *	configura en el LocalEnvironment la cola de respuesta del servicio
+ *	IN refEnvVar : esbXML : Enviroment en donde se tomara la cola de replytoQueue 
+ *	IN refHeaderIn : esbXML : referncia del Header en donde se tomara
+ *							 la cola de replytoQueue en caso d eno existir en el enviroment
+ *	INOUT lcEnv : referencia al LocalEnvironment
+****************************************************************/
+CREATE PROCEDURE SetDestinationListAssociateServiceResponse (IN refHeader REFERENCE, INOUT lcEnv REFERENCE)
+BEGIN
+	-- referencia al endpoint del requestData
+	-- referencia al arbol de destino de MQ
+	CREATE FIELD lcEnv.Destination.MQ.DestinationData;
+	DECLARE lcEnvMq REFERENCE TO lcEnv.Destination.MQ.DestinationData[1];
+
+	-- referencia al ID del canal
+	DECLARE systemId CHARACTER FIELDVALUE(refHeader.systemId);
+	
+	DECLARE serviceId CHARACTER FIELDVALUE(refHeader.requestData.endpointReference.serviceId);
+
+	DECLARE endpoint REFERENCE TO refHeader.requestData.endpointReference;
+	
+	-- incialmente se asigna la cola principal de respuesta
+	SET lcEnvMq.queueName = endpoint.routingData.responseQueueEndpoint.queueName;
+
+	-- obtener el nombre del servicio compuesto
+	DECLARE service ROW THE(SELECT asvc.associatedServiceName
+								    FROM endpoint.associatedService[] as asvc
+									  WHERE asvc.associatedServiceId = serviceId AND asvc.associatedSystemId = systemId);
+
+	-- Si es diferente de vacio es por que es un servicio compuesto
+	IF COALESCE(service.associatedServiceName, VACIO) <> VACIO THEN
+		-- Se obtiene la cola de repuesta al servicio compuesto
+		DECLARE responseQueue ROW THE(SELECT asvc.associatedRoutingData.responseQueueEndpoint
+									FROM endpoint.associatedService[] as asvc
+										WHERE asvc.associatedServiceId = serviceId AND asvc.associatedSystemId = systemId);
+		
+		-- pasar la lista de destino
+		SET lcEnvMq.queueName = responseQueue.responseQueueEndpoint.queueName;
+	END IF;
+END;
+
+
+/****************************************************************
+ * 	FUNCTION SetDestinationListAssociatedReq
+ *	configura en el LocalEnvironment la cola de respuesta del servicio asociado
+ *	IN header : esbXML : Header en donde se insertará la cola de respuesta
+ *	IN txCode : codigo del servicio asociado
+ *	INOUT lcEnv : referencia al LocalEnvironment
+****************************************************************/
+CREATE PROCEDURE SetDestinationListAssociatedReq (IN header REFERENCE, IN txCode CHARACTER, INOUT lcEnv REFERENCE)
+BEGIN
+	-- referencia al endpoint del requestData
+	DECLARE endpoint REFERENCE TO header.requestData.endpointReference;
+	-- referencia al ID del canal
+	DECLARE systemId CHARACTER FIELDVALUE(header.systemId);
+	-- referencia al arbol de destino de MQ
+	CREATE FIELD lcEnv.Destination.MQ.DestinationData;
+	DECLARE lcEnvMq REFERENCE TO lcEnv.Destination.MQ.DestinationData[1];
+	
+	-- obtener los datos de la cola del servicio
+	DECLARE requestQueue ROW THE(SELECT asvc.associatedRoutingData.requestQueueEndpoint
+								FROM endpoint.associatedService[] as asvc
+									WHERE asvc.associatedServiceId = txCode AND asvc.associatedSystemId = systemId);
+	
+	-- pasar la lista de destino
+	SET lcEnvMq.queueName = requestQueue.requestQueueEndpoint.queueName;
+			
+END;

@@ -1,0 +1,44 @@
+CREATE FUNCTION ProcessErrorTransformationDataHeaderJSON(IN refInMsg REFERENCE, IN refEnvVar  REFERENCE, INOUT msgOut REFERENCE, IN messageNumber INTEGER, IN messageText CHARACTER)
+BEGIN
+	IF CONTAINS(SYSTEM_CODES_ERROR_VALIDACION, CAST (messageNumber AS CHARACTER)) THEN
+		--Mapeo en caso de error de validación mensaje de entrada		
+		SET msgOut.HTTPHeaders.HTTPHeader[1].(XMLNSC.Attribute)name  = 'X-Original-HTTP-Status-Line';
+		SET msgOut.HTTPHeaders.HTTPHeader[1] = DESCRIPCIONDEVALIDACIONREST;
+		SET msgOut.HTTPHeaders.HTTPHeader[2].(XMLNSC.Attribute)name  = 'X-Original-HTTP-Status-Code';
+		SET msgOut.HTTPHeaders.HTTPHeader[2] = CODIGODEVALIDACIONREST;
+		SET msgOut.HTTPHeaders.HTTPHeader[3].(XMLNSC.Attribute)name  = 'Content-Type';
+		SET msgOut.HTTPHeaders.HTTPHeader[3] = RESTAPLICATION;
+		
+		--Error de timeout
+	ELSEIF CONTAINS(SYSTEM_CODES_ERROR_TIME, refInMsg.Body.MessageException.Code) THEN
+		SET msgOut.Code							= CODIGODEERRORTIMEOUT;
+		SET msgOut.Description					= DESCRIPCIONDEERRORTIMEOUT;
+		
+		--Error de conexion
+	ELSEIF CONTAINS(SYSTEM_CODES_ERROR_CONEXION, refInMsg.Body.MessageException.Code) THEN
+		SET msgOut.Code							= CODIGODEERRORCONEXION;
+		SET msgOut.Description					= DESCRIPCIONDEERRORCONEXION;
+		
+		--Error de homologacion
+	ELSEIF CONTAINS(SYSTEM_CODES_ERROR_HOMOLOGACION, CAST (messageNumber AS CHARACTER)) THEN  
+		SET msgOut.Code							= CODIGODEERRORHOMOLOGACION;
+		SET msgOut.Description					= DESCRIPCIONDEERRORHOMOLOGACION;
+		SET msgOut.subCode.codigo				= messageNumber;
+		SET msgOut.subCode.descripcion			= messageText;
+		
+		--Error retornado por el Backend
+	ELSEIF CONTAINS(SYSTEM_CODES_ERROR_BACKEND, CAST (messageNumber AS CHARACTER)) THEN  
+		SET msgOut.Code							= CODIGODEERRORBACKEND;
+		SET msgOut.Description					= DESCRIPCIONDEERRORBACKEND; 
+		SET msgOut.subCode.codigo				= messageNumber;
+		SET msgOut.subCode.descripcion			= messageText;
+	
+	ELSE
+		--Mapeo en caso de error de DataSource
+		SET msgOut.Code						   = CODIGODEERRORBUS;
+		SET msgOut.Description					= DESCRIPCIONDEERRORBUS;
+		SET msgOut.subCode.codigo				= messageNumber;
+		SET msgOut.subCode.descripcion			= messageText;
+	END IF;		
+			
+END;

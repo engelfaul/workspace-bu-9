@@ -1,0 +1,315 @@
+BROKER SCHEMA com.davivienda.mediospago.servicios
+
+/*
+ *
+ * File name: Functions.esql
+ *
+ * Purpose:   Esquema ESQL que define los modulos utilizados para las funciones
+ *				generales utilizadas en el ESB.
+ *
+ * Authors:  IBM AMS TAC Colombia
+ *                 
+ * Date      18 de Julio de 2016
+ * Version:  1.0
+ * 
+ *
+ */ 
+
+
+ /*
+ 	* Function: Creación de mensaje de error técnico del componente de servicio
+ 	*           de Establecimientos flujo de entrada.
+ 	*	
+ 	* Parameters:
+ 	* IN:  REFERENCE refInMsg 		  - Referencia al árbol de entrada de error técnico.
+ 	* IN:  REFERENCE refEnvVar		  - Referencia al árbol de Environment.
+ 	* INOUT: REFERENCE msgOut 		  - Referencia al árbol del mensaje de salida.
+ 	* IN:  REFERENCE messageNumber	  - Referencia al código de error del árbol de Excepción.
+ */
+
+CREATE FUNCTION ProcessErrorTransformationDataHeader(IN refInMsg REFERENCE, IN refEnvVar  REFERENCE, INOUT msgOut REFERENCE, IN messageNumber INTEGER)
+BEGIN
+	
+	DECLARE TAG_NAME_DATAHEADER CONSTANT CHARACTER 'DataHeader';
+	
+	--Mover referencia en el árbol de entrada hasta el contenedor DataHeader
+	DECLARE refDataHeaderIn	REFERENCE TO refInMsg;
+	MOVE refDataHeaderIn LASTCHILD;
+	MOVE refDataHeaderIn LASTCHILD;
+
+	--Validar si referencia ya apunta al DataHeader en caso de flujo response.
+	IF FIELDNAME(refDataHeaderIn) <> TAG_NAME_DATAHEADER THEN
+	--Si el mensaje proviene del flujo de request, mueva la referencia un ítem más adentro del árbol
+		MOVE refDataHeaderIn FIRSTCHILD NAMESPACE * NAME TAG_NAME_DATAHEADER;	
+	END IF;	
+	
+	
+	--Creación y referencia al mensaje de Salida
+	CREATE FIELD msgOut.DataHeader;		
+	DECLARE refDataHeaderOut	REFERENCE TO msgOut.DataHeader;
+		
+	--Declaración de variables
+	DECLARE nombreOperacion					CHARACTER COALESCE( FIELDVALUE(refDataHeaderIn.nombreOperacion),
+																FIELDVALUE(refEnvVar.nombreOperacion) );
+																
+	DECLARE total							CHARACTER COALESCE( FIELDVALUE(refDataHeaderIn.total),
+																FIELDVALUE(refEnvVar.total) );
+	
+	DECLARE idTransaccion					CHARACTER COALESCE( FIELDVALUE(refDataHeaderIn.idTransaccion),
+																FIELDVALUE(refEnvVar.idTransaccion) );	
+	
+	--Mapeo campos de salida
+	SET refDataHeaderOut.nombreOperacion	= COALESCE(nombreOperacion,VACIO);
+	SET refDataHeaderOut.total				= COALESCE(total,ZERO);
+	SET refDataHeaderOut.caracterAceptacion	= ACEPTA_MAL;
+	SET refDataHeaderOut.ultimoMensaje		= UNO;	
+	SET refDataHeaderOut.idTransaccion		= COALESCE(idTransaccion,VACIO);
+	
+	IF CONTAINS(CODIGOS_ERROR_VALIDACION, CAST (messageNumber AS CHARACTER)) THEN
+		--Mapeo en caso de error de validación mensaje de entrada
+		SET refDataHeaderOut.codMsgRespuesta	= COD_DATA_IN_ERROR;
+		SET refDataHeaderOut.msgRespuesta		= DESC_DATA_IN_ERROR;
+	ELSEIF(messageNumber = 2951)THEN
+		--Mapeo en caso de error de homologación
+		SET refDataHeaderOut.codMsgRespuesta	= COD_HOMOLOG_ERROR;
+		SET refDataHeaderOut.msgRespuesta		= DESC_HOMOLOG_ERROR; 
+	ELSE
+		--Mapeo en caso de error de ejecución del ESB
+		SET refDataHeaderOut.codMsgRespuesta	= DefaultCode;
+		SET refDataHeaderOut.msgRespuesta		= DefaultDescription;
+	END IF;		
+			
+END;
+ 
+ 
+/*
+ 	* Function: Transforma un mensaje de error técnico del Adaptador de Integración TCP
+ 	*			en un mensaje de error estandar para el canal consumidor (WS)
+ 	*           que maneje el contenedor DataHeader.
+ 	*	
+ 	* Parameters:
+ 	* IN:  REFERENCE refInMsg 		 - Referencia al arbol de entrada de error técnico.
+ 	* IN:  REFERENCE refEnvVar 		 - Referencia al arbol de Environment.Variables.
+ 	* INOUT: REFERENCE msgOut 		 - Referencia al arbol del mensaje de salida.
+ 	*
+ */
+ 
+CREATE FUNCTION TechnicalErrorTransformationDataHeader(IN refInMsg REFERENCE, IN refEnvVar REFERENCE, INOUT msgOut REFERENCE)
+BEGIN	
+	--Referencias a mensaje de entrada
+	DECLARE refMessageException REFERENCE TO refInMsg.MessageException;
+	
+	-- Creación y referencia al mensaje de Salida
+	CREATE FIELD msgOut.DataHeader;		
+	DECLARE refDataHeaderOut	REFERENCE TO msgOut.DataHeader;		
+	
+	--Declaración de variables
+	DECLARE code			CHARACTER FIELDVALUE(refMessageException.Code); 
+	
+	--Mapeo campos de salida
+	SET refDataHeaderOut.nombreOperacion	= refEnvVar.nombreOperacion;
+	SET refDataHeaderOut.total				= refEnvVar.total;
+	SET refDataHeaderOut.caracterAceptacion	= ACEPTA_MAL;
+	SET refDataHeaderOut.ultimoMensaje		= UNO;
+	SET refDataHeaderOut.idTransaccion		= refEnvVar.idTransaccion;
+					
+	CASE 
+	--Mapeos en caso de escenario error de conexión
+		WHEN code = CONNECTION_ERROR_CODE_ADP_INT THEN
+			SET refDataHeaderOut.codMsgRespuesta	= COD_CONNECTION_ERROR;
+			SET refDataHeaderOut.msgRespuesta		= DESC_CONNECTION_ERROR;		
+	--Mapeos en caso de escenario error de Timeout
+		WHEN code = TIMEOUT_ERROR_CODE_ADP_INT THEN
+			SET refDataHeaderOut.codMsgRespuesta	= COD_TIMEOUT_ERROR;
+			SET refDataHeaderOut.msgRespuesta		= DESC_TIMEOUT_ERROR;					
+	--Mapeos en caso de un error no esperado
+		ELSE
+			SET refDataHeaderOut.codMsgRespuesta	= DefaultCode;
+			SET refDataHeaderOut.msgRespuesta		= DefaultDescription;		
+	END CASE;
+END;
+
+/*
+ 	* Function: Realiza la función LPad de Oracle. Rellena 0's a 
+ 	*			la izq y lo formatea a un límite de size caracteres
+ 	*	
+ 	* Parameters:
+ 	* IN: CHARACTER entVar - Dato de entrada a convertir.
+ 	* IN: INTEGER size - Tamaño mínimo y límite del dato de retorno
+ 	* RETURNS: CHARACTER Devuelve el resultado formateado.
+ 	*
+ */
+CREATE FUNCTION doLPadChar(IN entVar CHARACTER, IN size INTEGER, IN paddingChar CHARACTER) RETURNS CHARACTER
+BEGIN
+	DECLARE paddingFormat CHARACTER;
+	DECLARE resultTemp CHARACTER;
+	DECLARE result CHARACTER;
+	DECLARE paddingLong INTEGER;
+	SET paddingFormat = REPLICATE(paddingChar, size);
+	
+	SET resultTemp = REPLACE(entVar,',','');
+	SET resultTemp = REPLACE(entVar,'.','');
+
+	SET paddingLong = LENGTH(resultTemp);
+	SET paddingLong = size - paddingLong;
+	
+	IF paddingLong > 0 THEN
+		SET result = SUBSTRING(paddingFormat FROM 1 FOR paddingLong) || resultTemp;
+	ELSE 
+		SET result = RIGHT(resultTemp,size);
+	END IF;
+	
+	RETURN result;
+END;	
+/*
+* Function: Realiza la función RPad de Oracle. Rellena paddingChar a 
+*			la der y lo formatea a un límite de size caracteres
+*	
+* Parameters:
+* IN: CHARACTER entVar - Dato de entrada a convertir.
+* IN: INTEGER size - Tamaño mínimo y límite del dato de retorno
+* IN: CHARACTER paddingChar - Carácter de Relleno
+* RETURNS: CHARACTER Devuelve el resultado formateado.
+*
+ */
+ CREATE FUNCTION doRPadChar(IN entVar CHARACTER, IN size INTEGER, IN paddingChar CHARACTER) RETURNS CHARACTER
+BEGIN
+	DECLARE paddingFormat CHARACTER;
+	DECLARE resultTemp CHARACTER;
+	DECLARE result CHARACTER;
+	DECLARE paddingLong INTEGER;
+	SET paddingFormat = REPLICATE(paddingChar, size);
+	
+	SET resultTemp = REPLACE(entVar,',','');
+	SET resultTemp = REPLACE(entVar,'.','');
+
+	SET paddingLong = LENGTH(resultTemp);
+	SET paddingLong = size - paddingLong;
+	
+	IF paddingLong > 0 THEN
+		SET result = resultTemp || SUBSTRING(paddingFormat FROM 1 FOR paddingLong);
+	ELSE 
+		SET result = LEFT(resultTemp,size);
+	END IF;
+	RETURN result;
+END;
+
+/*
+* Function: Convierte un número con decimales a trama 
+  Implementa la función LPAD de Oracle. 
+  Rellena paddingChar a la izq y lo formatea a un límite de size caracteres
+*	
+* Parameters:
+* IN: CHARACTER entVar - Dato de entrada a convertir.
+* IN: INTEGER size - Tamaño mínimo y límite del dato de retorno
+* IN: CHARACTER paddingChar - Carácter de Relleno
+* RETURNS: CHARACTER Devuelve el resultado formateado.
+*
+ */
+ CREATE FUNCTION doDecimalLPadChar(IN val DECIMAL, IN size_integer_part INTEGER, size_decimal_part INTEGER) RETURNS CHARACTER
+BEGIN
+	DECLARE result CHARACTER;
+	DECLARE cadena_valor CHARACTER '';
+	DECLARE dotPos integer;
+	DECLARE cadena_decimal CHARACTER '';
+	
+	SET cadena_valor = CAST(val AS CHARACTER);
+	SET cadena_valor = REPLACE(cadena_valor, ',', '.');
+	SET dotPos = POSITION ('.' IN cadena_valor);	
+
+	IF dotPos = 0 THEN
+		SET result = doLPadChar(cadena_valor, size_integer_part, ZERO) || doLPadChar(cadena_decimal, size_decimal_part, ZERO);
+	ELSE	
+		SET cadena_decimal = SUBSTRING(cadena_valor FROM dotPos+1 FOR LENGTH(cadena_valor));
+		SET cadena_decimal = doRPadChar(cadena_decimal, size_decimal_part, ZERO);
+		SET cadena_valor = SUBSTRING(cadena_valor FROM 1 FOR dotPos-1);
+		
+		SET result = doLPadChar(cadena_valor, size_integer_part, ZERO) || cadena_decimal;
+	END IF;	
+	
+	RETURN result;
+END;
+
+
+/*
+* Function: Convierte una cadena (trama) de valor con decimales a número decimal
+  *	
+* Parameters:
+* IN: CHARACTER cad - Dato de entrada a convertir.
+* IN: INTEGER size_decimal_part - Tamaño mínimo y límite del dato de retorno
+* RETURNS: CHARACTER Devuelve el resultado formateado.
+*
+ */
+ CREATE FUNCTION doCharToDecimal(IN cad CHARACTER, size_decimal_part INTEGER) RETURNS DECIMAL
+BEGIN
+	DECLARE result DECIMAL;
+	DECLARE integer_part CHARACTER '';
+	DECLARE decimal_part CHARACTER '';
+	DECLARE cad_valor CHARACTER '';
+	
+	SET cad = COALESCE(TRIM(cad), '0');
+	
+	IF (LENGTH(cad) - size_decimal_part) > 0 THEN
+		SET integer_part = SUBSTRING(cad FROM 1 FOR (LENGTH(cad) - size_decimal_part));
+		SET decimal_part = SUBSTRING(cad FROM (LENGTH(cad) - size_decimal_part) FOR size_decimal_part);
+	ELSE
+		SET integer_part = cad;
+		SET decimal_part = doRPadChar(decimal_part, size_decimal_part, ZERO);
+	END IF;
+		
+	SET cad_valor = integer_part;
+	
+	IF size_decimal_part > 0 THEN
+		SET cad_valor = cad_valor || '.' || decimal_part;
+	END IF;
+
+	SET result = CAST(cad_valor AS DECIMAL);
+	
+	RETURN result;
+END;
+
+  /*
+* Function: Devuelve el codigo del servicio homologado para un nombre de servicio. 
+*	
+* Parameters:
+* IN: CHARACTER serviceName - Nombre del servicio.
+* IN: INTEGER consecutive - Consecutivo del servicio asociado
+* IN: REFERENCE serviceTable - Consecutivo del servicio asociado
+* RETURNS: CHARACTER Devuelve el codigo de servicio homologado.
+*
+*/
+CREATE FUNCTION  HomoloServiceCod(IN serviceName CHARACTER, IN consecutive INTEGER, IN serviceTable REFERENCE)
+	RETURNS CHARACTER
+	BEGIN
+  	
+    DECLARE result ROW;
+    DECLARE nomTransaccion CHARACTER;
+    DECLARE homolog CHARACTER;
+	
+    SET result.datos  = THE(			   
+		   SELECT T.COD_SERVICIO
+		   FROM serviceTable.row[] AS T 
+		   WHERE T.NOMBRE_SERVICIO=serviceName
+		   AND T.CONSECUTIVO_TX=consecutive
+		   );
+		   
+	SET nomTransaccion = result.datos.COD_SERVICIO;
+    SET homolog = COALESCE(FIELDVALUE(result.datos.COD_SERVICIO),'0');
+	
+    RETURN homolog;
+END; 	
+
+
+/****************************************************************
+ * 	FUNCTION loadServicesTable
+ *	carga en memoria la tabla de homologación de servicios
+ *  INOUT servicesTableRow : Variable ROW en donde se cargará la tabla
+****************************************************************/
+CREATE FUNCTION loadServicesTable (INOUT servicesTableRow REFERENCE)
+
+BEGIN
+	
+	SET servicesTableRow.row[]  = SELECT T.COD_SERVICIO, T.CONSECUTIVO_TX, T.TX_SERVICIO, T.NOMBRE_SERVICIO   
+           							FROM Database.TABLA_HOMOLOGACION_SERVICIOS AS T;
+
+END;

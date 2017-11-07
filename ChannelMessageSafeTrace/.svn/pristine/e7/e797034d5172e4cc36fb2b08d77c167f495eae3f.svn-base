@@ -1,0 +1,175 @@
+BROKER SCHEMA com.davivienda.commons.trace
+PATH com.davivienda.utils;
+
+/*
+*
+* File name: ChannelMessageSafeLog.esql
+*
+* Purpose: Esquema ESQL que define la funcionalidad para todos los componentes comúnes
+* 			de registro de logs Contra el Backend.
+*
+* Authors: Ricardo Mestre
+*
+* Date 04 Marzo de 2013
+* Version: 1.0
+*
+*/
+
+-- Declaración de variable externa para Habilitar el trace
+DECLARE enabled  EXTERNAL CONSTANT BOOLEAN FALSE;
+-- Declaración variable externa para Identificar la Instancia
+DECLARE faultActor  EXTERNAL CONSTANT CHARACTER 'faultActor';
+-- Declaración variable externa para Identificar el nombre del archivo de traza
+DECLARE ChannelTraceFileName  EXTERNAL CONSTANT CHARACTER '';
+-- Declaración de Namespace ESB
+DECLARE esbXML NAMESPACE 'http://davivienda.com/envelope/esbxml';
+---------------------------------------------------------
+-- MODULE ChannelMessageSafeLog
+-- Módulo que se utiliza para generar el mensaje del log
+-- características UDP: 
+-- - enabled
+----------------------------------------------------------
+
+
+
+CREATE COMPUTE MODULE ChannelMessageSafeTrace_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		IF ((ChannelTraceFileName <> '') AND (enabled)) THEN
+			-- Copiar cabeceras del mensaje
+			CALL CopyMessageHeaders();
+			-- Mover variables al entorno
+			SET Environment.Variables.enabled = enabled;
+			-- Referencia el mensaje BLOB en caso de que exista
+			DECLARE messageBlobReference REFERENCE TO InputRoot.BLOB.BLOB;
+			-- Describe si existe un mensaje BLOB
+			DECLARE isBlobMessage BOOLEAN LASTMOVE (messageBlobReference);
+			-- Referencia el mensaje XMLNSC en caso de que exista
+			DECLARE messageXmlReference REFERENCE TO InputRoot.XMLNSC;
+			-- Crea la variable del OutputRoot donde se guardará la firma
+			CREATE FIELD OutputRoot.XMLNSC.LogHandlerMsgSet;
+			-- Guarda el Timestamp local de la firma
+			SET OutputRoot.XMLNSC.LogHandlerMsgSet.timestamp = CURRENT_TIMESTAMP;
+			-- Selecciona si el mensaje es o no un BLOB, para definir como tratarlo
+			
+			/**20160414 Se adiciona en el mensaje em messageId
+			Precondicion: debe cargar el campo Environment.Variables.MsgRequest.Header.messageId**/
+			
+			SET OutputRoot.XMLNSC.LogHandlerMsgSet.messageId = 
+				Environment.Variables.MsgRequest.Header.messageId;
+			IF (isBlobMessage) THEN 
+				-- Convertir el BLOB en CLOB
+				SET OutputRoot.XMLNSC.LogHandlerMsgSet.message = messageBlobReference;
+			ELSE
+				--Convertir XML (que llegó en InputRoot.XMLNSC) a BLOB
+				CREATE FIELD Environment.Variables.DataTmp.dataBlob;
+				CREATE FIELD Environment.Variables.Parametros.DATA_TRANS;
+				DECLARE sourceCursor     REFERENCE TO InputRoot.XMLNSC;
+				DECLARE resultBlobCursor REFERENCE TO Environment.Variables.DataTmp.dataBlob;
+				DECLARE targetClobCursor REFERENCE TO Environment.Variables.Parametros.DATA_TRANS;
+				DECLARE message CHARACTER;
+						
+				MOVE sourceCursor LASTCHILD;						
+										
+				DECLARE messageTreeOnBlob BLOB ASBITSTREAM(sourceCursor OPTIONS FolderBitStream);
+		
+				IF messageTreeOnBlob IS NOT NULL THEN
+					-- Crear un campo con el arbol XML convertido a BLOB
+					CREATE LASTCHILD OF resultBlobCursor
+					Type XML.BitStream
+					NAME 'messageTreeOnBlob'
+					VALUE messageTreeOnBlob;			
+					-- Asignar el BLOB
+					CREATE LASTCHILD OF targetClobCursor NAME 'XML_DATA' VALUE messageTreeOnBlob;
+				END IF;
+				DELETE FIELD resultBlobCursor;
+				DELETE FIELD Environment.Variables.DataTmp;
+				
+				--Asignar el BLOB al campo data del mensaje de auditoria
+				SET OutputRoot.XMLNSC.LogHandlerMsgSet.message	= FIELDVALUE(targetClobCursor.XML_DATA[<]);
+			END IF;
+			DECLARE logName CHARACTER LOWER(REPLACE(ChannelTraceFileName,' ','')) || '.txt';
+			SET OutputRoot.XMLNSC.LogHandlerMsgSet.filename = logName;
+			RETURN TRUE;
+		END IF;
+		RETURN FALSE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;
+
+---------------------------------------------------------
+-- MODULE BuildErrorMessage
+-- Módulo que se utiliza para generar el mensaje de error  
+-- características UDP: 
+-- - enabled
+----------------------------------------------------------
+
+CREATE COMPUTE MODULE BuildErrorLogMessage_TraceFlow
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		-- mantener las cabeceras
+		CALL CopyMessageHeaders();
+		
+		--Crear envoltura esbXml
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML;
+		DECLARE msgOut REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML;
+		
+		--Crear contenedor Header de salida
+		CREATE FIELD msgOut.Header;
+		
+		--Declarar referencias a campos de salida
+		DECLARE headerOut REFERENCE TO msgOut.Header;
+		
+		--Declaración de los parámetros de entrada para la función de manejo del ExceptionList
+		DECLARE messageText 	CHARACTER '';
+		DECLARE parentName 		CHARACTER '';
+		DECLARE catlgName 		CHARACTER '';
+		DECLARE messageNumber 	INTEGER 0;
+					 
+		--Llamado a la función de detalles de excepción
+   	    CALL getLastExceptionDetail(InputExceptionList, messageNumber, messageText, parentName, catlgName);
+   	    
+   	    --Reportar una excepción en la metaData de salida para del manejo de Excepciones
+		SET headerOut.responseData.status.statusCode = 'SystemException';
+   	    
+   	    --Crear contenedor y referencia al systemException	
+		CREATE FIELD 				  headerOut.responseData.status.systemException;
+		DECLARE sysExcep REFERENCE TO headerOut.responseData.status.systemException;
+		
+		--Grabar detalles de la excepcion en la metadata
+   	    SET sysExcep.faultcode   = '9000'; 
+		SET sysExcep.faultstring = 'Error al generar el mensaje de log';
+		SET sysExcep.faultactor  = faultActor;
+		SET sysExcep.detail		 = InputExceptionList;
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;

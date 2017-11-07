@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ComIbmCompute.msgnode="ComIbmCompute.msgnode" xmlns:ComIbmFlowOrder.msgnode="ComIbmFlowOrder.msgnode" xmlns:ComIbmMQOutput.msgnode="ComIbmMQOutput.msgnode" xmlns:ComIbmTryCatch.msgnode="ComIbmTryCatch.msgnode" xmlns:com_ibm_ams_framework_commons_ErrorFlow.subflow="com/ibm/ams/framework/commons/ErrorFlow.subflow" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow" xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="com/davivienda/commons/trace/ChannelMessageSafeTrace.subflow"
+    nsPrefix="com_davivienda_commons_trace_ChannelMessageSafeTrace.subflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.enabled" name="enabled" defaultValueLiteral="true">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.faultActor" name="faultActor" defaultValueLiteral="ADP.TRACE.FLOW">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.ChannelTraceFileName" name="ChannelTraceFileName">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <translation xmi:type="utility:TranslatableString" key="ChannelMessageSafeTrace" bundleName="com/davivienda/commons/trace/ChannelMessageSafeTrace" pluginId="ChannelMessageSafeTrace"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/ChannelMessageSafeTrace/icons/full/obj16/ChannelMessageSafeTrace.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/ChannelMessageSafeTrace/icons/full/obj30/ChannelMessageSafeTrace.gif"/>
+    <composition>
+      <nodes xmi:type="eflow:FCMSink" xmi:id="OutTerminal.Output" location="376,218">
+        <translation xmi:type="utility:TranslatableString" key="OutTerminal.Output" bundleName="com/davivienda/commons/trace/ChannelMessageSafeTrace" pluginId="ChannelMessageSafeTrace"/>
+      </nodes>
+      <nodes xmi:type="ComIbmFlowOrder.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="226,210">
+        <translation xmi:type="utility:ConstantString" string="Flow Order"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTryCatch.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_2" location="262,140">
+        <translation xmi:type="utility:ConstantString" string="HandleException"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_3" location="379,144" computeExpression="esql://routine/com.davivienda.commons.trace#ChannelMessageSafeTrace_Compute.Main">
+        <translation xmi:type="utility:ConstantString" string="BuildTraceRegister"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_4" location="506,145" queueName="PA.ADP.TRACE.IN" transactionMode="no" persistenceMode="no">
+        <translation xmi:type="utility:ConstantString" string="ADP.TRACE.IN"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_7" location="308,74" computeExpression="esql://routine/com.davivienda.commons.trace#BuildErrorLogMessage_TraceFlow.Main">
+        <translation xmi:type="utility:ConstantString" string="BuildErrorMessage"/>
+      </nodes>
+      <nodes xmi:type="eflow:FCMSource" xmi:id="InTerminal.Input" location="120,210">
+        <translation xmi:type="utility:TranslatableString" key="InTerminal.Input" bundleName="com/davivienda/commons/trace/ChannelMessageSafeTrace" pluginId="ChannelMessageSafeTrace"/>
+      </nodes>
+      <nodes xmi:type="com_ibm_ams_framework_commons_ErrorFlow.subflow:FCMComposite_1" xmi:id="FCMComposite_1_6" location="454,75" ERROR.IN="PA.ERROR.IN">
+        <translation xmi:type="utility:ConstantString" string="ErrorFlow"/>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_2" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.first" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_2" targetNode="OutTerminal.Output" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.second" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_3" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_2" sourceTerminalName="OutTerminal.try" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_4" targetNode="FCMComposite_1_4" sourceNode="FCMComposite_1_3" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_5" targetNode="FCMComposite_1_7" sourceNode="FCMComposite_1_2" sourceTerminalName="OutTerminal.catch" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_6" targetNode="FCMComposite_1_1" sourceNode="InTerminal.Input" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_7" targetNode="FCMComposite_1_6" sourceNode="FCMComposite_1_7" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+    </composition>
+    <propertyOrganizer>
+      <propertyDescriptor groupName="Group.Basic" configurable="true" userDefined="true" describedAttribute="Property.enabled">
+        <propertyName xmi:type="utility:TranslatableString" key="Property.enabled" bundleName="com/davivienda/commons/trace/ChannelMessageSafeTrace" pluginId="ChannelMessageSafeTrace"/>
+        <propertyDescriptor groupName="Group.Basic" configurable="true" userDefined="true" describedAttribute="Property.faultActor">
+          <propertyName xmi:type="utility:TranslatableString" key="Property.faultActor" bundleName="com/davivienda/commons/trace/ChannelMessageSafeTrace" pluginId="ChannelMessageSafeTrace"/>
+          <propertyDescriptor groupName="Group.Basic" configurable="true" userDefined="true" describedAttribute="Property.ChannelTraceFileName">
+            <propertyName xmi:type="utility:TranslatableString" key="Property.ChannelTraceFileName" bundleName="com/davivienda/commons/trace/ChannelMessageSafeTrace" pluginId="ChannelMessageSafeTrace"/>
+          </propertyDescriptor>
+        </propertyDescriptor>
+      </propertyDescriptor>
+    </propertyOrganizer>
+    <stickyBoard/>
+  </eClassifiers>
+</ecore:EPackage>

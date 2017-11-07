@@ -1,0 +1,27 @@
+CREATE FUNCTION doCharToDecimal(IN cad CHARACTER, size_decimal_part INTEGER) RETURNS DECIMAL
+BEGIN
+	DECLARE result DECIMAL;
+	DECLARE integer_part CHARACTER '';
+	DECLARE decimal_part CHARACTER '';
+	DECLARE cad_valor CHARACTER '';
+	
+	SET cad = COALESCE(TRIM(cad), '0');
+	
+	IF (LENGTH(cad) - size_decimal_part) > 0 THEN
+		SET integer_part = SUBSTRING(cad FROM 1 FOR (LENGTH(cad) - size_decimal_part));
+		SET decimal_part = SUBSTRING(cad FROM (LENGTH(cad) - size_decimal_part) FOR size_decimal_part);
+	ELSE
+		SET integer_part = cad;
+		SET decimal_part = doRPadChar(decimal_part, size_decimal_part, ZERO);
+	END IF;
+		
+	SET cad_valor = integer_part;
+	
+	IF size_decimal_part > 0 THEN
+		SET cad_valor = cad_valor || '.' || decimal_part;
+	END IF;
+
+	SET result = CAST(cad_valor AS DECIMAL);
+	
+	RETURN result;
+END;

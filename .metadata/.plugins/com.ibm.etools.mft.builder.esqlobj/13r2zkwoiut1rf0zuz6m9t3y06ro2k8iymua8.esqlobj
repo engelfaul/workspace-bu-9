@@ -1,0 +1,52 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+			
+		--Mantener el CorrelId
+		CALL CopyMessageHeaders();
+		
+		--Referencia al mensaje de entrada
+        DECLARE refMsgIn        REFERENCE TO InputRoot.XMLNSC.*:esbXML;
+        DECLARE refBodyIn       REFERENCE TO refMsgIn.Body;
+        
+        --Referencia al contenedor de la carga útil
+        DECLARE refEndpointElem	REFERENCE TO refBodyIn;
+		MOVE refEndpointElem FIRSTCHILD NAMESPACE *;
+        
+        DECLARE refContextoSol		REFERENCE TO refEndpointElem.*:contextoSolicitud;
+        DECLARE refOperCanal		REFERENCE TO refContextoSol.*:operacionCanal;
+      
+      
+       --Referencia a Variables del Environment
+        CREATE FIELD Environment.Variables;
+        DECLARE refEnvVar       REFERENCE TO Environment.Variables;
+      
+      	--Almacenar en Environment para posterior uso en la respuesta del componente
+		SET refEnvVar.idTransaccion	  = refOperCanal.*:idTransaccion;
+        
+       
+        CREATE FIELD OutputRoot.XMLNSC;
+        DECLARE refOut          REFERENCE TO OutputRoot.XMLNSC;
+                
+        --Guardar Header del envolvente esbXML
+        SET refEnvVar.Header = refMsgIn.Header;
+
+        --Indicar propiedad del Message Set
+        SET OutputRoot.Properties.MessageSet = NMessageSet;
+        
+        --Armar mensaje de salida sin namespace
+        SET refOut = refBodyIn;
+        
+        CALL StripNamespaces(refOut);
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;

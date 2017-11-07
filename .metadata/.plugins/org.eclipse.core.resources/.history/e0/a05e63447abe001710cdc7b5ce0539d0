@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:con="http://www.davivienda.com/xml/ConsultaPadronCliente" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:complexType name="ConsultaPadronClienteType">
+    <xsd:sequence>
+      <xsd:element name="Request" type="RequestType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="ConsultaPadronCliente" type="con:ConsultaPadronClienteType"/>
+  <xsd:complexType name="ConsultaPadronClienteResponseType">
+    <xsd:sequence>
+      <xsd:element name="Response" type="con:ResponseType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="ConsultaPadronClienteResponse" type="con:ConsultaPadronClienteResponseType"/>
+  <xsd:complexType name="RequestType">
+    <xsd:sequence>
+      <xsd:element name="DataHeader" type="con:DataHeader_Type"/>
+      <xsd:element name="Data" type="con:DataType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ResponseType">
+    <xsd:sequence>
+      <xsd:element name="DataHeader" type="con:DataHeader_RespType"/>
+      <xsd:element minOccurs="0" name="Data" type="con:DataResp_Type"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="DataHeader_Type">
+    <xsd:sequence>
+      <xsd:element default="ConsultaPadronCliente" name="nombreOperacion" type="xsd:string"/>
+      <xsd:element name="total" type="xsd:int"/>
+      <xsd:element name="jornada" type="xsd:short"/>
+      <xsd:element name="canal" type="xsd:short"/>
+      <xsd:element name="modoDeOperacion" type="xsd:short"/>
+      <xsd:element name="usuario" type="xsd:string"/>
+      <xsd:element name="perfil" type="xsd:short"/>
+      <xsd:element default="1.0.0" name="versionServicio" type="xsd:string"/>
+      <xsd:element name="idTransaccion" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="DataHeader_RespType">
+    <xsd:sequence>
+      <xsd:element default="ConsultaPadronCliente" name="nombreOperacion" type="xsd:string"/>
+      <xsd:element name="total" type="xsd:int"/>
+      <xsd:element name="caracterAceptacion" type="xsd:string"/>
+      <xsd:element name="ultimoMensaje" type="xsd:short"/>
+      <xsd:element name="idTransaccion" type="xsd:string"/>
+      <xsd:element name="codMsgRespuesta" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="msgRespuesta" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="DataType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="idSesion" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="codIdioma" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valOrigen" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="codPais" type="xsd:string"/>
+      <xsd:element name="codTipoIdentificacion" type="xsd:string"/>
+      <xsd:element name="valNumeroIdentificacion" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="DataResp_Type">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="valNombreCliente" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valApellidoCliente" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valEmail" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valLogin" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

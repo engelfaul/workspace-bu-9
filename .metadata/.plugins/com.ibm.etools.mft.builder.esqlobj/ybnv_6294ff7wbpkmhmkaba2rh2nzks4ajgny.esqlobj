@@ -1,0 +1,21 @@
+CREATE FUNCTION GetFieldXPath(IN TreeReference REFERENCE, IN FieldPath CHARACTER ) RETURNS CHARACTER
+BEGIN
+		-- carácter de separador del FieldPath
+		DECLARE separator 	CHARACTER '.';
+		-- constante de la posición inicial
+		DECLARE ini 		INTEGER 1;
+		-- posición del separador inicial
+		DECLARE posi 		INTEGER position(separator IN FieldPath);
+		
+		WHILE posi <> 0 DO
+			
+			DECLARE token 	CHARACTER SUBSTRING(FieldPath from ini for posi - ini);
+			MOVE TreeReference FIRSTCHILD TYPE Name NAMESPACE * NAME token;
+			SET FieldPath = SUBSTRING(FieldPath FROM posi+1);
+			SET posi = POSITION(separator IN FieldPath);
+		
+		END WHILE;
+		
+		RETURN FIELDVALUE(TreeReference.*:{FieldPath});		
+		
+END;

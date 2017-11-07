@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workingSetManager>
+<workingSet editPageId="com.ibm.etools.mft.navigator.BrokerWorkingSet.AppLib" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1507924820437_0" label="[Common_Call_ErrorHandler]" name="[Common_Call_ErrorHandler]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/Common_Call_ErrorHandler" type="4"/>
+</workingSet>
+<workingSet editPageId="com.ibm.etools.mft.navigator.BrokerWorkingSet.AppLib" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1507924820459_1" label="[Common_Call_LogHandler]" name="[Common_Call_LogHandler]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/Common_Call_LogHandler" type="4"/>
+</workingSet>
+<workingSet editPageId="com.ibm.etools.mft.navigator.BrokerWorkingSet.AppLib" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1507924820470_2" label="[Common_Lib_Utils]" name="[Common_Lib_Utils]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/Common_Lib_Utils" type="4"/>
+</workingSet>
+<workingSet editPageId="com.ibm.etools.mft.navigator.BrokerWorkingSet.AppLib" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1507924820487_3" label="[SVC_PA_Autenticacion]" name="[SVC_PA_Autenticacion]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_AutenticacionMsgSet" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_Autenticacion" type="4"/>
+</workingSet>
+<workingSet editPageId="com.ibm.etools.mft.navigator.BrokerWorkingSet.AppLib" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1507924820508_4" label="[SVC_PA_CambioUsuarioYClave]" name="[SVC_PA_CambioUsuarioYClave]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_CambioUsuarioYClaveMsgSet" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_CambioUsuarioYClave" type="4"/>
+</workingSet>
+<workingSet editPageId="com.ibm.etools.mft.navigator.BrokerWorkingSet.AppLib" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1507924820526_5" label="[SVC_PA_ConsultaDatosCuenta]" name="[SVC_PA_ConsultaDatosCuenta]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_ConsultaDatosCuentaMsgSet" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_ConsultaDatosCuenta" type="4"/>
+</workingSet>
+<workingSet editPageId="com.ibm.etools.mft.navigator.BrokerWorkingSet.AppLib" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1507924820546_6" label="[SVC_PA_ConsultaSaldosCliente]" name="[SVC_PA_ConsultaSaldosCliente]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_ConsultaSaldosClienteMsgSet" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_ConsultaSaldosCliente" type="4"/>
+</workingSet>
+<workingSet editPageId="com.ibm.etools.mft.navigator.BrokerWorkingSet.AppLib" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1507924820601_7" label="[SVC_PA_GenerarOTP]" name="[SVC_PA_GenerarOTP]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_GenerarOTP" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_GenerarOTPMsgSet" type="4"/>
+</workingSet>
+<workingSet editPageId="com.ibm.etools.mft.navigator.BrokerWorkingSet.AppLib" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1507924820633_8" label="[SVC_PA_NitOrigen]" name="[SVC_PA_NitOrigen]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_NitOrigenMsgSet" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_NitOrigen" type="4"/>
+</workingSet>
+<workingSet editPageId="com.ibm.etools.mft.navigator.BrokerWorkingSet.AppLib" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1508525981481_11" label="[ChannelMessageSafeTrace]" name="[ChannelMessageSafeTrace]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/ChannelMessageSafeTrace" type="4"/>
+</workingSet>
+<workingSet editPageId="com.ibm.etools.mft.navigator.BrokerWorkingSet.AppLib" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1508525981528_12" label="[Common_Call_TimeHandler]" name="[Common_Call_TimeHandler]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/Common_Call_TimeHandler" type="4"/>
+</workingSet>
+<workingSet editPageId="com.ibm.etools.mft.navigator.BrokerWorkingSet.AppLib" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1508525981574_13" label="[FWK_RPGIntegrationAdapter]" name="[FWK_RPGIntegrationAdapter]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/FWK_RPGIntegrationAdapter" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/RPGIntegrationAdapterJava" type="4"/>
+</workingSet>
+<workingSet editPageId="com.ibm.etools.mft.navigator.BrokerWorkingSet.AppLib" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1508525981637_14" label="[RPGIntegrationAdapterJavaLIB]" name="[RPGIntegrationAdapterJavaLIB]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/RPGIntegrationAdapterJavaLIB" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/RPGIntegrationAdapterJava" type="4"/>
+</workingSet>
+<workingSet editPageId="com.ibm.etools.mft.navigator.BrokerWorkingSet.AppLib" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1509034039488_16" label="[SVC_PA_ActualizacionParametrosNotificaciones]" name="[SVC_PA_ActualizacionParametrosNotificaciones]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_ActualizacionParametrosNotificaciones" type="4"/>
+</workingSet>
+<workingSet editPageId="com.ibm.etools.mft.navigator.BrokerWorkingSet.AppLib" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1509375096070_17" label="[SVC_PA_ConsultaClientesPorUsuario]" name="[SVC_PA_ConsultaClientesPorUsuario]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_ConsultaClientesPorUsuario" type="4"/>
+</workingSet>
+<workingSet editPageId="com.ibm.etools.mft.navigator.BrokerWorkingSet.AppLib" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1509480851939_16" label="[SVC_PA_ConsultaPadronCliente]" name="[SVC_PA_ConsultaPadronCliente]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_ConsultaPadronCliente" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_ConsultaPadronCliente_MsgSet" type="4"/>
+</workingSet>
+<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1508362099584_10" label="Conjunto de trabajo de ventana" name="Aggregate for window 1508362099584"/>
+</workingSetManager>

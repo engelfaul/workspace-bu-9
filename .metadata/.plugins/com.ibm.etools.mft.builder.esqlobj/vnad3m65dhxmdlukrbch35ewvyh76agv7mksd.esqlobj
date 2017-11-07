@@ -1,0 +1,6 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+
+		SET cache.valid VALUE = NULL;
+
+	END;

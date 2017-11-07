@@ -1,0 +1,1190 @@
+BROKER SCHEMA com.davivienda.busregional.servicios
+PATH com.davivienda.utils;
+ 
+/* Author		:	Jeffrey Hooker
+					
+   Fecha		:	2016/05/06
+   
+   Version		:	1.0
+					
+*/			
+
+ /*
+ *	Module name: ProcessErrorMessageReq
+ *	Purpose: Es el encargado de generar respuestas de 
+ *           error  
+ */
+ 
+ CREATE COMPUTE MODULE ProcessErrorMessageReq
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		--Mantener el CorrelId
+        CALL CopyMessageHeaders();
+        
+        --Referencia al Header y Body del envolvente
+        DECLARE refMsgIn         REFERENCE TO InputRoot.XMLNSC.*:esbXML;
+        DECLARE refHeaderIn      REFERENCE TO refMsgIn.Header;
+        DECLARE refBodyIn        REFERENCE TO refMsgIn.Body;
+            
+        --Referencia al OutputLocalEnvironment
+        DECLARE refLocEnv 		 REFERENCE TO OutputLocalEnvironment;
+                                                
+        --Referencia al Environment
+        CREATE FIELD Environment.Variables;
+        DECLARE refEnvVar        REFERENCE TO Environment.Variables;
+        
+        --Crear mensaje de salida
+        CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML;
+        DECLARE refMsgOut        REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML;
+        
+        --Crear campo y referencia Header de salida.
+        CREATE FIELD refMsgOut.Header;
+        DECLARE refHeaderOut     REFERENCE TO refMsgOut.Header;
+        
+        --Declaración de los tres parámetros de entrada para la función de manejo del ExceptionList
+        DECLARE nameSpaceResp	 CHARACTER FIELDVALUE(refEnvVar.NameSpace);
+        DECLARE messageText      CHARACTER VACIO;
+        DECLARE parentName       CHARACTER VACIO;
+        DECLARE catlgName        CHARACTER VACIO;
+        DECLARE systemId 	     CHARACTER FIELDVALUE(refHeaderIn.systemId);		
+		DECLARE messageNumber    INTEGER   ZERO_INT;        
+        
+        --Transportar el Header de la envoltura esbXML      
+        SET refHeaderOut = refHeaderIn;
+        
+        --Validacion MessageID
+        IF refHeaderIn.messageId IS NULL OR FIELDVALUE(refHeaderIn.messageId) = VACIO THEN 
+            SET refHeaderOut.messageId = InputRoot.MQMD.CorrelId; 
+        ELSE 
+            SET refHeaderOut.messageId = refHeaderIn.messageId; 
+        END IF;
+                
+        --Llamado a función que construye un SystemException en el esbXML:Header    
+        CALL BuildHeaderSystemException(refHeaderOut, InputExceptionList, 'PA.ADPRPG.CSCL.REQ');
+        
+        --Propagar mensaje al HandleError
+        PROPAGATE TO TERMINAL 'out1' MESSAGE OutputRoot DELETE NONE;
+                
+        CALL getLastExceptionDetail(InputExceptionList, messageNumber, messageText, parentName, catlgName);     
+        
+        --Crear campo y referencia Body de salida
+        CREATE FIELD refMsgOut.Body;
+        DECLARE refBodyOut           REFERENCE TO refMsgOut.Body;    
+ 
+        --Declaración y referencias campos de la carga útil de salida
+		CREATE FIELD refBodyOut.{nameSpaceResp}:ConsultaSaldosClienteResponse.Response;
+		DECLARE refRespOut		REFERENCE TO refBodyOut.{nameSpaceResp}:ConsultaSaldosClienteResponse.Response;
+	
+		   
+        --Llamado a función que construye el mensaje de salida por Error Datos de Entrada (Error Tecnico)
+        CALL ProcessErrorTransformationDataHeader(refMsgIn, refEnvVar, refRespOut, messageNumber);
+        
+         --CREATE FIELD refRespOut.Data;
+        
+       
+
+        --Setear la cola de salida
+        CALL SetDestinationListHd(refHeaderIn, refLocEnv);		
+       
+        RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+END MODULE;
+
+/*
+ *	Module name: ApplyRequestTransformation
+ *	Purpose: Transformar el mensaje request del canal al mensaje 
+ *			 request enviado al backend como requerimiento.  
+ */
+CREATE COMPUTE MODULE ApplyRequestTransformation
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		--Mantener el CorrelId   
+		CALL CopyMessageHeaders();
+		
+	    --Referencia a Variables del Environment
+		DECLARE refEnvVar 	REFERENCE TO Environment.Variables;
+		
+		--Referencia al Header y Body del envolvente
+		DECLARE refHeaderIn 	      REFERENCE TO refEnvVar.Header;
+		DECLARE refBodyIn		      REFERENCE TO InputRoot.XMLNSC;	
+		DECLARE refConsulta		      REFERENCE TO refBodyIn.ConsultaSaldosCliente;
+		DECLARE refFirstChildPayload  REFERENCE TO refConsulta.Request;		
+		DECLARE refDataHeaderIn		  REFERENCE TO refFirstChildPayload.DataHeader;
+		DECLARE refDataIn			  REFERENCE TO refFirstChildPayload.Data;
+		
+		--Referencia al OutputLocalEnvironment
+		DECLARE refOutputLocalEnvironment REFERENCE TO OutputLocalEnvironment;
+		
+		--Crear mensaje de salida
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML;
+		DECLARE refMsgOut	REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML;
+		
+		--Crear campos de salida Header y Body		
+		CREATE FIELD refMsgOut.Header;
+		CREATE FIELD refMsgOut.Body;
+							
+		-- Referencias al mensaje de salida
+		DECLARE refHeaderOut 	REFERENCE TO refMsgOut.Header;
+		DECLARE refBodyOut   	REFERENCE TO refMsgOut.Body;
+		
+		--Declaracion de Variables
+		DECLARE idServicio 	CHARACTER;
+		DECLARE nomOperacion CHARACTER FIELDVALUE(refDataHeaderIn.nombreOperacion);
+		
+		--Guardar en las Variables el id_Servicio Homologado
+		SET refEnvVar.idServicio = idServicio;
+
+		
+		 --Garantizar que se envía un messageId
+        IF refHeaderIn.messageId IS NULL OR FIELDVALUE(refHeaderIn.messageId) = VACIO THEN 
+            SET refHeaderOut.messageId = InputRoot.MQMD.CorrelId; 
+        ELSE 
+            SET refHeaderOut.messageId = refHeaderIn.messageId; 
+        END IF;
+		
+		--Transportar el Header de la envoltura esbXML
+		SET refHeaderOut = refHeaderIn;
+		
+		DECLARE ENTE					CONSTANT CHARACTER '11705';
+		DECLARE nomTransaccion CHARACTER FIELDVALUE(refHeaderIn.nombreOperacion);  
+				
+		CREATE FIELD refBodyOut.TCSCL_REQ;
+		DECLARE refReqOut		REFERENCE TO refBodyOut.TCSCL_REQ;
+		
+        
+        CREATE FIELD refReqOut.Header;
+		DECLARE refDataHeaderOut		REFERENCE TO refReqOut.Header;
+		
+		
+		CREATE FIELD refReqOut.Body;
+		DECLARE refBodyOut1		REFERENCE TO refReqOut.Body;
+        
+        DECLARE WHITE_SPACE CONSTANT CHARACTER ' '; 
+        DECLARE ZERO_STRING		CONSTANT CHARACTER '0'; 
+        
+		--Mapeos  
+		SET refDataHeaderOut.idServicio 				= doRPadCharEst(getBusReg_HomologServPA(refDataHeaderIn.nombreOperacion), 10, WHITE_SPACE); 
+		SET refDataHeaderOut.version   					= doRPadCharEst(I_VERSIONSERVICIO, 15, WHITE_SPACE);
+		SET refDataHeaderOut.idTransaccion 				= doRPadCharEst(refDataHeaderIn.idTransaccion, 10, WHITE_SPACE);
+		SET refDataHeaderOut.fechaOperacion 			= doRPadCharEst(CAST(CURRENT_TIMESTAMP AS CHARACTER FORMAT 'MM-dd-yyyy'), 10, WHITE_SPACE);
+		SET refDataHeaderOut.pais		 			    = doRPadCharEst(I_PAIS, 2, WHITE_SPACE);
+		SET refDataHeaderOut.lenguaje 					= doRPadCharEst(refDataIn.codIdioma, 2, WHITE_SPACE);
+		SET refDataHeaderOut.canal 						= doRPadCharEst(refDataHeaderIn.canal, 2, WHITE_SPACE);
+		SET refDataHeaderOut.ipCliente		 			= doRPadCharEst(refDataIn.valOrigen, 15, WHITE_SPACE);
+		SET refDataHeaderOut.idApp		 		    	= doRPadCharEst(refDataIn.valVersionApp, 20, WHITE_SPACE);
+		SET refDataHeaderOut.usuario 				    = doRPadCharEst(refDataHeaderIn.usuario, 10, WHITE_SPACE);
+	  	SET refDataHeaderOut.idSesion					= doRPadCharEst(refDataIn.idSesion, 200, WHITE_SPACE);
+	  	
+		SET refBodyOut1.master							= doRPadCharEst(WHITE_SPACE, 25, WHITE_SPACE);
+		SET refBodyOut1.pagina							= doLPadCharEst(refDataIn.cantidadProductosRta, 4, ZERO_STRING);
+	    
+	    --Seteo de cola en la cual el adaptador me retorna la respuesta correspondiente.
+		SET refHeaderOut.internalRoutingData.replyToQueue.queueName = UDPreplyToQ;
+		
+		--Setear la cola de salida para request
+		CALL SetDestinationList(UDPReqQ, '', refOutputLocalEnvironment);
+						
+		-- Se elimina el arbol del mensaje de entrada almacenado en el environment
+		DELETE FIELD refEnvVar.Header;
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+	
+END MODULE;
+
+/*
+ *	Module name: RemoveEnvelope
+ *	Purpose: Remover el namespace del mensaje de entrada
+ *  		 para validarlo contra el message set.
+ */
+CREATE COMPUTE MODULE RemoveEnvelope
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+			
+		--Mantener el CorrelId
+		CALL CopyMessageHeaders();				
+          				
+		--Referencia al mensaje de entrada
+		DECLARE refMsgIn				REFERENCE TO InputRoot.XMLNSC.*:esbXML;
+		DECLARE refBodyIn				REFERENCE TO refMsgIn.Body;
+									
+		DECLARE refEndpointElem	REFERENCE TO refBodyIn.*:ConsultaSaldosCliente;
+		DECLARE refRequestIn			REFERENCE TO refEndpointElem.Request;
+		DECLARE refDataHeaderIn			REFERENCE TO refEndpointElem.Request.DataHeader;
+		DECLARE refDataIn				REFERENCE TO refEndpointElem.Request.Data;
+		
+		--Referencia a Variables del Environment
+		CREATE FIELD Environment.Variables;
+		DECLARE refEnvVar				REFERENCE TO Environment.Variables;
+			
+		--Se guarda el NameSpace en el Environment
+		SET refEnvVar.NameSpace			= FIELDNAMESPACE(refEndpointElem);
+		SET refEnvVar.nombreOperacion   = refDataHeaderIn.nombreOperacion;
+		SET refEnvVar.idTransaccion     = refDataHeaderIn.idTransaccion;
+		SET refEnvVar.total				= refDataHeaderIn.total;
+		SET refEnvVar.tipoId			= refDataIn.tipoId;
+		
+
+			
+		CREATE FIELD OutputRoot.XMLNSC;
+		DECLARE refOut 					REFERENCE TO OutputRoot.XMLNSC;
+			
+			
+		-- Guardar Header del envolvente esbXML
+		SET refEnvVar.Header = refMsgIn.Header;
+		
+		--Indicar propiedad del Message Set
+		SET OutputRoot.Properties.MessageSet = NMessageSet;
+		
+		--Setear cola de replytoqueue 
+		SET OutputRoot.XMLNSC.esbXML:esbXML.Header.internalRoutingData.replyToQueue.queueName = UDPreplyToQ;		
+		
+		--Armar mensaje de salida sin namespace
+		SET refOut = refBodyIn;		
+		CALL RemoveNamespace (refOut, FIELDVALUE(refEnvVar.NameSpace));
+	
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+END MODULE;
+
+/*
+ *	Module name: ProcessErrorMessageResp
+ *	Purpose: Construir mensaje de error no esperado cuando
+ *			 se construía la respuesta para el canal o servicio compuesto.
+ */
+CREATE COMPUTE MODULE ProcessErrorMessageResp
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		--Mantener el CorrelId
+        CALL CopyMessageHeaders();
+        
+        --Referencia al Header y Body del envolvente
+        DECLARE refMsgIn         REFERENCE TO InputRoot.XMLNSC.*:esbXML;
+        DECLARE refHeaderIn      REFERENCE TO refMsgIn.Header;
+        DECLARE refBodyIn        REFERENCE TO refMsgIn.Body;
+            
+        --Referencia al OutputLocalEnvironment
+        DECLARE refLocEnv 		 REFERENCE TO OutputLocalEnvironment;
+                                                
+        --Referencia al Environment
+        CREATE FIELD Environment.Variables;
+        DECLARE refEnvVar        REFERENCE TO Environment.Variables;
+        
+        --Crear mensaje de salida
+        CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML;
+        DECLARE refMsgOut        REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML;
+        
+        --Crear campo y referencia Header de salida.
+        CREATE FIELD refMsgOut.Header;
+        DECLARE refHeaderOut     REFERENCE TO refMsgOut.Header;
+        
+        --Declaración de los tres parámetros de entrada para la función de manejo del ExceptionList
+        DECLARE nameSpaceResp	 CHARACTER FIELDVALUE(refEnvVar.NameSpace);
+        DECLARE messageText      CHARACTER VACIO;
+        DECLARE parentName       CHARACTER VACIO;
+        DECLARE catlgName        CHARACTER VACIO;
+        DECLARE systemId 	     CHARACTER FIELDVALUE(refHeaderIn.systemId);		
+		DECLARE messageNumber    INTEGER   ZERO_INT;        
+        
+        --Transportar el Header de la envoltura esbXML      
+        SET refHeaderOut = refHeaderIn;
+        
+        --Validacion MessageID
+        IF refHeaderIn.messageId IS NULL OR FIELDVALUE(refHeaderIn.messageId) = VACIO THEN 
+            SET refHeaderOut.messageId = InputRoot.MQMD.CorrelId; 
+        ELSE 
+            SET refHeaderOut.messageId = refHeaderIn.messageId; 
+        END IF;
+                
+        --Llamado a función que construye un SystemException en el esbXML:Header    
+        CALL BuildHeaderSystemException(refHeaderOut, InputExceptionList, 'ADPRPG.CSCL.CHN.RESP');
+        
+        --Propagar mensaje al HandleError
+        PROPAGATE TO TERMINAL 'out1' MESSAGE OutputRoot DELETE NONE;
+                
+        CALL getLastExceptionDetail(InputExceptionList, messageNumber, messageText, parentName, catlgName);     
+        
+        --Crear campo y referencia Body de salida
+        CREATE FIELD refMsgOut.Body;
+        DECLARE refBodyOut           REFERENCE TO refMsgOut.Body;    
+ 
+        --Declaración y referencias campos de la carga útil de salida
+		CREATE FIELD refBodyOut.{nameSpaceResp}:ConsultaSaldosClienteResponse;
+		DECLARE refFirstTagOut		REFERENCE TO refBodyOut.{nameSpaceResp}:ConsultaSaldosClienteResponse;
+		
+		--Declarar prefijo de la carga útil
+		SET refFirstTagOut.(XMLNSC.NamespaceDecl)xmlns:con = nameSpaceResp;	
+		   
+		   
+		--Crear campo y referencia al response de salida
+		CREATE FIELD refFirstTagOut.Response;	
+		DECLARE refResponseOut 			REFERENCE TO refFirstTagOut.Response;
+		
+		--Crear campo y referencia al data header de salida
+		CREATE FIELD refResponseOut.DataHeader;	
+		DECLARE refDataHeaderOut		 REFERENCE TO refResponseOut.DataHeader;
+		
+        --Llamado a función que construye el mensaje de salida por Error Datos de Entrada (Error Tecnico)
+        CALL ProcessErrorTransformationDataHeader(refMsgIn, refEnvVar, refResponseOut, messageNumber);
+		
+		
+		
+        --Setear la cola de salida
+        CALL SetDestinationListHd(refHeaderIn, refLocEnv);		
+       
+	        
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+END MODULE;
+
+/*
+ *	Module name: ApplyResponseTransformation
+ *	Purpose: Transformar el formato de mensaje de respuesta del 
+ *			sistema backend A el formato de mensaje de respuesta para
+ *			el canal o servicio.
+ */
+CREATE COMPUTE MODULE ApplyResponseTransformation
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+
+		--Mantener el CorrelId
+		CALL CopyMessageHeaders();
+		
+		--Referencia al Header y Body del envolvente - Repuesta  MQ_Alias_Productos
+		DECLARE refMsgIn		       REFERENCE TO InputRoot.XMLNSC.esbXML:esbXML;
+		DECLARE refHeaderIn		       REFERENCE TO refMsgIn.Header;
+		DECLARE refBodyIn		       REFERENCE TO refMsgIn.Body;
+		DECLARE refRespIn		       REFERENCE TO refBodyIn.TCSCL_RESP;
+		
+
+		--Referencia al OutputLocalEnvironment
+		DECLARE refLocEnv		REFERENCE TO OutputLocalEnvironment;
+				
+		--Referencia al Environment
+		DECLARE refEnvVar 		REFERENCE TO Environment.Variables;	
+		CREATE FIELD Environment.Split;
+		DECLARE refEnvSplit		REFERENCE TO Environment;
+		
+		--Referencia a la Respuesta MQ_ConsSaldosCliente
+		DECLARE	refMsgInHeader		REFERENCE TO refRespIn.Header;
+		
+		DECLARE	refMsgInBody  			REFERENCE TO refRespIn.Body;
+
+		DECLARE refMsgInBodyRegistros     REFERENCE TO refMsgInBody.Registros;
+		
+		DECLARE refMsgInBodyRegistrosRegistro  REFERENCE TO refMsgInBodyRegistros.Registro;
+	
+		
+		--Declaración de variables
+		DECLARE nameSpaceResp			CHARACTER FIELDVALUE(refEnvVar.NameSpace);
+		DECLARE aliasSQLServer			CHARACTER '';
+	
+		
+		--Crear mensaje de salida
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML;
+		DECLARE refMsgOut		REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML;
+		
+		--Crear campo y referencia Header de salida.
+		CREATE FIELD refMsgOut.Header;
+		DECLARE refHeaderOut	REFERENCE TO refMsgOut.Header;
+		
+		--Crear campo y referencia Body de salida
+		CREATE FIELD refMsgOut.Body;
+		DECLARE refBodyOut		REFERENCE TO refMsgOut.Body;	
+		
+		--Declaración y referencias campos de la carga útil de salida
+		CREATE FIELD refBodyOut.{nameSpaceResp}:ConsultaSaldosClienteResponse;
+		DECLARE refFirstTagOut		REFERENCE TO refBodyOut.{nameSpaceResp}:ConsultaSaldosClienteResponse;
+		
+		
+		
+		
+		--Declarar prefijo de la carga útil
+		SET refFirstTagOut.(XMLNSC.NamespaceDecl)xmlns:con = nameSpaceResp;
+		
+		--Crear campo y referencia al response de salida
+		CREATE FIELD refFirstTagOut.Response;	
+		DECLARE refResponseOut REFERENCE TO refFirstTagOut.Response;
+		
+		--Crear campo y referencia al data header de salida
+		CREATE FIELD refResponseOut.DataHeader;	
+		DECLARE refDataHeaderOut REFERENCE TO refResponseOut.DataHeader;
+								
+		--Crear campo y referencia al data de salida
+		CREATE FIELD refResponseOut.Data;	
+		DECLARE refDataOut REFERENCE TO refResponseOut.Data;
+		
+		--Crear campo y referencia a datos cliente
+		CREATE FIELD refDataOut.DatosCliente;	
+		DECLARE refDatosClienteOut REFERENCE TO refDataOut.DatosCliente;
+		
+	    --Transportar el Header de la envoltura esbXML
+		SET refHeaderOut = refHeaderIn;
+				
+		--Mapeo de la metadata en escenario exitoso
+		SET refHeaderOut.responseData.status.statusCode = SUCCESS;
+		
+		DECLARE ZERO_STRING CHARACTER '0';
+		DECLARE ZERO_DECIMAL DECIMAL 0;
+	
+        -- Asigna valores al contenedor Data Header 
+		SET refDataHeaderOut.nombreOperacion                = CAST(refEnvVar.nombreOperacion AS CHARACTER);
+		SET refDataHeaderOut.total                          = CAST(refEnvVar.total AS INTEGER);
+		SET refDataHeaderOut.caracterAceptacion             = 'B';
+		SET refDataHeaderOut.ultimoMensaje                  = CAST(refMsgInHeader.flagFinBloque AS INTEGER);
+		SET refDataHeaderOut.idTransaccion                  = CAST(refEnvVar.idTransaccion AS CHARACTER);	 
+		SET refDataHeaderOut.codMsgRespuesta                = CAST(refMsgInHeader.codigoError AS INTEGER);
+     	
+     	-- Asigna valores al contenedor DatosCliente
+				
+		SET refDatosClienteOut.numeroDeIdentificacion       = TRIM(FIELDVALUE(refMsgInBody.numeroDeIdentificacion));
+		SET refDatosClienteOut.tipoDeIdentificacion	        = TRIM(FIELDVALUE(refMsgInBody.tipoDeIdentificacion));
+		SET refDatosClienteOut.nombres	                    = TRIM(FIELDVALUE(refMsgInBody.primerNombre)) || ' ' || TRIM(FIELDVALUE(refMsgInBody.segundoNombre));
+		SET refDatosClienteOut.primerApellido	            = TRIM(FIELDVALUE(refMsgInBody.primerApellido));
+		SET refDatosClienteOut.segundoApellido	            = TRIM(FIELDVALUE(refMsgInBody.segundoApellido));
+		 
+		
+		--Crear campo y referencia a productos
+		CREATE FIELD refDataOut.Productos;	
+		DECLARE refProductosOut REFERENCE TO refDataOut.Productos;	
+		
+		
+		--Crea una lista por cada tipo de productos para al final agregarlos a la respuesta de manera ordenada
+		DECLARE productosAhorrosOut ROW;
+		CREATE FIELD productosAhorrosOut.ProductosAhorros;
+		
+		DECLARE productosCtaCteOut ROW;
+		CREATE FIELD productosCtaCteOut.ProductosCtaCte;
+		
+		DECLARE productosNoConsumoOut ROW;
+		CREATE FIELD productosNoConsumoOut.ProductosNoConsumo;
+		
+		DECLARE productosConsumoOut ROW;
+		CREATE FIELD productosConsumoOut.ProductosConsumo;
+		
+		DECLARE productosFondosInversionOut ROW;
+		CREATE FIELD productosFondosInversionOut.ProductosFondosInversion;
+		
+		DECLARE contPAhorro 			INTEGER 0;
+		DECLARE contPCtaCte 			INTEGER 0;
+		DECLARE contPNoConsumo  		INTEGER 0;
+		DECLARE contPConsumo 			INTEGER 0;
+		DECLARE contPFondosInver		INTEGER 0;
+		
+		FOR producto AS refMsgInBody.Registros.Registro[] DO
+			
+			DECLARE codIntProducto REFERENCE TO producto.codigoProducto;
+			SET  codIntProducto = TRIM(CAST(codIntProducto AS CHARACTER));
+			
+			IF codIntProducto='04'  THEN 	
+				
+				SET contPAhorro = contPAhorro + 1;
+				
+				--Crear Referencia a productos Ahorros
+				DECLARE refProductosAhorrosOut REFERENCE TO productosAhorrosOut.ProductosAhorros;
+				
+				--Crear campo y referencia a producto ahorro
+				CREATE FIELD refProductosAhorrosOut.ProductoAhorro[contPAhorro];
+				DECLARE refProductoAhorroOut REFERENCE TO refProductosAhorrosOut.ProductoAhorro[contPAhorro];
+				
+				--Crear campo y referencia a Datos Producto
+				CREATE FIELD refProductoAhorroOut.DatosProducto;
+				DECLARE refProductoOut REFERENCE TO refProductoAhorroOut.DatosProducto;
+				
+				CREATE FIELD refProductoOut.claseManejo;     
+				SET refProductoOut.codigoProducto   			= CAST(getBusReg_HomologTipoProdPA(codIntProducto, BR_PA_TPI)AS INTEGER);-- con el numero 550
+				SET refProductoOut.codigoSubproducto  			= CAST(FIELDVALUE(producto.codigoSubproducto) AS CHARACTER);
+				SET refProductoOut.descProducto                 = COALESCE(TRIM(FIELDVALUE(producto.descripcionProducto)), VACIO);
+				SET refProductoOut.aliasProducto                = COALESCE(TRIM(FIELDVALUE(producto.aliasProducto)), VACIO);	
+				SET refProductoOut.descripcionStatus            = COALESCE(TRIM(producto.estadoProducto),VACIO);
+				SET refProductoOut.numeroPortafolio             = COALESCE(FIELDVALUE(producto.numeroProducto), VACIO);
+				SET refProductoOut.numeroProducto 				= TRIM(CAST(producto.numeroProducto AS CHARACTER));
+				
+				
+				DECLARE fechaA DATE;
+				SET fechaA 										= CAST(producto.fechaApertura AS DATE FORMAT 'MM-dd-yyyy');
+				DECLARE refFechaApertura TIMESTAMP;
+				SET refFechaApertura							= CAST(fechaA AS TIMESTAMP FORMAT 'yyyyMMddHHmmss');				
+				SET refProductoOut.fechaApertura				= CAST(refFechaApertura AS CHARACTER  FORMAT 'yyyy-MM-dd HH:mm:ssZZZ');
+				SET refProductoOut.fechaApertura				= SUBSTRING(refProductoOut.fechaApertura FROM 0 FOR 11)||'T'||SUBSTRING(refProductoOut.fechaApertura FROM 12 FOR 23);				
+				
+				SET refProductoOut.vigencia						= CAST((producto.vigencia)AS CHARACTER); --Homologacion
+				SET refProductoOut.indicadorBolsillo			= ZERO;
+				SET refProductoOut.cantidadBolsillos			= ZERO;
+				SET refProductoOut.valNumeroProductoInterno  	= FIELDVALUE(producto.numeroProducto);
+				
+				--Crear campo y referencia a Saldos Ahorro
+				CREATE FIELD refProductoAhorroOut.SaldosAhorros;	
+				DECLARE refSaldosAhorroOut REFERENCE TO refProductoAhorroOut.SaldosAhorros;
+				
+				SET refSaldosAhorroOut.saldoBolsillos               = ZERO;
+				SET refSaldosAhorroOut.saldoContingente             = FormatearNumeroDosDecimales(TRIM(CAST(producto.saldoRetenido AS CHARACTER)));
+				SET refSaldosAhorroOut.saldoDisponible				= FormatearNumeroDosDecimales(TRIM(CAST(producto.saldoDisponible AS CHARACTER)));
+				SET refSaldosAhorroOut.saldoEmbargos				= FormatearNumeroDosDecimales(TRIM(CAST(producto.saldoEmbargado AS CHARACTER)));
+				SET refSaldosAhorroOut.saldoTotal					= FormatearNumeroDosDecimales(TRIM(CAST(producto.saldo AS CHARACTER)));
+				SET refSaldosAhorroOut.saldoCanjeLocal				= FormatearNumeroDosDecimales(TRIM(CAST(producto.saldoPignorado AS CHARACTER)));
+				SET refSaldosAhorroOut.saldoCanjePlaza				= ZERO;
+				SET refSaldosAhorroOut.valIndicadorMoneda			= TRIM(producto.moneda);
+				
+			END IF;
+			
+			
+			
+			IF codIntProducto='01' OR codIntProducto='02' OR codIntProducto='03' THEN 
+				
+				SET contPCtaCte = contPCtaCte + 1;
+					
+				--Crear Referencia a Prodcuctos Cuenta cliente
+				DECLARE refProductosCtaCteOut REFERENCE TO productosCtaCteOut.ProductosCtaCte;
+					
+				--Crear campo y referencia a producto CuentaCliente
+				CREATE FIELD refProductosCtaCteOut.ProductoCtaCte[contPCtaCte];	
+				DECLARE refDataProductoCtaCteOut REFERENCE TO refProductosCtaCteOut.ProductoCtaCte[contPCtaCte];
+				
+				--Crear campo y referencia a Datos Producto cuenta cliente
+				CREATE FIELD refDataProductoCtaCteOut.DatosProducto;
+				DECLARE refDatosProductoCtaOut REFERENCE TO refDataProductoCtaCteOut.DatosProducto;
+				
+				CREATE FIELD refDatosProductoCtaOut.claseManejo;
+				SET refDatosProductoCtaOut.codigoProducto					= CAST(getBusReg_HomologTipoProdPA(codIntProducto, BR_PA_TPI)AS INTEGER); -- con el valor 560
+				SET refDatosProductoCtaOut.codigoSubproducto				= CAST(producto.codigoSubproducto AS CHARACTER);
+				SET refDatosProductoCtaOut.descProducto                     = COALESCE(TRIM(FIELDVALUE(producto.descripcionProducto)), VACIO);
+				SET refDatosProductoCtaOut.aliasProducto                    = COALESCE(TRIM(FIELDVALUE(producto.aliasProducto)), VACIO);
+				SET refDatosProductoCtaOut.descripcionStatus                = COALESCE(TRIM(producto.estadoProducto),VACIO);
+				SET refDatosProductoCtaOut.numeroPortafolio                 = COALESCE(FIELDVALUE(producto.numeroProducto), VACIO);
+				SET refDatosProductoCtaOut.numeroProducto					= TRIM(CAST(producto.numeroProducto AS CHARACTER));
+				
+				DECLARE fechaA DATE;
+				SET fechaA 													= CAST(producto.fechaApertura AS DATE FORMAT 'MM-dd-yyyy');
+				DECLARE refFechaApertura TIMESTAMP;
+				SET refFechaApertura										= CAST(fechaA AS TIMESTAMP FORMAT 'yyyyMMddHHmmss');				
+				SET refDatosProductoCtaOut.fechaApertura					= CAST(refFechaApertura AS CHARACTER  FORMAT 'yyyy-MM-dd HH:mm:ssZZZ');
+				SET refDatosProductoCtaOut.fechaApertura					= SUBSTRING(refDatosProductoCtaOut.fechaApertura FROM 0 FOR 11)||'T'||SUBSTRING(refDatosProductoCtaOut.fechaApertura FROM 12 FOR 23);
+				
+				SET refDatosProductoCtaOut.vigencia							= CAST(producto.vigencia AS CHARACTER);
+				SET refDatosProductoCtaOut.indicadorBolsillo                = ZERO;
+				SET refDatosProductoCtaOut.cantidadBolsillos                = ZERO;
+				SET refDatosProductoCtaOut.valNumeroProductoInterno         = FIELDVALUE(producto.numeroProducto);
+				
+				--Crear campo y referencia a Saldos Cuenta Cliente
+				CREATE FIELD refDataProductoCtaCteOut.SaldosCtaCte;
+				DECLARE refSaldosCtaCteOut REFERENCE TO refDataProductoCtaCteOut.SaldosCtaCte;
+				
+				SET refSaldosCtaCteOut.diasSobregiro                    = ZERO;
+				SET refSaldosCtaCteOut.saldoDisponible					= FormatearNumeroDosDecimales(TRIM(CAST(producto.saldoDisponible AS CHARACTER)));
+				SET refSaldosCtaCteOut.disponibleRemesas                = FormatearNumeroDosDecimales(TRIM(CAST(producto.saldoRetenido AS CHARACTER)));
+				SET refSaldosCtaCteOut.interesSobregiro					= FormatearNumeroDosDecimales(TRIM(CAST(producto.interesSobregiro AS CHARACTER)));
+				SET refSaldosCtaCteOut.saldoEnCanje						= FormatearNumeroDosDecimales(TRIM(CAST(producto.saldoPignorado AS CHARACTER)));
+				SET refSaldosCtaCteOut.saldoCanjePlaza 					= ZERO;
+				SET refSaldosCtaCteOut.saldoCongeladoPorEmbargo 		= FormatearNumeroDosDecimales(TRIM(CAST(producto.saldoEmbargado AS CHARACTER)));
+				SET refSaldosCtaCteOut.disponibleSobregiro				= FormatearNumeroDosDecimales(TRIM(CAST(producto.disponibleSobregiro AS CHARACTER)));
+				SET refSaldosCtaCteOut.saldoTotal 						= FormatearNumeroDosDecimales(TRIM(CAST(producto.saldo AS CHARACTER)));
+				SET refSaldosCtaCteOut.usadoRemesas                     = ZERO;
+				SET refSaldosCtaCteOut.valIndicadorMoneda				= TRIM(producto.moneda);
+			
+			END IF;
+			
+			
+			
+			IF codIntProducto='10' THEN 
+				
+				
+				SET contPNoConsumo = contPNoConsumo + 1;
+				
+				--Crear Referencia a Productos No Consumo
+				DECLARE refProductosNoConsumo REFERENCE TO productosNoConsumoOut.ProductosNoConsumo;
+								
+				--Crear campo y referencia a producto ProductoNoConsumo
+				CREATE FIELD refProductosNoConsumo.ProductoNoConsumo[contPNoConsumo];	
+				DECLARE refProductoNoConsumoOut REFERENCE TO refProductosNoConsumo.ProductoNoConsumo[contPNoConsumo];
+				
+				--Crear campo y referencia a Datos Producto No Consumo
+				CREATE FIELD refProductoNoConsumoOut.DatosProducto;
+				DECLARE refDatosProductoNoConsumoOut REFERENCE TO refProductoNoConsumoOut.DatosProducto;
+				
+				SET refDatosProductoNoConsumoOut.codigoProducto					= CAST(getBusReg_HomologTipoProdPA(codIntProducto, BR_PA_TPI)AS INTEGER); -- con el valor 140
+				SET refDatosProductoNoConsumoOut.codigoSubproducto				= CAST(producto.codigoSubproducto AS CHARACTER);
+				SET refDatosProductoNoConsumoOut.descProducto                   = COALESCE(TRIM(FIELDVALUE(producto.descripcionProducto)), VACIO);
+				SET refDatosProductoNoConsumoOut.aliasProducto                  = COALESCE(TRIM(FIELDVALUE(producto.aliasProducto)), VACIO);
+				SET refDatosProductoNoConsumoOut.descripcionStatus              = COALESCE(TRIM(producto.estadoProducto),VACIO);
+				SET refDatosProductoNoConsumoOut.numeroPortafolio               = COALESCE(FIELDVALUE(producto.numeroProducto), VACIO);
+				SET refDatosProductoNoConsumoOut.numeroProducto					= TRIM(CAST(producto.numeroProducto AS CHARACTER));
+				
+				DECLARE fechaA DATE;
+				SET fechaA 														= CAST(producto.fechaApertura AS DATE FORMAT 'MM-dd-yyyy');
+				DECLARE refFechaApertura TIMESTAMP;	
+				SET refFechaApertura											= CAST(fechaA AS TIMESTAMP FORMAT 'yyyyMMddHHmmss');				
+				SET refDatosProductoNoConsumoOut.fechaApertura					= CAST(refFechaApertura AS CHARACTER  FORMAT 'yyyy-MM-dd HH:mm:ssZZZ');
+				SET refDatosProductoNoConsumoOut.fechaApertura					= SUBSTRING(refDatosProductoNoConsumoOut.fechaApertura FROM 0 FOR 11)||'T'||SUBSTRING(refDatosProductoNoConsumoOut.fechaApertura FROM 12 FOR 23);
+				
+				SET refDatosProductoNoConsumoOut.vigencia						= CAST(producto.vigencia AS CHARACTER); --Homologacion
+				SET refDatosProductoNoConsumoOut.indicadorBolsillo              = ZERO;
+				SET refDatosProductoNoConsumoOut.cantidadBolsillos              = ZERO;
+				
+				--Crear campo y referencia a Saldos No Consumo
+				CREATE FIELD refProductoNoConsumoOut.SaldosNoConsumo;
+				DECLARE refSaldosNoconsumoOut REFERENCE TO refProductoNoConsumoOut.SaldosNoConsumo;
+				
+				DECLARE fechaCu DATE;
+				SET fechaCu												= CAST(producto.fechaCorte AS DATE FORMAT 'MM-dd-yyyy');
+				
+				DECLARE refFechaCuota TIMESTAMP;
+				SET refFechaCuota										= CAST(fechaCu AS TIMESTAMP FORMAT 'yyyyMMddHHmmss');
+				SET refSaldosNoconsumoOut.diasMora						= CAST((producto.diasMora)AS INTEGER);
+				SET refSaldosNoconsumoOut.fechaCuota					= refFechaCuota;
+				
+				DECLARE fechaVec DATE;
+				SET fechaVec 											= CAST(producto.fechaVencimiento AS DATE FORMAT 'MM-dd-yyyy');
+				
+				DECLARE refFechaVec TIMESTAMP;
+				SET refFechaVec											= CAST(fechaVec AS TIMESTAMP FORMAT 'yyyyMMddHHmmss');
+				SET refSaldosNoconsumoOut.fechaSaldo					= refFechaVec;
+				
+				SET refSaldosNoconsumoOut.valorAprobado                 = FormatearNumeroDosDecimales(TRIM(CAST(producto.saldoDisponible AS CHARACTER)));
+				SET refSaldosNoconsumoOut.valorCuota					= FormatearNumeroDosDecimales(TRIM(CAST(producto.valorCuota AS CHARACTER)));
+				SET refSaldosNoconsumoOut.valorDisponibleCx				= FormatearNumeroDosDecimales(TRIM(CAST(producto.saldoDisponible AS CHARACTER)));
+				SET refSaldosNoconsumoOut.valorMora						= FormatearNumeroDosDecimales(TRIM(CAST(producto.valorMora AS CHARACTER)));
+				SET refSaldosNoconsumoOut.valorSaldo					= FormatearNumeroDosDecimales(TRIM(CAST(producto.saldo AS CHARACTER)));
+				SET refSaldosNoconsumoOut.valIndicadorMoneda			= TRIM(producto.moneda);
+				
+				
+			END IF;
+			
+			IF codIntProducto = '94' THEN 
+				
+				SET contPConsumo  = contPConsumo + 1;
+				
+				--Crear Referencia a Productos Consumo
+				DECLARE refProductosConsumo REFERENCE TO productosConsumoOut.ProductosConsumo;
+				
+				--Crear campo y referencia a producto consumo
+				CREATE FIELD refProductosConsumo.ProductoConsumo[contPConsumo];	
+				DECLARE refDataProductoConsumoOut REFERENCE TO refProductosConsumo.ProductoConsumo[contPConsumo];
+				
+				--Crear campo y referencia a Datos Producto Consumo
+				CREATE FIELD refDataProductoConsumoOut.DatosProducto;
+				DECLARE refDatosProductoConsumoOut REFERENCE TO refDataProductoConsumoOut.DatosProducto;
+				
+				SET refDatosProductoConsumoOut.codigoProducto				= CAST(getBusReg_HomologTipoProdPA(codIntProducto, BR_PA_TPI)AS INTEGER); --con el valor 120
+				SET refDatosProductoConsumoOut.codigoSubproducto			= CAST(FIELDVALUE(producto.codigoSubproducto)AS CHARACTER);
+				SET refDatosProductoConsumoOut.descProducto                 = COALESCE(TRIM(FIELDVALUE(producto.descripcionProducto)), VACIO);
+				SET refDatosProductoConsumoOut.aliasProducto                = COALESCE(TRIM(FIELDVALUE(producto.aliasProducto)), VACIO);
+				SET refDatosProductoConsumoOut.descripcionStatus            = COALESCE(TRIM(producto.estadoProducto),VACIO);
+				SET refDatosProductoConsumoOut.numeroPortafolio             = COALESCE(FIELDVALUE(producto.numeroProducto));
+				SET refDatosProductoConsumoOut.numeroProducto				= TRIM(CAST(producto.numeroProducto AS CHARACTER));
+				
+				DECLARE fechaA DATE;
+				SET fechaA 													= CAST(producto.fechaApertura AS DATE FORMAT 'MM-dd-yyyy');
+				DECLARE refFechaApertura TIMESTAMP;	
+				SET refFechaApertura										= CAST(fechaA AS TIMESTAMP FORMAT 'yyyyMMddHHmmss');				
+				SET refDatosProductoConsumoOut.fechaApertura				= CAST(refFechaApertura AS CHARACTER  FORMAT 'yyyy-MM-dd HH:mm:ssZZZ');
+				SET refDatosProductoConsumoOut.fechaApertura				= SUBSTRING(refDatosProductoConsumoOut.fechaApertura FROM 0 FOR 11)||'T'||SUBSTRING(refDatosProductoConsumoOut.fechaApertura FROM 12 FOR 23);
+				
+				SET refDatosProductoConsumoOut.vigencia						= CAST(producto.vigencia AS CHARACTER);--Homologacion
+				SET refDatosProductoConsumoOut.indicadorBolsillo            = ZERO;
+				SET refDatosProductoConsumoOut.cantidadBolsillos            = ZERO;
+								
+				--Crear campo y referencia a Informacion Extendida a consumo
+				CREATE FIELD refDataProductoConsumoOut.InformacionExtendidaConsumo;
+				DECLARE refInformacionExtendidaConsumoOut REFERENCE TO refDataProductoConsumoOut.InformacionExtendidaConsumo;
+				
+				SET refInformacionExtendidaConsumoOut.davipuntos			= CAST((producto.puntos)AS INTEGER);
+				SET refInformacionExtendidaConsumoOut.franquicia			= CAST(producto.franquicia AS INTEGER);
+				
+				--Crear campo y referencia a Saldo Consumo
+				CREATE FIELD refDataProductoConsumoOut.SaldosConsumo;
+				DECLARE refSaldosConsumoOut REFERENCE TO refDataProductoConsumoOut.SaldosConsumo;
+				
+				DECLARE fechaCo DATE;
+				SET fechaCo = CAST(producto.fechaCorte AS DATE FORMAT 'MM-dd-yyyy');
+				
+				SET refSaldosConsumoOut.cupoDisponible 					= FormatearNumeroDosDecimales(TRIM(CAST(producto.saldo AS CHARACTER)));
+				SET refSaldosConsumoOut.disponibleAvance				= FormatearNumeroDosDecimales(TRIM(CAST(producto.saldoDisponible AS CHARACTER)));
+				
+				DECLARE refFechaCorte TIMESTAMP;
+				SET refFechaCorte										= CAST(fechaCo AS TIMESTAMP FORMAT 'yyyyMMddHHmmss');
+				SET refSaldosConsumoOut.fechaCorte						= refFechaCorte;
+				SET refSaldosConsumoOut.fechaPagoMinimo					= refFechaCorte;
+				SET refSaldosConsumoOut.pagMinCarteraEnPesos            = ZERO;
+				SET refSaldosConsumoOut.pagMinCartUSDEnUSD				= FormatearNumeroDosDecimales(TRIM(CAST(producto.pagoMinimo AS CHARACTER)));
+				SET refSaldosConsumoOut.pagMinCartUSDEnPesos            = FormatearNumeroDosDecimales(TRIM(CAST(producto.saldoDisponible AS CHARACTER)));
+				SET refSaldosConsumoOut.pagTotCarteraEnPesos            = ZERO;
+				SET refSaldosConsumoOut.pagTotCartUSDEnUSD				= FormatearNumeroDosDecimales(TRIM(CAST(producto.pagoTotal AS CHARACTER)));
+				SET refSaldosConsumoOut.pagTotCartUSDEnPesos    		= FormatearNumeroDosDecimales(TRIM(CAST(producto.saldo AS CHARACTER)));
+				SET refSaldosConsumoOut.valSaldoTotalColones            = ZERO;
+				SET refSaldosConsumoOut.valSaldoTotalDolares            = FormatearNumeroDosDecimales(TRIM(CAST(producto.pagoTotal AS CHARACTER)));
+				SET refSaldosConsumoOut.valIndicadorMoneda				= TRIM(producto.moneda);
+							
+			END IF;
+			
+			IF codIntProducto = '11' OR codIntProducto = '12' THEN 
+				
+				SET contPFondosInver  = contPFondosInver + 1;
+				
+				--Crear Referencia a Productos Fondos Inversion
+				DECLARE refProductosFondosInversion REFERENCE TO productosFondosInversionOut.ProductosFondosInversion;
+				
+				--Crear campo y referencia a producto Fondos Inversion
+				CREATE FIELD refProductosFondosInversion.ProductoFondosInversion[contPFondosInver];	
+				DECLARE refDataProductoFondosInversionOut REFERENCE TO refProductosFondosInversion.ProductoFondosInversion[contPFondosInver];
+				
+				--Crear campo y referencia a Datos Producto Fondos Inversion
+				CREATE FIELD refDataProductoFondosInversionOut.DatosProducto;
+				DECLARE refDatosProductoFondosInversionOut REFERENCE TO refDataProductoFondosInversionOut.DatosProducto;
+				
+				SET refDatosProductoFondosInversionOut.codigoProducto				= CAST(getBusReg_HomologTipoProdPA(codIntProducto, BR_PA_TPI)AS INTEGER); --con el valor 120
+				SET refDatosProductoFondosInversionOut.codigoSubproducto			= CAST(FIELDVALUE(producto.codigoSubproducto)AS CHARACTER);
+				SET refDatosProductoFondosInversionOut.descProducto                 = COALESCE(TRIM(FIELDVALUE(producto.descripcionProducto)), VACIO);
+				SET refDatosProductoFondosInversionOut.aliasProducto                = COALESCE(TRIM(FIELDVALUE(producto.aliasProducto)), VACIO);
+				SET refDatosProductoFondosInversionOut.descripcionStatus            = COALESCE(TRIM(producto.estadoProducto),VACIO);
+				SET refDatosProductoFondosInversionOut.numeroPortafolio             = COALESCE(FIELDVALUE(producto.numeroProducto));
+				SET refDatosProductoFondosInversionOut.numeroProducto				= TRIM(CAST(producto.numeroProducto AS CHARACTER));
+				
+				DECLARE fechaA DATE;
+				SET fechaA 													= CAST(producto.fechaApertura AS DATE FORMAT 'MM-dd-yyyy');
+				DECLARE refFechaApertura TIMESTAMP;	
+				SET refFechaApertura										= CAST(fechaA AS TIMESTAMP FORMAT 'yyyyMMddHHmmss');				
+				SET refDatosProductoFondosInversionOut.fechaApertura				= CAST(refFechaApertura AS CHARACTER  FORMAT 'yyyy-MM-dd HH:mm:ssZZZ');
+				SET refDatosProductoFondosInversionOut.fechaApertura				= SUBSTRING(refDatosProductoFondosInversionOut.fechaApertura FROM 0 FOR 11)||'T'||SUBSTRING(refDatosProductoFondosInversionOut.fechaApertura FROM 12 FOR 23);
+				
+				SET refDatosProductoFondosInversionOut.vigencia						= CAST(producto.termino AS CHARACTER);
+				SET refDatosProductoFondosInversionOut.indicadorBolsillo            = ZERO;
+				SET refDatosProductoFondosInversionOut.cantidadBolsillos            = ZERO;
+				SET refDatosProductoFondosInversionOut.valmodalidadPago             = CAST(producto.modalidadPago AS CHARACTER);
+				
+				--Crear campo y referencia a Informacion Extendida a Fondos Inversion
+				CREATE FIELD refDataProductoFondosInversionOut.InformacionExtendidaFondosInversion;
+				DECLARE refInformacionExtendidaFondosInversionOut REFERENCE TO refDataProductoFondosInversionOut.InformacionExtendidaFondosInversion;
+				
+				DECLARE fechaV DATE;
+				SET fechaV 													        = CAST(producto.fechaVencimiento AS DATE FORMAT 'MM-dd-yyyy');
+				DECLARE refFechaVencimiento TIMESTAMP;
+				SET refFechaVencimiento										        = CAST(fechaV AS TIMESTAMP FORMAT 'yyyyMMddHHmmss');
+				SET refInformacionExtendidaFondosInversionOut.fechaVencimiento		= CAST(refFechaVencimiento AS CHARACTER  FORMAT 'yyyy-MM-dd HH:mm:ssZZZ');
+				SET refInformacionExtendidaFondosInversionOut.fechaVencimiento		= SUBSTRING(refInformacionExtendidaFondosInversionOut.fechaVencimiento FROM 0 FOR 11)||'T'||SUBSTRING(refInformacionExtendidaFondosInversionOut.fechaVencimiento FROM 12 FOR 23);
+				
+				DECLARE fechaR DATE;
+				SET fechaR 													        = CAST(producto.fechaRenovacion AS DATE FORMAT 'MM-dd-yyyy');
+				DECLARE refFechaRenovacion TIMESTAMP;
+				SET refFechaRenovacion										        = CAST(fechaR AS TIMESTAMP FORMAT 'yyyyMMddHHmmss');
+				SET refInformacionExtendidaFondosInversionOut.fechaRenovacion		= CAST(refFechaRenovacion AS CHARACTER  FORMAT 'yyyy-MM-dd HH:mm:ssZZZ');
+				SET refInformacionExtendidaFondosInversionOut.fechaRenovacion		= SUBSTRING(refInformacionExtendidaFondosInversionOut.fechaRenovacion FROM 0 FOR 11)||'T'||SUBSTRING(refInformacionExtendidaFondosInversionOut.fechaRenovacion FROM 12 FOR 23);
+				
+				SET refInformacionExtendidaFondosInversionOut.periodicidad                 = CAST(producto.periodicidad AS CHARACTER);
+				SET refInformacionExtendidaFondosInversionOut.rentabilidadClienteUltimoMes = FormatearNumeroDosDecimales(TRIM(CAST(producto.rendimientoUltPeriodo AS CHARACTER)));
+				SET refInformacionExtendidaFondosInversionOut.rentabilidadNeta             = FormatearNumeroDosDecimales(TRIM(CAST(producto.rendimientoNetoPeriodo AS CHARACTER)));
+								
+				--Crear campo y referencia a Saldo Fondos Inversion
+				CREATE FIELD refDataProductoFondosInversionOut.SaldosFondosInversion;
+				DECLARE refSaldosFondosInversionOut REFERENCE TO refDataProductoFondosInversionOut.SaldosFondosInversion;
+				
+				SET refSaldosFondosInversionOut.saldoConsolidado    	= FormatearNumeroDosDecimales(TRIM(CAST(producto.saldoDisponible AS CHARACTER)));
+				SET refSaldosFondosInversionOut.saldoTotal				= FormatearNumeroDosDecimales(TRIM(CAST(producto.saldo AS CHARACTER)));
+				SET refSaldosFondosInversionOut.tasaInteres             = FormatearNumeroSeisDecimales(TRIM(CAST(producto.tasaInteres AS CHARACTER)));
+				SET refSaldosFondosInversionOut.valorNetoIntereses      = FormatearNumeroDosDecimales(TRIM(CAST(producto.valorNetoIntereses AS CHARACTER)));
+				SET refSaldosFondosInversionOut.valIndicadorMoneda		= CAST(producto.moneda AS CHARACTER);
+							
+			END IF;
+				
+	END FOR;
+	
+		IF contPAhorro >= 1 THEN
+			--Crear campo a Productos Ahorros
+			CREATE FIELD refProductosOut.ProductosAhorros;
+			SET refProductosOut.ProductosAhorros = productosAhorrosOut.ProductosAhorros;
+		END IF;
+		
+		IF contPCtaCte >= 1 THEN
+			--Crear campo a Productos Cuenta Corriente
+			CREATE FIELD refProductosOut.ProductosCtaCte;
+			SET refProductosOut.ProductosCtaCte = productosCtaCteOut.ProductosCtaCte;
+		END IF;
+		
+		IF contPNoConsumo >= 1 THEN
+			--Crear campo a Productos No Consumo
+			CREATE FIELD refProductosOut.ProductosNoConsumo;
+			SET refProductosOut.ProductosNoConsumo = productosNoConsumoOut.ProductosNoConsumo;
+		END IF;
+		
+		IF contPConsumo >= 1 THEN
+			--Crear campo a Productos Consumo
+			CREATE FIELD refProductosOut.ProductosConsumo;	
+			SET refProductosOut.ProductosConsumo = productosConsumoOut.ProductosConsumo;
+		END IF;
+		
+		IF contPFondosInver >= 1 THEN
+			--Crear campo a Productos Consumo
+			CREATE FIELD refProductosOut.ProductosFondosInversion;	
+			SET refProductosOut.ProductosFondosInversion = productosFondosInversionOut.ProductosFondosInversion;
+		END IF;
+
+	--Setear la cola de salida
+	CALL SetDestinationListHd(refHeaderOut, refLocEnv);
+
+			
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+END MODULE;
+
+/*
+ *	Module name: ApplyMessageExceptionTransformation
+ *	Purpose: Transformar el formato de mensaje excepción
+ *			de respuesta del sistema backend A el formato de 
+ *			mensaje de respuesta para el canal o servicio.
+ */
+CREATE COMPUTE MODULE ApplyMessageExceptionTransformation
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+	   --Mantener el CorrelId
+		CALL CopyMessageHeaders();
+		
+		--Referencia al Header y Body del envolvente
+		DECLARE refMsgIn	REFERENCE TO InputRoot.XMLNSC.*:esbXML;
+		DECLARE refHeaderIn	REFERENCE TO refMsgIn.Header;
+		DECLARE refBodyIn	REFERENCE TO refMsgIn.Body;
+		
+ 		--Referencia al OutputLocalEnvironment
+ 		DECLARE refLocEnv 	REFERENCE TO OutputLocalEnvironment;
+		
+		--Referencia al Environment
+		DECLARE refEnvVar 	REFERENCE TO Environment.Variables;
+		
+		 --Declaración de variables
+		DECLARE nameSpaceResp			CHARACTER FIELDVALUE(refEnvVar.NameSpace);
+		
+		--Crear mensaje de salida
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML;
+		DECLARE refMsgOut 	REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML;
+		
+		--Crear campo y referencia Header de salida.
+		CREATE FIELD refMsgOut.Header;
+		DECLARE refHeaderOut REFERENCE TO refMsgOut.Header;
+		
+		--Crear campo y referencia Body de salida
+		CREATE FIELD refMsgOut.Body;
+		DECLARE refBodyOut	 REFERENCE TO refMsgOut.Body;
+		
+		--Declaración y referencias campos de la carga útil de salida
+        CREATE FIELD refBodyOut.{nameSpaceResp}:ConsultaSaldosClienteResponse;
+		DECLARE refFirstTagOut		REFERENCE TO refBodyOut.{nameSpaceResp}:ConsultaSaldosClienteResponse;	
+		
+		
+		--Declarar prefijo de la carga útil
+		SET refFirstTagOut.(XMLNSC.NamespaceDecl)xmlns:con = nameSpaceResp;
+		
+		--Crear campo y referencia al response de salida
+		CREATE FIELD refFirstTagOut.Response;	
+		DECLARE refResponseOut 			REFERENCE TO refFirstTagOut.Response;
+		
+		--Crear campo y referencia al data header de salida
+		CREATE FIELD refResponseOut.DataHeader;	
+		DECLARE refDataHeaderOut		 REFERENCE TO refResponseOut.DataHeader;
+		
+		--Transportar el Header de la envoltura esbXML
+		SET refHeaderOut = refHeaderIn;
+		
+		--Construir el mensaje de salida para un error técnico
+		CALL TechnicalErrorTransformationDataHeader(refBodyIn, refEnvVar, refResponseOut);
+		
+		
+		
+		 --Setear la cola de salida
+        CALL SetDestinationListHd(refHeaderIn, refLocEnv);		
+        
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+END MODULE;
+
+/*
+ *	Module name: ApplyBusinessErrorTransformation
+ *	Purpose: Transformar el formato de mensaje error de negocio 
+ *			de respuesta del sistema backend al formato de 
+ *			mensaje de respuesta para el canal.
+ */
+CREATE COMPUTE MODULE ApplyBusinessErrorTransformation
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- Mantener el CorrelId
+		CALL CopyMessageHeaders();
+		
+		CALL CopyMessageHeaders();
+		
+		--Referencia al Header y Body del envolvente
+		DECLARE refMsgIn		       	REFERENCE TO InputRoot.XMLNSC.esbXML:esbXML;
+		DECLARE refHeaderIn		       	REFERENCE TO refMsgIn.Header;
+		DECLARE refBodyIn		       	REFERENCE TO refMsgIn.Body;
+		DECLARE refRespIn		      	REFERENCE TO refBodyIn.TCSCL_RESP;
+		DECLARE refDataHeaderIn	       	REFERENCE TO refRespIn.Header;
+			
+		--Referencia al OutputLocalEnvironment
+		DECLARE refLocEnv				REFERENCE TO OutputLocalEnvironment;
+				
+		--Referencia al Environment
+		DECLARE refEnvVar 				REFERENCE TO Environment.Variables;
+		
+		--Declaración de variables
+		DECLARE codigoError				CHARACTER FIELDVALUE(refDataHeaderIn.CodigoStatus);
+		DECLARE mensajeError			CHARACTER RTRIM(FIELDVALUE(refDataHeaderIn.DescripcionStatus));	
+		
+		--Declaración de variables
+		DECLARE nameSpaceResp			CHARACTER FIELDVALUE(refEnvVar.NameSpace);
+						
+		--Crear mensaje de salida
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML;
+		DECLARE refMsgOut				REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML;
+		
+		--Crear campo y referencia Header de salida.
+		CREATE FIELD refMsgOut.Header;
+		DECLARE refHeaderOut			REFERENCE TO refMsgOut.Header;
+		
+		--Crear campo y referencia Body de salida
+		CREATE FIELD refMsgOut.Body;
+		DECLARE refBodyOut				REFERENCE TO refMsgOut.Body;	
+		
+		--Declaración y referencias campos de la carga útil de salida
+		CREATE FIELD refBodyOut.{nameSpaceResp}:ConsultaSaldosClienteResponse;
+		DECLARE refFirstTagOut			REFERENCE TO refBodyOut.{nameSpaceResp}:ConsultaSaldosClienteResponse;
+		
+		--Declarar prefijo de la carga útil
+		SET refFirstTagOut.(XMLNSC.NamespaceDecl)xmlns:con = nameSpaceResp;
+		
+		--Crear campo y referencia al response de salida
+		CREATE FIELD refFirstTagOut.Response;	
+		DECLARE refResponseOut 			REFERENCE TO refFirstTagOut.Response;
+		
+		--Crear campo y referencia al data header de salida
+		CREATE FIELD refResponseOut.DataHeader;	
+		DECLARE refDataHeaderOut		 REFERENCE TO refResponseOut.DataHeader;
+        
+		--Transportar el Header de la envoltura esbXML
+		SET refHeaderOut = refHeaderIn;
+				
+		--Garantizar que se envía un messageId
+		IF refHeaderIn.messageId IS NULL OR FIELDVALUE(refHeaderIn.messageId) = VACIO THEN 
+			SET refHeaderOut.messageId = InputRoot.MQMD.CorrelId; 
+		END IF;
+		
+		--Declaración referencia al statusReference de la metadata
+		CREATE FIELD refHeaderOut.responseData.status;
+		DECLARE statusReference	REFERENCE TO refHeaderOut.responseData.status;		
+		
+		--Mapeo del error para el HandleError
+		SET statusReference.statusCode							= BUSINESS_EXCEPTION; 
+		SET statusReference.businessException.businessCode		= codigoError;				
+		SET statusReference.businessException.businessMessage	= mensajeError;
+		
+		--Propagar mensaje al HandleError
+		PROPAGATE TO TERMINAL 'out1' MESSAGE OutputRoot DELETE NONE;
+        -- Asigna valores al contenedor Data Header 
+		SET refDataHeaderOut.nombreOperacion                = FIELDVALUE(refEnvVar.nombreOperacion);
+		SET refDataHeaderOut.total                          = FIELDVALUE(refEnvVar.total);
+		SET refDataHeaderOut.caracterAceptacion             = 'M';
+		SET refDataHeaderOut.ultimoMensaje                  = UNO;	 
+		SET refDataHeaderOut.idTransaccion                  = FIELDVALUE(refEnvVar.idTransaccion);	 
+		SET refDataHeaderOut.codMsgRespuesta                = TRIM(FIELDVALUE(refDataHeaderIn.codigoError));
+		SET refDataHeaderOut.msgRespuesta                	= TRIM(FIELDVALUE(refDataHeaderIn.mensajeError)); 
+				
+		
+		
+	    --Setear la cola de salida
+		CALL SetDestinationListHd(refHeaderOut, refLocEnv);
+				
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+END MODULE;
+
+
+
+
+
+	--Funcion que Realiza el formateo de un numero tomando sus dos ultimos digitos como decimales
+		CREATE FUNCTION FormatearNumeroDosDecimales(IN cadena CHARACTER) RETURNS DECIMAL
+	BEGIN
+    	--Declaracion de Constantes
+   	 	DECLARE sizeEntVar         INTEGER 0;
+    	DECLARE rigthDigits     CHARACTER '';
+    	DECLARE leftDigits        CHARACTER '';
+    	DECLARE integerDigits     INTEGER 1;
+    	DECLARE initial         INTEGER;
+    	DECLARE decimalDigits     CONSTANT INTEGER 2;
+    	DECLARE resultCharacter CHARACTER '';
+    	DECLARE point           CHARACTER '.';
+    	DECLARE decimalReturn    DECIMAL;
+    
+    -- Realizacion de la transformacion
+    SET sizeEntVar = LENGTH(cadena);
+    SET integerDigits     = sizeEntVar - decimalDigits;        
+    SET initial            = sizeEntVar - 1;
+    SET rigthDigits     = SUBSTRING(cadena FROM initial FOR 2);
+    SET leftDigits        = SUBSTRING(cadena FROM 1 FOR integerDigits);
+    SET resultCharacter = leftDigits||point||rigthDigits;
+    SET decimalReturn     = CAST(resultCharacter AS DECIMAL);
+    
+    RETURN decimalReturn;
+	END;
+	
+		--Funcion que Realiza el formateo de un numero tomando sus seis ultimos digitos como decimales (solo toma dos decimales)
+		CREATE FUNCTION FormatearNumeroSeisDecimales(IN cadena CHARACTER) RETURNS DECIMAL
+	BEGIN
+    	--Declaracion de Constantes
+   	 	DECLARE sizeEntVar      INTEGER 0;
+    	DECLARE rigthDigits     CHARACTER '';
+    	DECLARE leftDigits      CHARACTER '';
+    	DECLARE integerDigits   INTEGER 1;
+    	DECLARE initial         INTEGER;
+    	DECLARE decimalDigits   CONSTANT INTEGER 6;
+    	DECLARE resultCharacter CHARACTER '';
+    	DECLARE point           CHARACTER '.';
+    	DECLARE decimalReturn   DECIMAL;
+    
+    -- Realizacion de la transformacion
+    SET sizeEntVar 		= LENGTH(cadena);
+    SET integerDigits   = sizeEntVar - decimalDigits;        
+    SET initial         = integerDigits + 1;
+    SET rigthDigits     = SUBSTRING(cadena FROM initial FOR 2);
+    SET leftDigits      = SUBSTRING(cadena FROM 1 FOR integerDigits);
+    SET resultCharacter = leftDigits||point||rigthDigits;
+    SET decimalReturn   = CAST(resultCharacter AS DECIMAL);
+    
+    RETURN decimalReturn;
+	END;
+	
+	
+	/*
+* Function: Realiza la funci�n RPad de Oracle. Rellena paddingChar a 
+*			la der y lo formatea a un l�mite de size caracteres
+*	
+* Parameters:
+* IN: CHARACTER entVar - Dato de entrada a convertir.
+* IN: INTEGER size - Tama�o m�nimo y l�mite del dato de retorno
+* IN: CHARACTER paddingChar - Car�cter de Relleno
+* RETURNS: CHARACTER Devuelve el resultado formateado.
+*
+ */
+ CREATE FUNCTION doRPadCharEst(IN entVar CHARACTER, IN size INTEGER, IN paddingChar CHARACTER) RETURNS CHARACTER
+BEGIN
+	DECLARE paddingFormat 	CHARACTER REPLICATE(paddingChar, size);
+	DECLARE result 			CHARACTER '';
+	DECLARE paddingLong 	INTEGER 0;	
+	
+	IF entVar IS NULL THEN
+		SET entVar = '';		
+	END IF;
+	
+	SET paddingLong = LENGTH(entVar);	
+	SET paddingLong = size - paddingLong;
+	
+	IF paddingLong > 0 THEN
+		SET result = entVar || SUBSTRING(paddingFormat FROM 1 FOR paddingLong);
+	ELSE 
+		SET result = LEFT(entVar,size);
+	END IF;
+	RETURN result;
+END;
+
+/*
+ 	* Function: Realiza la funci�n fillDoLPad de Oracle. Rellena con el
+ 	*			tercer par�metro especificado a	la izquierda y lo formatea
+ 	*			 a un l�mite de size caracteres
+ 	*	
+ 	* Parameters:
+ 	* IN: CHARACTER entVar - Dato de entrada a convertir.
+ 	* IN: INTEGER size - Tama�o m�nimo y l�mite del dato de retorno
+ 	* IN: CHARACTER - caracter de relleno
+ 	* RETURNS: CHARACTER Devuelve el resultado formateado.
+ 	*
+ */
+CREATE FUNCTION doLPadCharEst(IN entVar CHARACTER, IN size INTEGER, IN fill CHARACTER) RETURNS CHARACTER
+BEGIN
+	DECLARE paddingFormat 	CHARACTER REPLICATE(fill, size);
+	DECLARE result 			CHARACTER '';
+	DECLARE paddingLong 	INTEGER 0;
+	
+	IF entVar IS NULL THEN
+		SET entVar = '';
+	END IF;	
+	
+	SET paddingLong = LENGTH(entVar);
+	SET paddingLong = size - paddingLong;
+	
+	IF paddingLong > 0 THEN
+		SET result = SUBSTRING(paddingFormat FROM 1 FOR paddingLong) || entVar;	
+	ELSE 
+		SET result = RIGHT(entVar,size);
+	END IF;
+	
+	RETURN result;
+END;

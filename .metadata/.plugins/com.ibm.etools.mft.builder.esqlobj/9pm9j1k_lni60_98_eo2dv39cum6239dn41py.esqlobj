@@ -1,0 +1,23 @@
+CREATE FUNCTION checkIdHomologChannel( IN idCanal			CHARACTER,
+										IN idHomologacion	CHARACTER,
+										IN refHomologView	REFERENCE )	RETURNS CHARACTER	
+BEGIN	
+    DECLARE result				ROW NULL;
+   	DECLARE resultCheck		CHARACTER '';
+
+    SET result.datos  = THE(   SELECT *
+							   FROM refHomologView.row[] AS T 
+							   WHERE T.ID_CANAL			= idCanal
+							   AND T.ID_HOMOLOGACION	= idHomologacion
+							   );
+	
+	--Se asigna a la variable resultCheck el valor 0- cuando no hay filas en el vista que cumplan con la condición  o 1 cuando ya existen filas que cumplen con la condición.
+	
+	IF CARDINALITY(result.datos[]) = 0 THEN
+		SET resultCheck= '0';
+	ELSE
+		SET resultCheck= '1';
+	END IF;	
+	
+    RETURN resultCheck	;
+END;

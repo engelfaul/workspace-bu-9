@@ -1,0 +1,12 @@
+CREATE FUNCTION ReplaceCharacter(IN refInputField REFERENCE)
+BEGIN
+	
+	DECLARE apos   CHARACTER;
+
+	SET apos 	=  CAST(CAST(x'27' AS BLOB CCSID 1208 ENCODING 546) AS CHAR CCSID 1208 ENCODING 546);
+
+	SET refInputField = REPLACE (refInputField,'&gt;','>');
+	SET refInputField = REPLACE (refInputField,'&apos;',apos);
+	SET refInputField = REPLACE (refInputField,'&quot;','"');
+
+END;

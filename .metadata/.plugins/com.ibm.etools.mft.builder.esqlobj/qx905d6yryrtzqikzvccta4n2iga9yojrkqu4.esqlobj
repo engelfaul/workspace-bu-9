@@ -1,0 +1,12 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+		-- dejar pasar el mensaje de respuesta
+		SET OutputRoot = InputRoot;
+		
+		-- restaurar Environment
+		SET Environment = InputLocalEnvironment.XMLNSC.ReturnedMessage.Variables;	
+		
+		RETURN TRUE;
+	END;
+
+	

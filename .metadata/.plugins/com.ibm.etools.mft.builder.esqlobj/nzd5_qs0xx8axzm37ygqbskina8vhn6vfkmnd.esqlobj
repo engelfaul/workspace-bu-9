@@ -1,0 +1,24 @@
+CREATE PROCEDURE SetDestinationListBasicAssociated (IN header REFERENCE, IN serviceId CHARACTER, INOUT lcEnv REFERENCE)
+BEGIN
+	-- referencia al endpoint del requestData
+	DECLARE endpoint REFERENCE TO header.requestData.endpointReference;
+	-- referencia al ID del canal
+	DECLARE systemId CHARACTER FIELDVALUE(header.systemId);
+	-- referencia al arbol de destino de MQ
+	CREATE FIELD lcEnv.Destination.MQ.DestinationData;
+	DECLARE lcEnvMq REFERENCE TO lcEnv.Destination.MQ.DestinationData[1];
+	
+	IF endpoint.serviceId = serviceId THEN
+		-- pasar la lista de destino
+		SET lcEnvMq.queueName = endpoint.routingData.responseQueueEndpoint.queueName;
+	ELSE
+		-- obtener los datos de la cola del servicio
+		DECLARE responseQueue ROW THE(SELECT asvc.associatedRoutingData.responseQueueEndpoint
+								FROM endpoint.associatedService[] as asvc
+									WHERE asvc.associatedServiceId = serviceId AND asvc.associatedSystemId = systemId);
+	
+	-- pasar la lista de destino
+	SET lcEnvMq.queueName = responseQueue.responseQueueEndpoint.queueName;
+	
+	END IF;		
+END;

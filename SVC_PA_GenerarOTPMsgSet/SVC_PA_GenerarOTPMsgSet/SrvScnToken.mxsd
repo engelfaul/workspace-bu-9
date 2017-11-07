@@ -1,0 +1,920 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.2.6b02  svn-revision#14033.--><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:complexType name="msjRespOpGenerarTokenOTP">
+    <xsd:sequence>
+      <xsd:element name="contextoRespuesta" type="ContextoRespuestaTipo"/>
+      <xsd:element minOccurs="0" name="tokenOTP" type="TokenOTP"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="MsjSolOpValidarCodigoActivacion">
+    <xsd:sequence>
+      <xsd:element name="contextoSolicitud" type="ContextoSolicitudTipo"/>
+      <xsd:element name="clienteNaturalTipo" type="ClienteNaturalTipo"/>
+      <xsd:element minOccurs="0" name="codActivacion" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="token" type="TokenTipo"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="MsjSolOpEliminarToken">
+    <xsd:sequence>
+      <xsd:element name="contextoSolicitud" type="ContextoSolicitudTipo"/>
+      <xsd:element name="token" type="TokenTipo"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="MsjRespOpAsignarToken">
+    <xsd:sequence>
+      <xsd:element name="contextoRespuesta" type="ContextoRespuestaTipo"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="MsjSolOpAsignarToken">
+    <xsd:sequence>
+      <xsd:element name="contextoSolicitud" type="ContextoSolicitudTipo"/>
+      <xsd:element name="clienteNaturalTipo" type="ClienteNaturalTipo"/>
+      <xsd:element name="token" type="TokenTipo"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="MsjSolOpActualizarToken">
+    <xsd:sequence>
+      <xsd:element name="contextoSolicitud" type="ContextoSolicitudTipo"/>
+      <xsd:element name="token" type="TokenTipo"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="MsjSolOpConsultarHistoricosToken">
+    <xsd:sequence>
+      <xsd:element name="contextoSolicitud" type="ContextoSolicitudTipo"/>
+      <xsd:element maxOccurs="unbounded" name="criterioConsultaTipo" type="CriterioConsultaTipo"/>
+      <xsd:element minOccurs="0" name="RangoFechasTipo" type="RangoFechasTipo"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="msjSolOpGenerarTokenOTP">
+    <xsd:sequence>
+      <xsd:element name="contextoSolicitud" type="ContextoSolicitudTipo"/>
+      <xsd:element name="clienteNaturalTipo" type="ClienteNaturalTipo"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="MsjRespOpActualizarToken">
+    <xsd:sequence>
+      <xsd:element name="contextoRespuesta" type="ContextoRespuestaTipo"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="MsjSolOpReemplazarToken">
+    <xsd:sequence>
+      <xsd:element name="contextoSolicitud" type="ContextoSolicitudTipo"/>
+      <xsd:element name="token" type="TokenTipo"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="MsjRespOpConsultarTokenOTP">
+    <xsd:sequence>
+      <xsd:element name="contextoRespuesta" type="ContextoRespuestaTipo"/>
+      <xsd:element minOccurs="0" name="tokenOTP" type="TokenOTP"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="MsjSolOpConsultarTokenOTP">
+    <xsd:sequence>
+      <xsd:element name="contextoSolicitud" type="ContextoSolicitudTipo"/>
+      <xsd:element name="clienteNatural" type="ClienteNaturalTipo"/>
+      <xsd:element name="seguridadToken" type="SeguridadTokenTipo"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="MsjRespOpConsultarHistoricosToken">
+    <xsd:sequence>
+      <xsd:element name="contextoRespuesta" type="ContextoRespuestaTipo"/>
+      <xsd:element maxOccurs="unbounded" name="infoHistoricoRSA" type="InfoHistoricoRSATipo"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="MsjRespOpReemplazarToken">
+    <xsd:sequence>
+      <xsd:element name="contextoRespuesta" type="ContextoRespuestaTipo"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="MsjRespOpValidarCodigoActivacion">
+    <xsd:sequence>
+      <xsd:element name="contextoRespuesta" type="ContextoRespuestaTipo"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="MsjRespOpEliminarToken">
+    <xsd:sequence>
+      <xsd:element name="contextoRespuesta" type="ContextoRespuestaTipo"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="MsjSolOpValidarEstadoTokenPorUsuario">
+    <xsd:sequence>
+      <xsd:element name="contextoSolicitud" type="ContextoSolicitudTipo"/>
+      <xsd:element name="clienteNaturalTipo" type="ClienteNaturalTipo"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="MsjRespOpValidarToken">
+    <xsd:sequence>
+      <xsd:element name="contextoRespuesta" type="ContextoRespuestaTipo"/>
+      <xsd:element name="estadoValidacion" nillable="true" type="xsd:boolean"/>
+      <xsd:element name="mensajeResultado" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="msjSolOpGenerarOTP">
+    <xsd:sequence>
+      <xsd:element name="contextoSolicitud" type="ContextoSolicitudTipo"/>
+      <xsd:element name="clienteNatural" type="ClienteNaturalTipo"/>
+      <xsd:element name="notificacion" type="Notificacion"/>
+      <xsd:element minOccurs="0" name="tokenOTP" type="TokenOTP"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="MsjSolOpValidarToken">
+    <xsd:sequence>
+      <xsd:element name="contextoSolicitud" type="ContextoSolicitudTipo"/>
+      <xsd:element name="token" type="TokenTipo"/>
+      <xsd:element name="tipoValidacion" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="MsjRespOpValidarEstadoTokenPorUsuario">
+    <xsd:sequence>
+      <xsd:element name="contextoRespuesta" type="ContextoRespuestaTipo"/>
+      <xsd:element name="estadoValidacion" type="xsd:boolean"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="msjSolOpValidarToken" type="MsjSolOpValidarToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/msjSolOpValidarToken;XSDElementDeclaration$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="msjRespOpGenerarTokenOTP" type="msjRespOpGenerarTokenOTP">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/msjRespOpGenerarTokenOTP;XSDElementDeclaration=1$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="msjSolOpConsultarTokenOTP" type="MsjSolOpConsultarTokenOTP">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/msjSolOpConsultarTokenOTP;XSDElementDeclaration=2$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="msjSolOpEliminarToken" type="MsjSolOpEliminarToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/msjSolOpEliminarToken;XSDElementDeclaration=3$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="msjSolOpActualizarToken" type="MsjSolOpActualizarToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/msjSolOpActualizarToken;XSDElementDeclaration=4$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="msjSolOpAsignarToken" type="MsjSolOpAsignarToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/msjSolOpAsignarToken;XSDElementDeclaration=5$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="msjSolOpValidarCodigoActivacion" type="MsjSolOpValidarCodigoActivacion">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/msjSolOpValidarCodigoActivacion;XSDElementDeclaration=6$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="msjRespOpEliminarToken" type="MsjRespOpEliminarToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/msjRespOpEliminarToken;XSDElementDeclaration=7$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="msjSolOpValidarEstadoTokenPorUsuario" type="MsjSolOpValidarEstadoTokenPorUsuario">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/msjSolOpValidarEstadoTokenPorUsuario;XSDElementDeclaration=8$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="msjRespOpConsultarHistoricosToken" type="MsjRespOpConsultarHistoricosToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/msjRespOpConsultarHistoricosToken;XSDElementDeclaration=9$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="msjRespOpActualizarToken" type="MsjRespOpActualizarToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/msjRespOpActualizarToken;XSDElementDeclaration=10$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="msjRespOpValidarCodigoActivacion" type="MsjRespOpValidarCodigoActivacion">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/msjRespOpValidarCodigoActivacion;XSDElementDeclaration=11$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="msjRespOpValidarEstadoTokenPorUsuario" type="MsjRespOpValidarEstadoTokenPorUsuario">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/msjRespOpValidarEstadoTokenPorUsuario;XSDElementDeclaration=12$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="msjSolOpConsultarHistoricosToken" type="MsjSolOpConsultarHistoricosToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/msjSolOpConsultarHistoricosToken;XSDElementDeclaration=13$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="msjSolOpGenerarTokenOTP" type="msjSolOpGenerarTokenOTP">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/msjSolOpGenerarTokenOTP;XSDElementDeclaration=14$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="msjRespOpReemplazarToken" type="MsjRespOpReemplazarToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/msjRespOpReemplazarToken;XSDElementDeclaration=15$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="msjRespOpValidarToken" type="MsjRespOpValidarToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/msjRespOpValidarToken;XSDElementDeclaration=16$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="msjRespOpAsignarToken" type="MsjRespOpAsignarToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/msjRespOpAsignarToken;XSDElementDeclaration=17$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="msjSolOpReemplazarToken" type="MsjSolOpReemplazarToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/msjSolOpReemplazarToken;XSDElementDeclaration=18$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="msjSolOpGenerarOTP" type="msjSolOpGenerarOTP">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/msjSolOpGenerarOTP;XSDElementDeclaration=19$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="msjRespOpConsultarTokenOTP" type="MsjRespOpConsultarTokenOTP">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/msjRespOpConsultarTokenOTP;XSDElementDeclaration=20$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+  
+  <xsd:complexType name="ContextoRespuestaTipo">
+    <xsd:sequence>
+      <xsd:element name="resultadoTransaccion" type="ResultadoTransaccionTipo"/>
+      <xsd:element minOccurs="0" name="error" type="ErrorTipo"/>
+      <xsd:element minOccurs="0" name="paginacion" type="PaginacionTipo"/>
+    </xsd:sequence>
+  </xsd:complexType>  
+  <xsd:complexType name="ResultadoTransaccionTipo">
+    <xsd:sequence>
+      <xsd:element name="codEstadoTransaccion" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valCaracterAceptacion" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valNumeroAprobacion" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="idTransaccion" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="fecOperacion" type="xsd:dateTime"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ErrorTipo">
+    <xsd:sequence>
+      <xsd:element name="codMsjRespuesta" type="xsd:string"/>
+      <xsd:element name="valMsjRespuesta" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="codMsjRespuestaBackend" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valMsjRespuestaBackend" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PaginacionTipo">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="valCantidadRegistrosLote" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="valNumeroLote" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="valTotalRegistros" type="xsd:int"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ContextoSolicitudTipo">
+    <xsd:sequence>
+      <xsd:element name="servicio" type="ServicioTipo"/>
+      <xsd:element name="operacionCanal" type="OperacionCanalTipo"/>
+      <xsd:element name="consumidor" type="ConsumidorTipo"/>
+      <xsd:element minOccurs="0" name="huellaDigitalDispositivo" type="HuellaDigitalDispositivoTipo"/>
+      <xsd:element minOccurs="0" name="criteriosOrdenamiento">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="criterioOrdenamiento" nillable="true" type="CriterioOrdenamientoTipo"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="paginacion" type="PaginacionTipo"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="CriterioOrdenamientoTipo">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="valColumna" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valOrden" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+   <xsd:complexType name="ServicioTipo">
+    <xsd:sequence>
+      <xsd:element name="idServicio" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="OperacionCanalTipo">
+    <xsd:sequence>
+      <xsd:element name="idSesion" type="xsd:string"/>
+      <xsd:element name="idTransaccion" type="xsd:string"/>
+      <xsd:element name="fecOperacion" type="xsd:dateTime"/>
+      <xsd:element name="valJornada" type="xsd:string"/>
+      <xsd:element name="codMoneda" type="xsd:string"/>
+      <xsd:element name="codPais" type="xsd:string"/>
+      <xsd:element name="codIdioma" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ConsumidorTipo">
+    <xsd:sequence>
+      <xsd:element name="idConsumidor" type="xsd:string"/>
+      <xsd:element name="aplicacion" type="AplicacionTipo"/>
+      <xsd:element name="canal" type="CanalTipo"/>
+      <xsd:element name="terminal" type="TerminalTipo"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AplicacionTipo">
+    <xsd:sequence>
+      <xsd:element name="idAplicacion" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+   <xsd:complexType name="CanalTipo">
+    <xsd:sequence>
+      <xsd:element name="idCanal" type="xsd:short"/>
+      <xsd:element name="idHost" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TerminalTipo">
+    <xsd:sequence>
+      <xsd:element name="idTerminal" type="xsd:int"/>
+      <xsd:element name="valOrigenPeticion" type="xsd:string"/>
+      <xsd:element name="codUsuario" type="xsd:string"/>
+      <xsd:element name="valPerfil" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="HuellaDigitalDispositivoTipo">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="idBeacon" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valHuellaDispositivo" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valTokenCookie" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valTokenFSO" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valHttpAccept" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valHttpAcceptChars" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valHttpAcceptEncoding" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valHttpAcceptLanguage" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valHttpReferrer" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valIpAddress" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valUserAgent" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ClienteNaturalTipo">
+    <xsd:complexContent>
+      <xsd:extension base="PersonaNaturalTipo">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="codEmpresaAsociada" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="valNombreEmpresaAsociada" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="PersonaNaturalTipo">
+    <xsd:complexContent>
+      <xsd:extension base="PersonaTipo">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="valPrimerNombre" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="valSegundoNombre" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="valPrimerApellido" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="valSegundoApellido" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="codSexo" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="codEstadoCivil" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="valLoginAutoservicio" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="codNivelEducativo" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="valFechaNacimiento" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="PersonaTipo">
+    <xsd:sequence>
+      <xsd:element name="codTipoIdentificacion" type="xsd:string"/>
+      <xsd:element name="valNumeroIdentificacion" type="xsd:string"/>
+      <xsd:element name="valNombre" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="contacto" type="ContactoPersonaTipo"/>
+      <xsd:element minOccurs="0" name="valNaturaleza" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ContactoPersonaTipo">
+    <xsd:sequence>
+      <xsd:element name="telefonos">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="telefono" nillable="true" type="TelefonoTipo"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="correosElectronicos">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="valCorreoElectronico" nillable="true" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="esAutorizaNotificacionElectronica" type="xsd:boolean"/>
+      <xsd:element name="ubicaciones">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="ubicacion" nillable="true" type="UbicacionPersonaTipo"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TelefonoTipo">
+    <xsd:sequence>
+      <xsd:element name="codTipoTelefono" type="xsd:string"/>
+      <xsd:element name="valNumeroTelefono" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="UbicacionPersonaTipo">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="municipio" type="MunicipioTipo"/>
+      <xsd:element minOccurs="0" name="valDireccion" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="codTipoDireccion" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="MunicipioTipo">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="idMunicipio" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="codMunicipio" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valNombre" type="xsd:string"/>
+      <xsd:element name="departamento" type="DepartamentoTipo"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="DepartamentoTipo">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="idDepartamento" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="codDepartamento" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valNombre" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TokenTipo">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="valEstado" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="codActivacion" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valSerialTokenActual" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valSerialTokenRemplazo" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valTipoToken" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="fecActivacion" type="xsd:date"/>
+      <xsd:element minOccurs="0" name="fecCaducidad" type="xsd:date"/>
+      <xsd:element minOccurs="0" name="valClavePersonal" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valClaveDinamica" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="esTokenAsignado" type="xsd:boolean"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="Notificacion">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="tipoNotificacion" type="xsd:string"/>
+      <xsd:element name="notificacionPush" type="xsd:boolean"/>
+      <xsd:element name="notificacionSMS" type="xsd:boolean"/>
+    </xsd:sequence>
+  </xsd:complexType>
+   <xsd:complexType name="TokenOTP">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="valTokenOPT" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="idSesionToken" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="feInicio" type="xsd:dateTime"/>
+      <xsd:element minOccurs="0" name="fecExpiracion" type="xsd:dateTime"/>
+      <xsd:element minOccurs="0" name="valTiempoExpiracion" type="xsd:long"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="SeguridadTokenTipo">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="idSesionToken" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valClavePersonal" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valClaveDinamica" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="esSesionUnica" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="esSesionPorCanal" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="esTokenAutenticado" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="esSiguienteToken" type="xsd:boolean"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="CriterioConsultaTipo">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="valLlave" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valValor" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="RangoFechasTipo">
+    <xsd:sequence>
+      <xsd:element name="fecInicio" type="xsd:dateTime"/>
+      <xsd:element minOccurs="0" name="fecFinal" type="xsd:dateTime"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="InfoHistoricoRSATipo">
+    <xsd:sequence>
+      <xsd:element name="codTipoIdentificacion" type="xsd:string"/>
+      <xsd:element name="valNumeroIdentificacion" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valFechaActivacion" type="xsd:dateTime"/>
+      <xsd:element minOccurs="0" name="valTipoUsuario" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PersonaJuridicaTipo">
+    <xsd:complexContent>
+      <xsd:extension base="PersonaTipo">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="codActividadEconomica" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="codTipoPersonaJuridica" type="xsd:short"/>
+          <xsd:element minOccurs="0" name="codClasePersonaJuridica" type="xsd:short"/>
+          <xsd:element minOccurs="0" name="codSegmento" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="valRazonSocial" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="ProductoTipo">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="codProducto" type="xsd:short"/>
+      <xsd:element minOccurs="0" name="codSubproducto" type="xsd:short"/>
+      <xsd:element minOccurs="0" name="valTipoProducto" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="valCompania" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="descProducto" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="codVinculacion" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="valAliasProducto" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valNumeroProducto" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valVigencia" type="xsd:short"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="EmpresaTipo">
+    <xsd:complexContent>
+      <xsd:extension base="PersonaJuridicaTipo">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="esClienteEmpresarial" type="xsd:boolean"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+    <xsd:element name="MsjSolOpValidarCodigoActivacion" type="MsjSolOpValidarCodigoActivacion">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MsjSolOpValidarCodigoActivacion;XSDElementDeclaration=21$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="MsjSolOpEliminarToken" type="MsjSolOpEliminarToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MsjSolOpEliminarToken;XSDElementDeclaration=22$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="MsjRespOpAsignarToken" type="MsjRespOpAsignarToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MsjRespOpAsignarToken;XSDElementDeclaration=23$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="MsjSolOpAsignarToken" type="MsjSolOpAsignarToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MsjSolOpAsignarToken;XSDElementDeclaration=24$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="MsjSolOpActualizarToken" type="MsjSolOpActualizarToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MsjSolOpActualizarToken;XSDElementDeclaration=25$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="MsjSolOpConsultarHistoricosToken" type="MsjSolOpConsultarHistoricosToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MsjSolOpConsultarHistoricosToken;XSDElementDeclaration=26$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="MsjRespOpActualizarToken" type="MsjRespOpActualizarToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MsjRespOpActualizarToken;XSDElementDeclaration=27$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="MsjSolOpReemplazarToken" type="MsjSolOpReemplazarToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MsjSolOpReemplazarToken;XSDElementDeclaration=28$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="MsjRespOpConsultarTokenOTP" type="MsjRespOpConsultarTokenOTP">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MsjRespOpConsultarTokenOTP;XSDElementDeclaration=29$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="MsjSolOpConsultarTokenOTP" type="MsjSolOpConsultarTokenOTP">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MsjSolOpConsultarTokenOTP;XSDElementDeclaration=30$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="MsjRespOpConsultarHistoricosToken" type="MsjRespOpConsultarHistoricosToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MsjRespOpConsultarHistoricosToken;XSDElementDeclaration=31$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="MsjRespOpReemplazarToken" type="MsjRespOpReemplazarToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MsjRespOpReemplazarToken;XSDElementDeclaration=32$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="MsjRespOpValidarCodigoActivacion" type="MsjRespOpValidarCodigoActivacion">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MsjRespOpValidarCodigoActivacion;XSDElementDeclaration=33$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="MsjRespOpEliminarToken" type="MsjRespOpEliminarToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MsjRespOpEliminarToken;XSDElementDeclaration=34$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="MsjSolOpValidarEstadoTokenPorUsuario" type="MsjSolOpValidarEstadoTokenPorUsuario">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MsjSolOpValidarEstadoTokenPorUsuario;XSDElementDeclaration=35$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="MsjRespOpValidarToken" type="MsjRespOpValidarToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MsjRespOpValidarToken;XSDElementDeclaration=36$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="MsjSolOpValidarToken" type="MsjSolOpValidarToken">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MsjSolOpValidarToken;XSDElementDeclaration=37$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="MsjRespOpValidarEstadoTokenPorUsuario" type="MsjRespOpValidarEstadoTokenPorUsuario">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MsjRespOpValidarEstadoTokenPorUsuario;XSDElementDeclaration=38$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="ContextoRespuestaTipo" type="ContextoRespuestaTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ContextoRespuestaTipo;XSDElementDeclaration=39$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="ResultadoTransaccionTipo" type="ResultadoTransaccionTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ResultadoTransaccionTipo;XSDElementDeclaration=40$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="ErrorTipo" type="ErrorTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ErrorTipo;XSDElementDeclaration=41$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="PaginacionTipo" type="PaginacionTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/PaginacionTipo;XSDElementDeclaration=42$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="ContextoSolicitudTipo" type="ContextoSolicitudTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ContextoSolicitudTipo;XSDElementDeclaration=43$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="CriterioOrdenamientoTipo" type="CriterioOrdenamientoTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CriterioOrdenamientoTipo;XSDElementDeclaration=44$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="ServicioTipo" type="ServicioTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ServicioTipo;XSDElementDeclaration=45$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="OperacionCanalTipo" type="OperacionCanalTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/OperacionCanalTipo;XSDElementDeclaration=46$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="ConsumidorTipo" type="ConsumidorTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ConsumidorTipo;XSDElementDeclaration=47$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="AplicacionTipo" type="AplicacionTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/AplicacionTipo;XSDElementDeclaration=48$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="CanalTipo" type="CanalTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CanalTipo;XSDElementDeclaration=49$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="TerminalTipo" type="TerminalTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/TerminalTipo;XSDElementDeclaration=50$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="HuellaDigitalDispositivoTipo" type="HuellaDigitalDispositivoTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/HuellaDigitalDispositivoTipo;XSDElementDeclaration=51$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="ClienteNaturalTipo" type="ClienteNaturalTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ClienteNaturalTipo;XSDElementDeclaration=52$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="PersonaNaturalTipo" type="PersonaNaturalTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/PersonaNaturalTipo;XSDElementDeclaration=53$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="PersonaTipo" type="PersonaTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/PersonaTipo;XSDElementDeclaration=54$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="ContactoPersonaTipo" type="ContactoPersonaTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ContactoPersonaTipo;XSDElementDeclaration=55$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="TelefonoTipo" type="TelefonoTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/TelefonoTipo;XSDElementDeclaration=56$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="UbicacionPersonaTipo" type="UbicacionPersonaTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/UbicacionPersonaTipo;XSDElementDeclaration=57$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="MunicipioTipo" type="MunicipioTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MunicipioTipo;XSDElementDeclaration=58$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="DepartamentoTipo" type="DepartamentoTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/DepartamentoTipo;XSDElementDeclaration=59$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="TokenTipo" type="TokenTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/TokenTipo;XSDElementDeclaration=60$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="Notificacion" type="Notificacion">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/Notificacion;XSDElementDeclaration=61$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="TokenOTP" type="TokenOTP">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/TokenOTP;XSDElementDeclaration=62$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="SeguridadTokenTipo" type="SeguridadTokenTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/SeguridadTokenTipo;XSDElementDeclaration=63$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="CriterioConsultaTipo" type="CriterioConsultaTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CriterioConsultaTipo;XSDElementDeclaration=64$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="RangoFechasTipo" type="RangoFechasTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/RangoFechasTipo;XSDElementDeclaration=65$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="InfoHistoricoRSATipo" type="InfoHistoricoRSATipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/InfoHistoricoRSATipo;XSDElementDeclaration=66$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="PersonaJuridicaTipo" type="PersonaJuridicaTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/PersonaJuridicaTipo;XSDElementDeclaration=67$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="ProductoTipo" type="ProductoTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ProductoTipo;XSDElementDeclaration=68$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="EmpresaTipo" type="EmpresaTipo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/EmpresaTipo;XSDElementDeclaration=69$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+</xsd:schema>

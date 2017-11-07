@@ -1,0 +1,23 @@
+CREATE FUNCTION BuildHeaderProviderException(IN header REFERENCE, IN listexception REFERENCE, IN componentname CHARACTER) 
+BEGIN
+		--Declaración de los campos de salida del manejo de Excepciones en el data Header
+		SET header.responseData.status.statusCode = 'ProviderException';
+		
+		--Creación de los campos del mensaje de salida para posteriormente mapear.
+		CREATE FIELD header.responseData.status.providerException;
+		DECLARE proException REFERENCE TO header.responseData.status.providerException;
+		
+		--Declaración de los tres parámetros de entrada para la función de manejo del ExceptionList
+		DECLARE messageText 	CHARACTER '';
+		DECLARE parentName 		CHARACTER '';
+		DECLARE catlgName 		CHARACTER '';
+		DECLARE messageNumber 	INTEGER   0;
+		
+		--Llamado a la función de detalles de excepción
+   	    CALL getLastExceptionDetail(listexception,messageNumber,messageText,parentName,catlgName);
+		
+		SET proException.providerCode = catlgName ||  CAST(messageNumber AS CHARACTER);
+		SET proException.providerMessage = 'An Exception has ocurred: ' || parentName || '. With the following Inserts:' || messageText;
+		SET proException.providerLocation = componentname;
+		SET proException.providerDetail = listexception;
+END;

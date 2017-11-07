@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:complexType name="ConsultaDatosCuentaType">
+    <xsd:sequence>
+            <xsd:element name="Request" type="ConsultaDatosCuentaRequestType"/>
+        </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="ConsultaDatosCuenta" type="ConsultaDatosCuentaType">
+        <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ConsultaDatosCuenta;XSDElementDeclaration$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+    </xsd:element>
+  <xsd:complexType name="ConsultaDatosCuentaResponseType">
+    <xsd:sequence>
+      <xsd:element name="Response" type="ConsultaDatosCuentaRespType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="ConsultaDatosCuentaResponse" type="ConsultaDatosCuentaResponseType">
+        <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ConsultaDatosCuentaResponse;XSDElementDeclaration=1$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+    </xsd:element>
+    <xsd:complexType name="ConsultaDatosCuentaRequestType">
+    <xsd:sequence maxOccurs="1" minOccurs="1">
+      <xsd:element name="DataHeader" type="DataheaderRequestType"/>
+      <xsd:element name="Data" type="DataRequestType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="DataheaderRequestType">
+    <xsd:sequence maxOccurs="1" minOccurs="1">
+      <xsd:element name="nombreOperacion" type="xsd:string"/>
+      <xsd:element name="total" type="xsd:int"/>
+      <xsd:element name="jornada" type="xsd:short"/>
+      <xsd:element name="canal" type="xsd:short"/>
+      <xsd:element name="modoDeOperacion" type="xsd:short"/>
+      <xsd:element name="usuario" type="xsd:string"/>
+      <xsd:element name="perfil" type="xsd:short"/>
+      <xsd:element default="1.0.0" name="versionServicio" type="xsd:string"/>
+      <xsd:element name="idTransaccion" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="DataRequestType">
+    <xsd:sequence maxOccurs="1" minOccurs="1">
+      <xsd:element minOccurs="0" name="idSesion" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="codIdioma" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valOrigen" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valVersionApp" type="xsd:string"/>
+      <xsd:element name="valNumeroProducto" type="xsd:string"/>
+      <xsd:element name="codTipoProducto" type="xsd:short"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="ConsultaDatosCuentaRespType">
+    <xsd:sequence maxOccurs="1" minOccurs="1">
+      <xsd:element name="DataHeader" type="DataHeaderRespType"/>
+      <xsd:element minOccurs="0" name="Data" type="DataRespType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="DataHeaderRespType">
+    <xsd:sequence maxOccurs="1" minOccurs="1">
+      <xsd:element name="nombreOperacion" type="xsd:string"/>
+      <xsd:element name="total" type="xsd:int"/>
+      <xsd:element name="caracterAceptacion" type="xsd:string"/>
+      <xsd:element name="ultimoMensaje" type="xsd:short"/>
+      <xsd:element name="idTransaccion" type="xsd:string"/>
+      <xsd:element name="codMsgRespuesta" type="xsd:short"/>
+      <xsd:element minOccurs="0" name="msgRespuesta" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="DataRespType">
+    <xsd:sequence maxOccurs="1" minOccurs="1">
+      <xsd:element name="Registros" type="RegistrosDataType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="RegistrosDataType">
+    <xsd:sequence maxOccurs="1" minOccurs="1">
+      <xsd:element maxOccurs="unbounded" minOccurs="1" name="Registro" type="RegistroDataType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="RegistroDataType">
+    <xsd:sequence maxOccurs="1" minOccurs="1">
+      <xsd:element name="valNumeroProducto" type="xsd:string"/>
+      <xsd:element name="valMonedaOrigenProducto" type="xsd:string"/>
+      <xsd:element name="valNombre" type="xsd:string"/>
+      <xsd:element name="codProducto" type="xsd:short"/>
+      <xsd:element name="codSubProducto" type="xsd:int"/>
+      <xsd:element name="valDesProducto" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:element name="ConsultaDatosCuentaType" type="ConsultaDatosCuentaType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ConsultaDatosCuentaType;XSDElementDeclaration=2$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="ConsultaDatosCuentaResponseType" type="ConsultaDatosCuentaResponseType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ConsultaDatosCuentaResponseType;XSDElementDeclaration=3$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="ConsultaDatosCuentaRequestType" type="ConsultaDatosCuentaRequestType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ConsultaDatosCuentaRequestType;XSDElementDeclaration=4$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="DataheaderRequestType" type="DataheaderRequestType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/DataheaderRequestType;XSDElementDeclaration=5$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="DataRequestType" type="DataRequestType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/DataRequestType;XSDElementDeclaration=6$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="ConsultaDatosCuentaRespType" type="ConsultaDatosCuentaRespType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ConsultaDatosCuentaRespType;XSDElementDeclaration=7$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="DataHeaderRespType" type="DataHeaderRespType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/DataHeaderRespType;XSDElementDeclaration=8$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="DataRespType" type="DataRespType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/DataRespType;XSDElementDeclaration=9$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="RegistrosDataType" type="RegistrosDataType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/RegistrosDataType;XSDElementDeclaration=10$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="RegistroDataType" type="RegistroDataType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/RegistroDataType;XSDElementDeclaration=11$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+</xsd:schema>

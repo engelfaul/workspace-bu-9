@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MRMessageSet id="K0HCISS002001" name="SVC_PA_CambioUsuarioYClaveMsgSet" parser="XMLNSC">
+  <MRMsgCollection
+    href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd"
+    prefix="" targetNamespace="">
+    <message
+      href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd#/0/CambioUsuarioYClave;XSDElementDeclaration$MRMessage" name="CambioUsuarioYClave"/>
+    <message
+      href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd#/0/CambioUsuarioYClaveResponse;XSDElementDeclaration=1$MRMessage" name="CambioUsuarioYClaveResponse"/>
+    <message
+      href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd#/0/CambioUsuarioYClaveType;XSDElementDeclaration=2$MRMessage" name="CambioUsuarioYClaveType"/>
+    <message
+      href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd#/0/CambioUsuarioYClaveReqType;XSDElementDeclaration=3$MRMessage" name="CambioUsuarioYClaveReqType"/>
+    <message
+      href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd#/0/DataHeaderReqType;XSDElementDeclaration=4$MRMessage" name="DataHeaderReqType"/>
+    <message
+      href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd#/0/CambioUsuarioYClaveRequestType;XSDElementDeclaration=5$MRMessage" name="CambioUsuarioYClaveRequestType"/>
+    <message
+      href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd#/0/DataHeaderRespType;XSDElementDeclaration=6$MRMessage" name="DataHeaderRespType"/>
+    <message
+      href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd#/0/DataRespType;XSDElementDeclaration=7$MRMessage" name="DataRespType"/>
+    <element
+      href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd#/0/CambioUsuarioYClave;XSDElementDeclaration"
+      name="CambioUsuarioYClave" type="mset://SVC_PA_CambioUsuarioYClaveMsgSet#/-/complexType{}CambioUsuarioYClaveType"/>
+    <element
+      href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd#/0/CambioUsuarioYClaveResponse;XSDElementDeclaration=1"
+      name="CambioUsuarioYClaveResponse" type="mset://SVC_PA_CambioUsuarioYClaveMsgSet#/-/complexType{}CambioUsuarioYClaveResponse"/>
+    <element
+      href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd#/0/CambioUsuarioYClaveType;XSDElementDeclaration=2"
+      name="CambioUsuarioYClaveType" type="mset://SVC_PA_CambioUsuarioYClaveMsgSet#/-/complexType{}CambioUsuarioYClaveType"/>
+    <element
+      href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd#/0/CambioUsuarioYClaveReqType;XSDElementDeclaration=3"
+      name="CambioUsuarioYClaveReqType" type="mset://SVC_PA_CambioUsuarioYClaveMsgSet#/-/complexType{}CambioUsuarioYClaveReqType"/>
+    <element
+      href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd#/0/DataHeaderReqType;XSDElementDeclaration=4"
+      name="DataHeaderReqType" type="mset://SVC_PA_CambioUsuarioYClaveMsgSet#/-/complexType{}DataHeaderReqType"/>
+    <element
+      href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd#/0/CambioUsuarioYClaveRequestType;XSDElementDeclaration=5"
+      name="CambioUsuarioYClaveRequestType" type="mset://SVC_PA_CambioUsuarioYClaveMsgSet#/-/complexType{}CambioUsuarioYClaveRequestType"/>
+    <element
+      href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd#/0/DataHeaderRespType;XSDElementDeclaration=6"
+      name="DataHeaderRespType" type="mset://SVC_PA_CambioUsuarioYClaveMsgSet#/-/complexType{}DataHeaderRespType"/>
+    <element
+      href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd#/0/DataRespType;XSDElementDeclaration=7"
+      name="DataRespType" type="mset://SVC_PA_CambioUsuarioYClaveMsgSet#/-/complexType{}DataRespType"/>
+    <complexType
+      baseType="mset://SVC_PA_CambioUsuarioYClaveMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd#/0/CambioUsuarioYClaveType;XSDComplexTypeDefinition" name="CambioUsuarioYClaveType"/>
+    <complexType
+      baseType="mset://SVC_PA_CambioUsuarioYClaveMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd#/0/CambioUsuarioYClaveReqType;XSDComplexTypeDefinition=1" name="CambioUsuarioYClaveReqType"/>
+    <complexType
+      baseType="mset://SVC_PA_CambioUsuarioYClaveMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd#/0/DataHeaderReqType;XSDComplexTypeDefinition=2" name="DataHeaderReqType"/>
+    <complexType
+      baseType="mset://SVC_PA_CambioUsuarioYClaveMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd#/0/CambioUsuarioYClaveRequestType;XSDComplexTypeDefinition=3" name="CambioUsuarioYClaveRequestType"/>
+    <complexType
+      baseType="mset://SVC_PA_CambioUsuarioYClaveMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd#/0/CambioUsuarioYClaveResponse;XSDComplexTypeDefinition=4" name="CambioUsuarioYClaveResponse"/>
+    <complexType
+      baseType="mset://SVC_PA_CambioUsuarioYClaveMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd#/0/DataHeaderRespType;XSDComplexTypeDefinition=5" name="DataHeaderRespType"/>
+    <complexType
+      baseType="mset://SVC_PA_CambioUsuarioYClaveMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_CambioUsuarioYClaveMsgSet/SVC_PA_CambioUsuarioYClaveMsgSet/CambioUsuarioYClaveBusRegional.mxsd#/0/DataRespType;XSDComplexTypeDefinition=6" name="DataRespType"/>
+  </MRMsgCollection>
+</MRMessageSet>

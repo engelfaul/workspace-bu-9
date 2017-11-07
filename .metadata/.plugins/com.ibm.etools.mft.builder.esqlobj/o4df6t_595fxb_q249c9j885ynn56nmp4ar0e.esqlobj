@@ -1,0 +1,87 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+
+		-- Mantener el CorrelId
+		CALL CopyMessageHeaders();
+		
+		--Referencia al Header y Body del mensaje entrante
+		DECLARE refMsgIn		    			REFERENCE TO InputRoot.XMLNSC.*:esbXML;
+		DECLARE refHeaderIn         			REFERENCE TO refMsgIn.Header;
+		DECLARE refBodyIn						REFERENCE TO refMsgIn.Body;
+		DECLARE refRespIn						REFERENCE TO refBodyIn.TGOTP_RESP;
+		
+
+		--Referencia al OutputLocalEnvironment
+		DECLARE refLocEnv		    			REFERENCE TO OutputLocalEnvironment;
+					
+		--Referencia al Environment
+		DECLARE refEnvVar           			REFERENCE TO Environment.Variables;
+		
+		--Crear mensaje de salida
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML;
+		DECLARE refMsgOut						REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML;
+		
+		--Crear campo y referencia Header de salida.
+		CREATE FIELD refMsgOut.Header;
+		DECLARE refHeaderOut					REFERENCE TO refMsgOut.Header;
+		
+		--Crear campo y referencia Body de salida
+		CREATE FIELD refMsgOut.Body;
+		DECLARE refBodyOut						REFERENCE TO refMsgOut.Body;
+		
+		SET refHeaderOut 						= refHeaderIn;
+		
+		DECLARE refDataHeaderIn 				REFERENCE TO refRespIn.Header;
+        DECLARE refDataIn 						REFERENCE TO refRespIn.Body;											
+		
+		 --Garantizar que se envía un messageId
+        IF refHeaderIn.messageId IS NULL OR FIELDVALUE(refHeaderIn.messageId) = VACIO THEN
+            SET refHeaderOut.messageId 			= InputRoot.MQMD.CorrelId; 
+        ELSE 
+            SET refHeaderOut.messageId 			= refHeaderIn.messageId; 
+        END IF;
+        
+        CREATE FIELD refBodyOut.V1_SrvScnToken:msjRespOpGenerarTokenOTP;
+        DECLARE refFirstTagOut					REFERENCE TO refBodyOut.V1_SrvScnToken:msjRespOpGenerarTokenOTP;
+        
+        --Declarar prefijos de carga útil
+        SET refFirstTagOut.(XMLNSC.NamespaceDecl)xmlns:v1 					= V1_SrvScnToken;
+        SET refFirstTagOut.(XMLNSC.NamespaceDecl)xmlns:v11 					= v11Res;
+        SET refFirstTagOut.(XMLNSC.NamespaceDecl)xmlns:v12 					= v12Res;
+        
+        CREATE FIELD refFirstTagOut.V1_SrvScnToken:contextoRespuesta;
+        DECLARE refContextoRespuesta 			REFERENCE TO refFirstTagOut.V1_SrvScnToken:contextoRespuesta;
+        
+        CREATE FIELD refContextoRespuesta.v11Res:resultadoTransaccion;
+        DECLARE refResultadoTrans				REFERENCE TO refContextoRespuesta.v11Res:resultadoTransaccion;
+        
+        
+        --Mapeos de los campos
+        SET refResultadoTrans.v12Res:valCaracterAceptacion 			= 'B';
+        SET refResultadoTrans.v12Res:idTransaccion 		 			= refEnvVar.idTransaccion;
+        SET refResultadoTrans.v12Res:valNumeroAprobacion 			= ZERO;
+        SET refResultadoTrans.v12Res:fecOperacion 		 			= refEnvVar.fecOperacion; 
+        
+        CREATE FIELD refFirstTagOut.V1_SrvScnToken:tokenOTP;
+        DECLARE refTokenOTP			REFERENCE TO refFirstTagOut.V1_SrvScnToken:tokenOTP;
+        
+        --Mapeos campos tokenOTP
+        SET refTokenOTP.v15TRes:valTokenOTP			= TRIM(FIELDVALUE(refDataIn.TOKEN));
+        SET refTokenOTP.v15TRes:idSesionToken		= ZERO;
+        SET refTokenOTP.v15TRes:feInicio      		= CURRENT_DATE;
+			
+		--Llamado a la función que setea en el localEnvironment la cola de respuesta
+		CALL SetDestinationListHd(refHeaderOut, refLocEnv);
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;

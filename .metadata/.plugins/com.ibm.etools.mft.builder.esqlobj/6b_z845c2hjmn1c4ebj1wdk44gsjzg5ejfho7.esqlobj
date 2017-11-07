@@ -1,0 +1,24 @@
+CREATE FUNCTION getHomolog( IN idCanal			CHARACTER,
+							IN idHomologacion	CHARACTER,
+							IN valorEntrada		CHARACTER,
+							IN refHomologView	REFERENCE )	RETURNS CHARACTER	
+BEGIN
+	--Declaración de variables	
+    DECLARE result				ROW NULL;
+    DECLARE resultHomolog		CHARACTER VACIO;
+	DECLARE resultObligatorio	CHARACTER VACIO;
+	
+	--Obtener el valor de la homologación de valor de entrada mediante consulta a la variable de caché.
+    SET result.datos  = THE(
+							   SELECT T.VALOR_SALIDA
+							   FROM refHomologView.row[] AS T 
+							   WHERE T.ID_CANAL			= idCanal
+							   AND T.ID_HOMOLOGACION	= idHomologacion
+							   AND T.VALOR_ENTRADA		= valorEntrada
+							   );
+							   
+	--Almacena el valor del resultado de la homologación						   
+	SET resultHomolog		= FIELDVALUE(result.datos.VALOR_SALIDA);
+	
+    RETURN resultHomolog;
+END;

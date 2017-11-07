@@ -1,0 +1,39 @@
+CREATE FUNCTION ProcessErrorTransformationSCNRegionalToken(IN refInMsg REFERENCE, IN refEnvVar REFERENCE, INOUT msgOut REFERENCE, IN messageNumber INTEGER)
+BEGIN	
+	--Referencias a mensaje de entrada
+	DECLARE refMessageException REFERENCE TO refInMsg.MessageException;
+	
+	---Declaración de variables
+	DECLARE code			CHARACTER FIELDVALUE(refMessageException.Code); 
+	
+	CREATE FIELD msgOut.V1_SrvScnToken:contextoRespuesta;
+    DECLARE refContextoRespuesta 										REFERENCE TO msgOut.V1_SrvScnToken:contextoRespuesta;
+    
+    CREATE FIELD refContextoRespuesta.v11Res:resultadoTransaccion;
+    DECLARE refResultadoTrans											REFERENCE TO refContextoRespuesta.v11Res:resultadoTransaccion;
+    
+    CREATE FIELD refContextoRespuesta.v11Res:error;
+    DECLARE refError													REFERENCE TO refContextoRespuesta.v11Res:error;
+    
+    --Mapeos de los campos de salida
+    
+    SET refResultadoTrans.v12Res:codEstadoTransaccion	= '';
+	SET refResultadoTrans.v12Res:valCaracterAceptacion	= ACEPTA_MAL;
+	SET refResultadoTrans.v12Res:idTransaccion			= refEnvVar.idTransaccion;
+	SET refResultadoTrans.v12Res:fecOperacion			= refEnvVar.fecOperacion;
+	
+	IF CONTAINS(CODIGOS_ERROR_VALIDACION, CAST (messageNumber AS CHARACTER)) THEN
+		--Mapeo en caso de error de validación mensaje de entrada
+		SET refError.v13Res:codMsjRespuesta		= COD_DATA_IN_ERROR;
+    	SET refError.v13Res:valMsjRespuesta		= DESC_DATA_IN_ERROR;
+	ELSEIF(messageNumber = 2951)THEN
+		--Mapeo en caso de error de homologación
+		SET refError.v13Res:codMsjRespuesta		= COD_HOMOLOG_ERROR;
+    	SET refError.v13Res:valMsjRespuesta		= DESC_HOMOLOG_ERROR;
+	ELSE
+		--Mapeo en caso de error de ejecución del ESB
+		SET refError.v13Res:codMsjRespuesta		= DefaultCode;
+    	SET refError.v13Res:valMsjRespuesta		= DefaultDescription;
+	END IF;
+		
+END;

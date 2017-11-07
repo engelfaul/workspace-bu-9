@@ -1,0 +1,764 @@
+BROKER SCHEMA com.davivienda.busregional.servicios
+PATH com.davivienda.utils;
+
+
+/*
+ * File name: ConsultaClientesPorUsa.esql
+ *
+ * Authors:   
+ *                
+ * Email:	 
+ * 
+ * Date:      
+ * 
+ * Version:   1.0
+ */ 
+ 
+ 
+DECLARE UDP_SERVICIO	EXTERNAL CHARACTER NULL;
+/*
+*	Module name: RemoveEnvelope
+*	Purpose: Remover el namespace del mensaje de entrada
+* 			 para validarlo con el message set
+*/
+CREATE COMPUTE MODULE RemoveEnvelope
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		--mantener el CorrelId
+		CALL CopyMessageHeaders();		
+		
+		--Referencia al Header y Body del envolvente
+		DECLARE refMsgIn 		REFERENCE TO InputRoot.XMLNSC.*:esbXML;
+		DECLARE refHeaderIn 	REFERENCE TO refMsgIn.Header;
+		DECLARE refBodyIn		REFERENCE TO refMsgIn.Body;
+				
+		--Referencia al contenedor de la carga útil
+		DECLARE refEndpointElem	REFERENCE TO refBodyIn;
+		MOVE refEndpointElem 	FIRSTCHILD NAMESPACE *;
+		
+		-- Referencia al Environment
+		CREATE FIELD Environment.Variables;
+		DECLARE refEnvVar		REFERENCE TO Environment.Variables;
+		
+		--Transportar el Header de la envoltura esbXML
+		SET refEnvVar.Header	= refHeaderIn;
+				
+		-- Almacenar en Environment para posterior uso en la respuesta del componente
+		DECLARE refDataHeaderIn	 	REFERENCE TO refEndpointElem.Request.DataHeader;
+		
+		SET refEnvVar.NameSpace			= FIELDNAMESPACE(refEndpointElem);
+		SET refEnvVar.nombreOperacion	= refDataHeaderIn.nombreOperacion;	
+		SET refEnvVar.total			 	= refDataHeaderIn.total;
+		SET refEnvVar.idTransaccion		= refDataHeaderIn.idTransaccion;
+		SET refEnvVar.codPais			= refDataHeaderIn.codPais;
+		--Crear mensaje de salida
+		CREATE FIELD OutputRoot.XMLNSC;
+		DECLARE refMsgOut		REFERENCE TO OutputRoot.XMLNSC;
+		
+		--Indicar propiedad del Message Set
+		SET OutputRoot.Properties.MessageSet = NMessageSet;
+				
+		--Armar mensaje de salida sin namespace
+		SET refMsgOut			= refBodyIn;
+		
+		CALL StripNamespaces(refMsgIn);
+		CALL RemoveNamespace(refMsgOut, FIELDVALUE(refEnvVar.NameSpace));
+				
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;
+
+
+/*
+*  Module name: ApplyRequestTransformation
+*  Purpose: Transformar el mensaje request del canal al mensaje
+*           request enviado al backend como requerimiento
+*/
+CREATE COMPUTE MODULE ApplyRequestTransformation_APAN
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- mantener el CorrelId
+		CALL CopyMessageHeaders();
+		
+		DECLARE refLocEnv	REFERENCE TO OutputLocalEnvironment;
+		DECLARE refEnvVar	REFERENCE TO Environment.Variables;
+		DECLARE refHeaderIn	REFERENCE TO refEnvVar.Header;
+
+		DECLARE refBodyIn		REFERENCE TO InputRoot.XMLNSC.ActualizacionParametrosNotificaciones; 
+		DECLARE refDataHeaderIn REFERENCE TO refBodyIn.Request.DataHeader;
+		DECLARE refDataIn 		REFERENCE TO refBodyIn.Request.Data;
+		
+		-- Crear mensaje de salida
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML;
+		DECLARE refMsgOut	REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML;
+		
+		-- Crear Header de salida
+		CREATE FIELD refMsgOut.Header;
+		DECLARE refHeaderOut		REFERENCE TO refMsgOut.Header;
+		
+		-- Transportar el header de la envoltura esbXML
+		SET refHeaderOut = refHeaderIn;
+		
+		-- Crear y referenciar contenedor Body de salida
+		CREATE FIELD refMsgOut.Body;
+		DECLARE refBodyOut	REFERENCE TO refMsgOut.Body;
+		
+		-- Declaración de variables
+		DECLARE numTransaccion CHARACTER '';
+		DECLARE nomTransaccion CHARACTER FIELDNAME(refBodyIn);
+		
+		-- Garantizar que se envía un messageId
+		IF refHeaderIn.messageId IS NULL OR FIELDVALUE(refHeaderIn.messageId) = VACIO THEN
+			SET refHeaderOut.messageId = InputRoot.MQMD.CorrelId;
+		ELSE
+			SET refHeaderOut.messageId = refHeaderIn.messageId;
+		END IF;
+		
+		
+		CREATE FIELD refBodyOut.TAPAN_REQ;
+		DECLARE refReqOut	REFERENCE TO refBodyOut.TAPAN_REQ;
+		
+		CREATE FIELD refReqOut.Header;
+		DECLARE headerOut		REFERENCE TO refReqOut.Header;
+
+		CREATE FIELD refReqOut.Body;
+		DECLARE bodyOut REFERENCE TO refReqOut.Body;
+
+		DECLARE ESPACIO	CONSTANT CHARACTER ' ';
+
+		-- Mapeo de servicio
+		SET headerOut.SERVICIO				= doRPadCharEst(UDP_SERVICIO, 20, ESPACIO);
+		SET headerOut.IDTRX					= doRPadCharEst(refDataHeaderIn.idTransaccion, 36, ESPACIO);
+		SET headerOut.IDSESION 				= doRPadCharEst(refDataIn.idSesion, 36, ESPACIO);
+		SET headerOut.FECHASIS		 		= doRPadCharEst(CAST(CURRENT_TIMESTAMP AS CHARACTER FORMAT 'YYYY-MM-dd hh:mm:ss'), 30, ESPACIO);
+		SET headerOut.CANAL					= doRPadCharEst(refDataHeaderIn.canal, 10, ESPACIO);
+		SET headerOut.PAIS					= doRPadCharEst(refDataIn.codPais, 3, ESPACIO);
+		SET headerOut.USUARIO				= doRPadCharEst(refDataHeaderIn.usuario, 20, ESPACIO);
+		SET headerOut.IDIOMA				= doRPadCharEst(refDataIn.codIdioma, 10, ESPACIO);
+		SET headerOut.IPCLIENTE				= doRPadCharEst(refDataIn.valOrigen, 50, ESPACIO);
+		
+		SET bodyOut.tipoID	                = doRPadCharEst(refDataIn.codTipoIdentificacion, 4, ESPACIO);
+		SET bodyOut.numeroID	            = doRPadCharEst(refDataIn.valNumeroIdentificacion, 30, ESPACIO);
+		SET bodyOut.email		            = doRPadCharEst(refDataIn.valEmailNotificaciones, 60, ESPACIO);
+	--lista
+		DECLARE i	INTEGER;
+		SET 	i		= 1; 
+		
+	
+		DECLARE lista CHARACTER;
+		SET lista = '';
+		DECLARE notifiCodTipo CHARACTER;
+		DECLARE NumProducto CHARACTER;
+		DECLARE valCodigoMoneda CHARACTER;
+		DECLARE valOpe CHARACTER;
+		DECLARE valCel CHARACTER;
+		DECLARE valOpeAdicional CHARACTER;
+		DECLARE valCelAdicional CHARACTER;
+		DECLARE email CHARACTER;
+		
+		WHILE i <= CARDINALITY(refDataIn.ParametrosNotificaciones.ParametrosNotificacion[]) DO
+			
+			SET notifiCodTipo = refDataIn.ParametrosNotificaciones.ParametrosNotificacion[i].codTipoNotificacion;
+			
+			DECLARE valFamilia CHARACTER THE(SELECT ITEM T.valValor 
+			FROM refDataIn.ParametrosNotificaciones.ParametrosNotificacion[i].ParametrosAdicionales.ParametroAdicional[] as T WHERE CONTAINS(T.valLlave, 'Familia'));
+
+			DECLARE valTipoProducto CHARACTER THE(SELECT ITEM T.valValor 
+			FROM refDataIn.ParametrosNotificaciones.ParametrosNotificacion[i].ParametrosAdicionales.ParametroAdicional[] as T WHERE CONTAINS(T.valLlave, 'TipoProducto'));
+			
+			DECLARE valGrupo CHARACTER THE(SELECT ITEM T.valValor 
+			FROM refDataIn.ParametrosNotificaciones.ParametrosNotificacion[i].ParametrosAdicionales.ParametroAdicional[] as T WHERE CONTAINS(T.valLlave, 'Grupo'));
+			
+			DECLARE valCodProducto CHARACTER THE(SELECT ITEM T.valValor 
+			FROM refDataIn.ParametrosNotificaciones.ParametrosNotificacion[i].ParametrosAdicionales.ParametroAdicional[] as T WHERE CONTAINS(T.valLlave, 'CodigoProducto'));
+				
+			SET NumProducto			= COALESCE(refDataIn.ParametrosNotificaciones.ParametrosNotificacion[i].valNumeroProducto,'');
+			SET valCodigoMoneda 	= COALESCE(refDataIn.ParametrosNotificaciones.ParametrosNotificacion[i].codMoneda,'');
+			SET valOpe 				= COALESCE(refDataIn.ParametrosNotificaciones.ParametrosNotificacion[i].valOperador,'');
+			SET valCel 				= COALESCE(refDataIn.ParametrosNotificaciones.ParametrosNotificacion[i].valCelular,'');
+			SET valOpeAdicional 	= COALESCE(refDataIn.ParametrosNotificaciones.ParametrosNotificacion[i].valOperadorAdicional,'');
+			SET valCelAdicional 	= COALESCE(refDataIn.ParametrosNotificaciones.ParametrosNotificacion[i].valCelularAdicional,'');
+			SET email 				= refDataIn.ParametrosNotificaciones.ParametrosNotificacion[i].valEmail;
+			
+			IF (notifiCodTipo = 'T') THEN
+				SET lista = lista || notifiCodTipo || '|' || valFamilia || '|' || valTipoProducto || '|' || valGrupo || '|' 
+				|| valCodProducto || '|' || NumProducto || '|' || valCodigoMoneda || '|' || valOpe || '|' || valCel
+				 || valOpeAdicional || '|' || valCelAdicional || '|' || email || ';';
+			ELSE IF	(notifiCodTipo = 'E') THEN
+				SET lista = lista || notifiCodTipo || '|' || valFamilia || '|' || valTipoProducto || '|' || valGrupo || '|' 
+				|| valCodProducto || '|' || NumProducto || '|' || valCodigoMoneda || '|' || email || ';';	
+			END IF; END IF;
+		  SET i=i+1;
+		END WHILE;
+		
+		SET bodyOut.lista 					= doRPadCharEst(lista, 16384, ESPACIO); 
+	--politicas
+		SET 	i		= 1;
+		DECLARE pol CHARACTER;
+		SET pol = '';
+		WHILE i <= CARDINALITY(refDataIn.Archivos.Archivo.Politicas.valPolitica[]) DO
+			SET pol = pol || refDataIn.Archivos.Archivo.Politicas.valPolitica[i] || ','; 
+			SET i=i+1;
+		END WHILE;
+		
+		SET bodyOut.politicas	            = doRPadCharEst(pol, 16384, ESPACIO);	
+	--
+		SET bodyOut.archivo		            = doRPadCharEst(refDataIn.Archivos.Archivo.valNombre, 128, ESPACIO);
+		SET bodyOut.adjunto		            = doRPadCharEst(refDataIn.Archivos.Archivo.codTipoArchivo, 100, ESPACIO);
+		-- sorteo de cola en el cual el adaptador me retorna la respuesta correspondiente
+		SET refHeaderOut.internalRoutingData.replyToQueue.queueName = UDPreplyToQ;
+		
+		-- Setear la cola de salida para request
+		CALL SetDestinationList(UDPReqQ, VACIO, refLocEnv);
+		
+		-- Se elimina el arbol del mensaje de entrada almacenado en el environment
+		DELETE FIELD refEnvVar.Header;
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;
+
+/*
+* Module name: ProcessErrorMessageReq
+* Purpose: Es el encargado de generar respuestas de
+*          error
+*/
+CREATE COMPUTE MODULE ProcessErrorMessageReq
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- mantener el CorrelId
+		CALL CopyMessageHeaders();
+		
+		-- Referencia al Header y Body del envolvente
+		DECLARE refMsgIn		REFERENCE TO InputRoot.XMLNSC.*:esbXML;
+		DECLARE refHeaderIn 	REFERENCE TO refMsgIn.Header;
+		DECLARE refBodyIn   	REFERENCE TO refMsgIn.Body;
+		
+		-- Referencia al OutputLocalEnvironment
+		DECLARE refLocEnv		REFERENCE TO OutputLocalEnvironment;
+		
+		-- Referencia al Environment
+		CREATE FIELD Environment.Variables;
+		DECLARE refEnvVar 		REFERENCE TO Environment.Variables;
+		
+		-- Crear mensaje de salida
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML;
+		DECLARE refMsgOut 		REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML;
+		
+		-- Crear campo y referencia Header de salida
+		CREATE FIELD refMsgOut.Header;
+		DECLARE refHeaderOut	REFERENCE TO refMsgOut.Header;		
+		
+		-- Declaración de los tres parámetros de entrada para la función de manejo del ExceptionList
+		DECLARE nameSpaceResp	CHARACTER FIELDVALUE(refEnvVar.NameSpace);
+		DECLARE messageText		CHARACTER VACIO;
+		DECLARE parentName		CHARACTER VACIO;
+		DECLARE catlgName		CHARACTER VACIO;
+		DECLARE messageNumber	INTEGER ZERO_INT;
+		
+		-- Transportar el Header de la envoltura esbXML
+		SET refHeaderOut = refHeaderIn;
+		
+		-- Validación MessageID
+		IF refHeaderIn.messageId IS NULL OR FIELDVALUE(refHeaderIn.messageId) = VACIO THEN
+			SET refHeaderOut.messageId = InputRoot.MQMD.CorrelId;
+		ELSE
+			SET refHeaderOut.messageId = refHeaderIn.messageId;
+		END IF;
+		
+		-- Llamado a función que construye un systemException en el esbXML:Header
+		CALL BuildHeaderSystemException(refHeaderOut, InputExceptionList, UDPReqQ);
+		
+		-- Propagar mensaje al HandleError
+		PROPAGATE TO TERMINAL 'out1' MESSAGE OutputRoot DELETE NONE;
+		
+		-- Llamado a función que construye un systemException en el esbXML:Header
+		CALL getLastExceptionDetail(InputExceptionList, messageNumber, messageText, parentName, catlgName);
+		
+		-- Crear campo y referencia Body de salida
+		CREATE FIELD refMsgOut.Body;
+		DECLARE refBodyOut	REFERENCE TO refMsgOut.Body;
+		
+		-- Declaración y referencias campos de la carga útil de salida
+		CREATE FIELD refBodyOut.{nameSpaceResp}:ActualizacionParametrosNotificacionesResponse;
+		DECLARE refRespOut	REFERENCE TO refBodyOut.{nameSpaceResp}:ActualizacionParametrosNotificacionesResponse;
+		
+		-- Declarar prefijo de la carga útil
+		SET refRespOut.(XMLNSC.NamespaceDecl)xmlns:cam = nameSpaceResp;
+		
+		CREATE LASTCHILD OF refRespOut NAME 'Response';
+		MOVE refRespOut LASTCHILD;
+		
+		-- Llamado a la función que construye el mensaje de salida por Error Datos de Entrada (Error Tecnico)
+		CALL ProcessErrorTransformationDataHeaderBranch(refBodyIn, refEnvVar, refRespOut, messageNumber);
+		
+		-- Setear la cola de salida
+		CALL SetDestinationListHd(refHeaderOut, refLocEnv); 
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;
+
+/*
+ *	Module name: ApplyResponseTransformation
+ *	Purpose: Transformar el formato de mensaje de respuesta del 
+ *			sistema backend A el formato de mensaje de respuesta para
+ *			el canal o servicio.
+ */
+CREATE COMPUTE MODULE ApplyResponseTransformation_APAN
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- Mantener el CorrelId
+		CALL CopyMessageHeaders();
+		
+		--Referencia al Header y Body del mensaje entrante
+		DECLARE refMsgIn		    REFERENCE TO InputRoot.XMLNSC.*:esbXML;
+		DECLARE refHeaderIn         REFERENCE TO refMsgIn.Header;
+		DECLARE refBodyIn			REFERENCE TO refMsgIn.Body;
+		DECLARE refRespIn			REFERENCE TO refBodyIn.TAPAN_RESP.Header;
+		DECLARE refRespInBody		REFERENCE TO refBodyIn.TAPAN_RESP.Body;
+		
+		--Referencia al OutputLocalEnvironment
+		DECLARE refLocEnv		    REFERENCE TO OutputLocalEnvironment;
+				
+		--Referencia al Environment
+		DECLARE refEnvVar           REFERENCE TO Environment.Variables;
+		
+		--Crear mensaje de salida
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML;
+		DECLARE refMsgOut		REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML;
+		
+		--Crear campo y referencia Header de salida.
+		CREATE FIELD refMsgOut.Header;
+		DECLARE refHeaderOut	REFERENCE TO refMsgOut.Header;
+		
+		--Crear campo y referencia Body de salida
+		CREATE FIELD refMsgOut.Body;
+		DECLARE refBodyOut		REFERENCE TO refMsgOut.Body;
+		
+		 --Garantizar que se envía un messageId
+        IF refHeaderIn.messageId IS NULL OR FIELDVALUE(refHeaderIn.messageId) = VACIO THEN
+            SET refHeaderOut.messageId = InputRoot.MQMD.CorrelId; 
+        ELSE 
+            SET refHeaderOut.messageId = refHeaderIn.messageId; 
+        END IF;
+        
+		--Referencia al namespace
+		DECLARE nameSpaceResp		CHARACTER refEnvVar.NameSpace;
+        -- crear response
+		CREATE FIELD refBodyOut.{nameSpaceResp}:ActualizacionParametrosNotificacionesResponse;
+		DECLARE refFirstTagOut	REFERENCE TO refBodyOut.{nameSpaceResp}:ActualizacionParametrosNotificacionesResponse;
+		
+		-- Declarar prefijo de la carga útil
+		SET refFirstTagOut.(XMLNSC.NamespaceDecl)xmlns:cam = nameSpaceResp;
+		
+		CREATE LASTCHILD OF refFirstTagOut NAME 'Response';
+		MOVE refFirstTagOut LASTCHILD;
+		
+		-- Crear los tag contenedores de respuesta
+        CREATE FIELD refFirstTagOut.DataHeader;
+        DECLARE refDataHeaderOut 									REFERENCE TO refFirstTagOut.DataHeader;
+        
+        CREATE FIELD refFirstTagOut.Data;
+        DECLARE refDataOut											REFERENCE TO refFirstTagOut.Data;
+       
+      							
+		--Transportar el Header de la envoltura esbXML
+		SET refHeaderOut = refHeaderIn;
+		
+		--Mapeos de salida
+		SET refDataHeaderOut.nombreOperacion	   = TRIM(CAST(FIELDVALUE(refEnvVar.nombreOperacion) AS CHARACTER));
+		SET refDataHeaderOut.total		  		   = TRIM(FIELDVALUE(refEnvVar.total));
+		SET refDataHeaderOut.caracterAceptacion    = 'B';
+		SET refDataHeaderOut.ultimoMensaje		   = '1';
+		SET refDataHeaderOut.idTransaccion         = TRIM(CAST(FIELDVALUE(refEnvVar.idTransaccion) AS CHARACTER));
+		SET refDataHeaderOut.codMsgRespuesta   	   = TRIM(CAST(FIELDVALUE(refRespIn.ERROR) AS CHARACTER));
+		SET refDataHeaderOut.msgRespuesta   	   = TRIM(CAST(FIELDVALUE(refRespIn.MENSAJER) AS CHARACTER));
+		
+		--Llamado a la función que setea en el localEnvironment la cola de respuesta
+		CALL SetDestinationListHd(refHeaderOut, refLocEnv);
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;
+
+/*
+ *	Module name: ApplyMessageExceptionTransformation
+ *	Purpose: Transformar el formato de mensaje excepción
+ *			de respuesta del sistema backend A el formato de 
+ *			mensaje de respuesta para el canal o servicio.
+ */
+CREATE COMPUTE MODULE ApplyMessageExceptionTransformation
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		--Mantener el CorrelId
+        CALL CopyMessageHeaders();
+        
+        --Referencia al Header y Body del envolvente
+        DECLARE refMsgIn         REFERENCE TO InputRoot.XMLNSC.*:esbXML;
+        DECLARE refHeaderIn      REFERENCE TO refMsgIn.Header;
+        DECLARE refBodyIn        REFERENCE TO refMsgIn.Body;
+            
+        
+        --Referencia al OutputLocalEnvironment
+        DECLARE refLocEnv REFERENCE TO OutputLocalEnvironment;
+                                                
+        --Referencia al Environment
+        CREATE FIELD Environment.Variables;
+        DECLARE refEnvVar REFERENCE TO Environment.Variables;
+        
+        --Declaración de variables
+		DECLARE nameSpaceResp			CHARACTER FIELDVALUE(refEnvVar.NameSpace);
+        
+        --Crear mensaje de salida
+        CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML;
+        DECLARE refMsgOut       REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML;
+        
+        --Crear campo y referencia Header de salida.
+        CREATE FIELD refMsgOut.Header;
+        DECLARE refHeaderOut    REFERENCE TO refMsgOut.Header;
+        
+        --Transportar el Header de la envoltura esbXML      
+        SET refHeaderOut = refHeaderIn;
+        
+        --Validacion MessageID
+        IF refHeaderIn.messageId IS NULL OR FIELDVALUE(refHeaderIn.messageId) = VACIO THEN 
+            SET refHeaderOut.messageId = InputRoot.MQMD.CorrelId; 
+        ELSE 
+            SET refHeaderOut.messageId = refHeaderIn.messageId; 
+        END IF;
+        
+        --Crear campo y referencia Body de salida
+        CREATE FIELD refMsgOut.Body;
+        DECLARE refBodyOut      REFERENCE TO refMsgOut.Body;
+        
+        -- crear response
+		CREATE FIELD refBodyOut.{nameSpaceResp}:ActualizacionParametrosNotificacionesResponse;
+		DECLARE refFirstTagOut	REFERENCE TO refBodyOut.{nameSpaceResp}:ActualizacionParametrosNotificacionesResponse;
+		
+		-- Declarar prefijo de la carga útil
+		SET refFirstTagOut.(XMLNSC.NamespaceDecl)xmlns:cam = nameSpaceResp;
+        
+        CREATE LASTCHILD OF refFirstTagOut NAME 'Response';
+		MOVE refFirstTagOut LASTCHILD;
+		
+        --Setear la cola de salida
+		DECLARE destinationqueue CHARACTER refHeaderIn.requestData.endpointReference.routingData.
+										   responseQueueEndpoint.queueName;
+        	
+	    --Llamado a función que construye el mensaje de salida por Error Datos de Entrada (Error Tecnico)
+	    CALL TechnicalErrorTransformationDataHeaderBranch(refBodyIn, refEnvVar, refFirstTagOut);
+        
+        --Setear la cola de salida
+		CALL SetDestinationList(destinationqueue,'',refLocEnv);
+        
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;
+
+
+
+/*
+ *	Module name: ApplyBusinessErrorTransformation
+ *	Purpose: Transformar el formato de mensaje error de negocio 
+ *			de respuesta del sistema backend al formato de 
+ *			mensaje de respuesta para el canal.
+ */
+CREATE COMPUTE MODULE ApplyBusinessErrorTransformation_APAN
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- Mantener el CorrelId
+		CALL CopyMessageHeaders();
+		
+		--Referencia al Header y Body del mensaje entrante
+		DECLARE refMsgIn			REFERENCE TO InputRoot.XMLNSC.*:esbXML;
+		DECLARE refHeaderIn     	REFERENCE TO refMsgIn.Header;
+		DECLARE refBodyIn			REFERENCE TO refMsgIn.Body;
+		DECLARE refRespIn			REFERENCE TO refBodyIn.TAPAN_RESP.Header;
+		
+		--Referencia al OutputLocalEnvironment
+		DECLARE refLocEnv		REFERENCE TO OutputLocalEnvironment;
+					
+		--Referencia al Environment
+		DECLARE refEnvVar REFERENCE TO Environment.Variables;
+		
+		--Declaración de variables
+		DECLARE nameSpaceResp			CHARACTER FIELDVALUE(refEnvVar.NameSpace);
+		
+		--Crear mensaje de salida
+        CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML;
+        DECLARE refMsgOut           REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML;
+
+        --Crear Header de salida
+        CREATE FIELD refMsgOut.Header;
+        DECLARE refHeaderOut        REFERENCE TO refMsgOut.Header;
+        
+        --Declaración de variables
+		DECLARE codMsjRespuesta		CHARACTER TRIM(FIELDVALUE(refRespIn.ERROR));
+		DECLARE valMsjRespuesta	    CHARACTER TRIM(FIELDVALUE(refRespIn.MENSAJER));
+		
+		--Transportar el Header de la envoltura esbXML
+		SET refHeaderOut = refHeaderIn;
+		
+		 --Garantizar que se envía un messageId
+        IF refHeaderIn.messageId IS NULL OR FIELDVALUE(refHeaderIn.messageId) = VACIO THEN
+            SET refHeaderOut.messageId = InputRoot.MQMD.CorrelId; 
+        ELSE 
+            SET refHeaderOut.messageId = refHeaderIn.messageId; 
+       END IF;
+        
+        --Declaración referencia al statusReference de la metadata
+		CREATE FIELD refHeaderOut.responseData.status;
+		DECLARE statusReference	REFERENCE TO refHeaderOut.responseData.status;		
+		
+		--Mapeo del error para el HandleError
+		SET statusReference.statusCode							= BUSINESS_EXCEPTION; 
+		SET statusReference.businessException.businessCode		= codMsjRespuesta;				
+		SET statusReference.businessException.businessMessage	= valMsjRespuesta;
+		
+		--Propagar mensaje al HandleError
+		PROPAGATE TO TERMINAL 'out1' MESSAGE OutputRoot DELETE NONE;
+		
+		--Crear campo y referencia Body de salida
+		CREATE FIELD refMsgOut.Body;
+		DECLARE refBodyOut		REFERENCE TO refMsgOut.Body;	
+		
+        -- crear response
+		CREATE FIELD refBodyOut.{nameSpaceResp}:ActualizacionParametrosNotificacionesResponse;
+		DECLARE refFirstTagOut	REFERENCE TO refBodyOut.{nameSpaceResp}:ActualizacionParametrosNotificacionesResponse;
+		
+		-- Declarar prefijo de la carga útil
+		SET refFirstTagOut.(XMLNSC.NamespaceDecl)xmlns:cam = nameSpaceResp;
+		
+		CREATE LASTCHILD OF refFirstTagOut NAME 'Response';
+		MOVE refFirstTagOut LASTCHILD;
+		
+		-- Crear los tag contenedores de respuesta
+        CREATE FIELD refFirstTagOut.DataHeader;
+        DECLARE refDataHeaderOut 									REFERENCE TO refFirstTagOut.DataHeader;
+        
+		
+		--Mapeos de salida
+		SET refDataHeaderOut.nombreOperacion	   = TRIM(CAST(FIELDVALUE(refEnvVar.nombreOperacion) AS CHARACTER));
+		SET refDataHeaderOut.total		  		   = TRIM(FIELDVALUE(refEnvVar.total));
+		SET refDataHeaderOut.caracterAceptacion    = 'M';
+		SET refDataHeaderOut.ultimoMensaje		   = '1';
+		SET refDataHeaderOut.idTransaccion         = TRIM(CAST(FIELDVALUE(refEnvVar.idTransaccion) AS CHARACTER));	
+		SET refDataHeaderOut.codMsgRespuesta   	   = codMsjRespuesta;
+		SET refDataHeaderOut.msgRespuesta   	   = valMsjRespuesta;
+		
+		--Setear la cola de salida
+		CALL SetDestinationListHd(refHeaderOut, refLocEnv);
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;
+
+
+/*
+*	Module name: ProcessErrorMessageResp
+*	Purpose: Construir mensaje de error no esperado cuando 
+* 			 se construía la respuesta para el canal o servicio compuesto
+*/
+CREATE COMPUTE MODULE ProcessErrorMessageResp
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- Mantener el correlId
+		CALL CopyMessageHeaders();
+		
+		-- Referencia al Header y Body del envolvente
+		DECLARE refMsgIn	REFERENCE TO InputRoot.XMLNSC.*:esbXML;
+		DECLARE refHeaderIn	REFERENCE TO refMsgIn.Header;
+		DECLARE refBodyIn	REFERENCE TO refMsgIn.Body;
+		
+		-- Referencia al OutputLocalEnvironment
+		DECLARE refLocEnv	REFERENCE TO OutputLocalEnvironment;
+		
+		-- Referencia al Environment
+		DECLARE refEnvVar	REFERENCE TO Environment.Variables;
+		
+		-- Crear mensaje de salida
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML;
+		DECLARE refMsgOut	REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML;
+		
+		-- Crear campo y referencia Header de salida
+		CREATE FIELD refMsgOut.Header;
+		DECLARE refHeaderOut	REFERENCE TO refMsgOut.Header;
+		
+		-- Declaración de los tres parámetros de entrada para la función de manejo del ExceptionList
+		DECLARE nameSpaceResp	CHARACTER FIELDVALUE(refEnvVar.NameSpace);
+		DECLARE messageText		CHARACTER VACIO;
+		DECLARE parentName		CHARACTER VACIO;
+		DECLARE catlgName		CHARACTER VACIO;
+		DECLARE messageNumber	INTEGER ZERO_INT;
+		
+        --Transportar el Header de la envoltura esbXML      
+        SET refHeaderOut = refHeaderIn;
+        
+        --Validacion MessageID
+        IF refHeaderIn.messageId IS NULL OR FIELDVALUE(refHeaderIn.messageId) = VACIO THEN 
+            SET refHeaderOut.messageId = InputRoot.MQMD.CorrelId; 
+        ELSE 
+            SET refHeaderOut.messageId = refHeaderIn.messageId; 
+        END IF;
+        
+        
+        PROPAGATE TO TERMINAL 'out1' MESSAGE OutputRoot DELETE NONE; 
+                
+        --Llamado a función que construye un SystemException en el esbXML:Header    
+        CALL getLastExceptionDetail(InputExceptionList, messageNumber, messageText, parentName, catlgName);     
+        
+        --Crear campo y referencia Body de salida
+        CREATE FIELD refMsgOut.Body;
+        DECLARE refBodyOut           REFERENCE TO refMsgOut.Body;
+        
+        -- crear response
+		CREATE FIELD refBodyOut.{nameSpaceResp}:ActualizacionParametrosNotificacionesResponse;
+		DECLARE refFirstTagOut	REFERENCE TO refBodyOut.{nameSpaceResp}:ActualizacionParametrosNotificacionesResponse;
+		
+		-- Declarar prefijo de la carga útil
+		SET refFirstTagOut.(XMLNSC.NamespaceDecl)xmlns:cam = nameSpaceResp;
+		
+		CREATE LASTCHILD OF refFirstTagOut NAME 'Response';
+		MOVE refFirstTagOut LASTCHILD;
+		
+         --Llamado a función que construye el mensaje de salida por Error Datos de Entrada (Error Tecnico)
+        CALL TechnicalErrorTransformationDataHeaderBranch(refBodyIn, refEnvVar, refFirstTagOut);
+
+        --Setear la cola de salida
+        CALL SetDestinationListHd(refHeaderOut, refLocEnv);
+	        
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;
+
+
+/*
+* Function: Realiza la funci�n RPad de Oracle. Rellena paddingChar a 
+*			la der y lo formatea a un l�mite de size caracteres
+*	
+* Parameters:
+* IN: CHARACTER entVar - Dato de entrada a convertir.
+* IN: INTEGER size - Tama�o m�nimo y l�mite del dato de retorno
+* IN: CHARACTER paddingChar - Car�cter de Relleno
+* RETURNS: CHARACTER Devuelve el resultado formateado.
+*
+ */
+ CREATE FUNCTION doRPadCharEst(IN entVar CHARACTER, IN size INTEGER, IN paddingChar CHARACTER) RETURNS CHARACTER
+BEGIN
+	DECLARE paddingFormat 	CHARACTER REPLICATE(paddingChar, size);
+	DECLARE result 			CHARACTER '';
+	DECLARE paddingLong 	INTEGER 0;	
+	
+	IF entVar IS NULL THEN
+		SET entVar = '';		
+	END IF;
+	
+	SET paddingLong = LENGTH(entVar);	
+	SET paddingLong = size - paddingLong;
+	
+	IF paddingLong > 0 THEN
+		SET result = entVar || SUBSTRING(paddingFormat FROM 1 FOR paddingLong);
+	ELSE 
+		SET result = LEFT(entVar,size);
+	END IF;
+	RETURN result;
+END;

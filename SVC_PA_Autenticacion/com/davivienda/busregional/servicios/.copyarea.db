@@ -1,0 +1,13 @@
+ClearCase CopyAreaDB|4
+vServDavi\ServBusRegional\SVC_PA_Autenticacion\com\davivienda\busregional\servicios
+2
+9
+31:Autenticacion_ValidarTokenOTPAVTO_Request.msgflow|1|15e7cf63fcb|41ac|ded43f4f|e400845a5f6546d5b8db99ee6633d070|0
+2e:Autenticacion_CerrarSesionACSN_Request.msgflow|1|15e7cf63fda|3e8d|4d7c3788|3860c71e43b54867991a264da2277e86|0
+2f:Autenticacion_CerrarSesionACSN_Response.msgflow|1|15e7cf63fea|3059|69e69a86|8ecbd8e9a0f1448dbbf265e6839c715c|0
+23:Autenticacion_CerrarSesionACSN.esql|1|15e7cf63fda|69e8|5cdcf043|7c5e0eae9b9b4862a014ad4812c7e276|0
+36:Autenticacion_ValidarClaveVirtualAVCV_Response.msgflow|1|15e7cf63fda|3089|d7efad77|e8fdbe0fc8d2415a9de61760d7a50339|0
+23:Autenticacion_ValidarTokenAVTO.esql|1|15e7cf63fea|6e88|f8c5f3db|d0574a392788406b9163ac2eb00826d7|0
+32:Autenticacion_ValidarTokenOTPAVTO_Response.msgflow|1|15e7cf63fea|3069|d3ea9f59|03ef5ff366044cd3b651c854580444ff|0
+2a:Autenticacion_ValidarClaveVirtualAVCV.esql|1|15e7cf63fda|67fe|12727bea|74d610377da041fb9c2052b043df95a1|0
+35:Autenticacion_ValidarClaveVirtualAVCV_Request.msgflow|1|15e7cf63fda|41f0|3955dd7|975cde82447f4e588eb269df71312346|0

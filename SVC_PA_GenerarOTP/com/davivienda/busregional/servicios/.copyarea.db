@@ -1,0 +1,7 @@
+ClearCase CopyAreaDB|4
+vServDavi\ServBusRegional\SVC_PA_GenerarOTP\com\davivienda\busregional\servicios
+2
+3
+1a:GenerarOTP_Request.msgflow|1|15e7cf64e0d|3fe2|b00889fa|4c0b0df59a964aed95911d73623c69c9|0
+f:GenerarOTP.esql|1|15e7cf64e0d|68ae|6523a5e3|3a1d569916f849a3b8adb4db240ddabe|0
+1b:GenerarOTP_Response.msgflow|1|15e7cf64e1d|2fa2|d8565089|913b28fd750748b0b1364511b013bdb0|0

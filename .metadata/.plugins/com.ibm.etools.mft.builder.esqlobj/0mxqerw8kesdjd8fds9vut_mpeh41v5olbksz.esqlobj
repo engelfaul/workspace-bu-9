@@ -1,0 +1,62 @@
+CREATE COMPUTE MODULE RemoveEnvelope
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+			
+		--Mantener el CorrelId
+		CALL CopyMessageHeaders();
+		
+		--Referencia al mensaje de entrada
+        DECLARE refMsgIn        REFERENCE TO InputRoot.XMLNSC.*:esbXML;
+        DECLARE refBodyIn       REFERENCE TO refMsgIn.Body;
+        
+        --Referencia al contenedor de la carga útil
+        DECLARE refEndpointElem	REFERENCE TO refBodyIn;
+		MOVE refEndpointElem FIRSTCHILD NAMESPACE *;
+        
+         --Referencia a Variables del Environment
+        CREATE FIELD Environment.Variables;
+        DECLARE refEnvVar       REFERENCE TO Environment.Variables;
+        
+        	
+		DECLARE refContextoSol		REFERENCE TO refEndpointElem.*:contextoSolicitud;
+		DECLARE refServIn			REFERENCE TO refContextoSol.*:servicio; 
+		DECLARE refOperCanal		REFERENCE TO refContextoSol.*:operacionCanal;
+        
+        --Almacenar en Environment para posterior uso en la respuesta del componente
+        SET refEnvVar.NameSpace		  = FIELDNAMESPACE(refEndpointElem);
+		SET refEnvVar.nombreOperacion = refServIn.*:idServicio;
+		SET refEnvVar.idTransaccion	  = refOperCanal.*:idTransaccion;
+	
+	
+        CREATE FIELD OutputRoot.XMLNSC;
+        DECLARE refOut          REFERENCE TO OutputRoot.XMLNSC;
+                
+        --Guardar Header del envolvente esbXML
+        SET refEnvVar.Header = refMsgIn.Header;
+
+        --Indicar propiedad del Message Set
+        SET OutputRoot.Properties.MessageSet = NMessageSet;
+        
+        --Armar mensaje de salida sin namespace
+        SET refOut = refBodyIn;
+        
+        CALL StripNamespaces(refOut);
+		-- CALL CopyMessageHeaders();
+		-- CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;

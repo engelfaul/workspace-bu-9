@@ -1,0 +1,66 @@
+CREATE COMPUTE MODULE BuildErrorTraceMessage
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		-- Copiar cabeceras del mensaje
+		SET OutputRoot.MQMD = InputRoot.MQMD;
+		SET OutputRoot.Properties = InputRoot.Properties;
+		
+		DECLARE esbxmlin REFERENCE TO InputRoot.XMLNSC.*:esbXML;
+		-- referencia al header de entrada
+		DECLARE headerin REFERENCE TO esbxmlin.Header;
+		
+		-- referencia al body de entrada
+		DECLARE refBodyIn REFERENCE TO esbxmlin.Body;
+		
+		-- referencia al message exception de entrada
+		DECLARE msgExceptionIn REFERENCE TO refBodyIn;
+		MOVE msgExceptionIn FIRSTCHILD TYPE Name NAMESPACE * NAME 'MessageException';
+		-- Se valida si el message exception viene envuelto en un Fault o contenedor adicional
+		IF NOT(CONTAINS(FIELDNAME(msgExceptionIn),'MessageException')) THEN
+			MOVE msgExceptionIn TO refBodyIn.*.MessageException;
+		END IF;
+			
+		-- referencia a la propiedad traceable de config de entrada
+		DECLARE traceable CHARACTER FIELDVALUE(Environment.Variables.Traceable);
+
+		-- validar campo traceable del environment
+		IF FIELDVALUE(headerin.requestData.endpointReference.configuration.traceable) IS NOT NULL THEN
+			SET traceable = FIELDVALUE(headerin.requestData.endpointReference.configuration.traceable);
+		END IF;  
+		
+		-- verificar flag de log
+		IF CAST(traceable AS BOOLEAN) THEN
+		
+			-- cadena de caracteres que representan mensaje
+			MOVE esbxmlin FIRSTCHILD TYPE Name NAMESPACE * NAME 'Body';	
+			
+			-- construcción de mensaje de log
+			CREATE FIELD OutputRoot.XMLNSC.LogHandlerMsgSet;
+			
+			SET OutputRoot.XMLNSC.LogHandlerMsgSet.systemId			= COALESCE(headerin.systemId,'');
+			SET OutputRoot.XMLNSC.LogHandlerMsgSet.messageId		= COALESCE(headerin.messageId,InputRoot.MQMD.CorrelId);
+			SET OutputRoot.XMLNSC.LogHandlerMsgSet.componentId 		= traceabilityPoint;
+			SET OutputRoot.XMLNSC.LogHandlerMsgSet.timeStamp	 	= CURRENT_TIMESTAMP;
+			SET OutputRoot.XMLNSC.LogHandlerMsgSet.serviceId	 	= headerin.requestData.endpointReference.serviceId;		
+			SET OutputRoot.XMLNSC.LogHandlerMsgSet.errorMsg		 	= COALESCE(msgExceptionIn.Description,Environment.Variables.Description);		
+			
+			
+			PROPAGATE TO TERMINAL 'out' MESSAGE OutputRoot DELETE DEFAULT;
+			
+		END IF;
+		
+		RETURN FALSE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+END MODULE;

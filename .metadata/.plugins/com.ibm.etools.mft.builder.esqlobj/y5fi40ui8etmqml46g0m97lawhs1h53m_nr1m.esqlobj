@@ -1,0 +1,15 @@
+CREATE FUNCTION pullFacadeResp (INOUT refHeader REFERENCE) RETURNS CHARACTER
+ BEGIN
+ 	DECLARE queueFacadeResp		CHARACTER '';		
+		-- Traer la cola de respuesta de la fachada
+	 DECLARE refProp REFERENCE TO refHeader.messageContext;
+		
+	   DECLARE prop ROW
+		THE (SELECT prop
+				FROM refProp.property[] AS prop
+					WHERE prop.key = 'FacadeResp');	
+		
+	SET queueFacadeResp		= prop.value;
+ 	
+ 	RETURN queueFacadeResp; 	
+ END;

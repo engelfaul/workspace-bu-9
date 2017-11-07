@@ -1,0 +1,14 @@
+CREATE COMPUTE MODULE RestoreEnvironment
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- dejar pasar el mensaje de respuesta
+		SET OutputRoot = InputRoot;
+		
+		-- restaurar Environment
+		SET Environment = InputLocalEnvironment.XMLNSC.ReturnedMessage.Variables;	
+		
+		RETURN TRUE;
+	END;
+
+	
+END MODULE;

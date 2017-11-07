@@ -1,0 +1,104 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+		--Mantener el CorrelId   
+		CALL CopyMessageHeaders();
+		
+	    --Referencia a Variables del Environment
+		DECLARE refEnvVar 	REFERENCE TO Environment.Variables;
+		
+		--Referencia al Header y Body del envolvente
+		DECLARE refHeaderIn 	      REFERENCE TO refEnvVar.Header;
+		DECLARE refBodyIn		      REFERENCE TO InputRoot.XMLNSC;	
+		DECLARE refConsulta		      REFERENCE TO refBodyIn.ConsultaSaldosCliente;
+		DECLARE refFirstChildPayload  REFERENCE TO refConsulta.Request;		
+		DECLARE refDataHeaderIn		  REFERENCE TO refFirstChildPayload.DataHeader;
+		DECLARE refDataIn			  REFERENCE TO refFirstChildPayload.Data;
+		
+		--Referencia al OutputLocalEnvironment
+		DECLARE refOutputLocalEnvironment REFERENCE TO OutputLocalEnvironment;
+		
+		--Crear mensaje de salida
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML;
+		DECLARE refMsgOut	REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML;
+		
+		--Crear campos de salida Header y Body		
+		CREATE FIELD refMsgOut.Header;
+		CREATE FIELD refMsgOut.Body;
+							
+		-- Referencias al mensaje de salida
+		DECLARE refHeaderOut 	REFERENCE TO refMsgOut.Header;
+		DECLARE refBodyOut   	REFERENCE TO refMsgOut.Body;
+		
+		--Declaracion de Variables
+		DECLARE idServicio 	CHARACTER;
+		DECLARE nomOperacion CHARACTER FIELDVALUE(refDataHeaderIn.nombreOperacion);
+		
+		--Guardar en las Variables el id_Servicio Homologado
+		SET refEnvVar.idServicio = idServicio;
+
+		
+		 --Garantizar que se envía un messageId
+        IF refHeaderIn.messageId IS NULL OR FIELDVALUE(refHeaderIn.messageId) = VACIO THEN 
+            SET refHeaderOut.messageId = InputRoot.MQMD.CorrelId; 
+        ELSE 
+            SET refHeaderOut.messageId = refHeaderIn.messageId; 
+        END IF;
+		
+		--Transportar el Header de la envoltura esbXML
+		SET refHeaderOut = refHeaderIn;
+		
+		DECLARE ENTE					CONSTANT CHARACTER '11705';
+		DECLARE nomTransaccion CHARACTER FIELDVALUE(refHeaderIn.nombreOperacion);  
+				
+		CREATE FIELD refBodyOut.TCSCL_REQ;
+		DECLARE refReqOut		REFERENCE TO refBodyOut.TCSCL_REQ;
+		
+        
+        CREATE FIELD refReqOut.Header;
+		DECLARE refDataHeaderOut		REFERENCE TO refReqOut.Header;
+		
+		
+		CREATE FIELD refReqOut.Body;
+		DECLARE refBodyOut1		REFERENCE TO refReqOut.Body;
+        
+        DECLARE WHITE_SPACE CONSTANT CHARACTER ' '; 
+        DECLARE ZERO_STRING		CONSTANT CHARACTER '0'; 
+        
+		--Mapeos  
+		SET refDataHeaderOut.idServicio 				= doRPadCharEst(getBusReg_HomologServPA(refDataHeaderIn.nombreOperacion), 10, WHITE_SPACE); 
+		SET refDataHeaderOut.version   					= doRPadCharEst(I_VERSIONSERVICIO, 15, WHITE_SPACE);
+		SET refDataHeaderOut.idTransaccion 				= doRPadCharEst(refDataHeaderIn.idTransaccion, 10, WHITE_SPACE);
+		SET refDataHeaderOut.fechaOperacion 			= doRPadCharEst(CAST(CURRENT_TIMESTAMP AS CHARACTER FORMAT 'MM-dd-yyyy'), 10, WHITE_SPACE);
+		SET refDataHeaderOut.pais		 			    = doRPadCharEst(I_PAIS, 2, WHITE_SPACE);
+		SET refDataHeaderOut.lenguaje 					= doRPadCharEst(refDataIn.codIdioma, 2, WHITE_SPACE);
+		SET refDataHeaderOut.canal 						= doRPadCharEst(refDataHeaderIn.canal, 2, WHITE_SPACE);
+		SET refDataHeaderOut.ipCliente		 			= doRPadCharEst(refDataIn.valOrigen, 15, WHITE_SPACE);
+		SET refDataHeaderOut.idApp		 		    	= doRPadCharEst(refDataIn.valVersionApp, 20, WHITE_SPACE);
+		SET refDataHeaderOut.usuario 				    = doRPadCharEst(refDataHeaderIn.usuario, 10, WHITE_SPACE);
+	  	SET refDataHeaderOut.idSesion					= doRPadCharEst(refDataIn.idSesion, 200, WHITE_SPACE);
+	  	
+		SET refBodyOut1.master							= doRPadCharEst(WHITE_SPACE, 25, WHITE_SPACE);
+		SET refBodyOut1.pagina							= doLPadCharEst(refDataIn.cantidadProductosRta, 4, ZERO_STRING);
+	    
+	    --Seteo de cola en la cual el adaptador me retorna la respuesta correspondiente.
+		SET refHeaderOut.internalRoutingData.replyToQueue.queueName = UDPreplyToQ;
+		
+		--Setear la cola de salida para request
+		CALL SetDestinationList(UDPReqQ, '', refOutputLocalEnvironment);
+						
+		-- Se elimina el arbol del mensaje de entrada almacenado en el environment
+		DELETE FIELD refEnvVar.Header;
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+	

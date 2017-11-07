@@ -1,0 +1,7 @@
+CREATE FILTER MODULE SPIntegrationAdapterResponse_MessageExceptionFilter
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		RETURN TRUE;
+	END;
+
+END MODULE;

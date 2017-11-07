@@ -1,0 +1,27 @@
+CREATE COMPUTE MODULE IgnoreException
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		/* ******************************************************************
+		**  NOTA: Este modulo es utilizado para controlar la excepción     **
+		**  del nodo Timeout Control cuando no encuentre el identificador  **
+		********************************************************************/
+		-- declaración de constantes
+		DECLARE MsgExc CHARACTER 'Timeout Set Identifier not in store';
+		-- referencia a la lista de excepciones
+		DECLARE ExcList REFERENCE TO InputExceptionList;
+		
+		WHILE LASTMOVE(ExcList) DO
+			
+			MOVE ExcList LASTCHILD NAME 'RecoverableException';
+			
+		END WHILE;
+		-- verificar si el error no es por no encontrar identificador de timeout
+		IF NOT CONTAINS(FIELDVALUE(ExcList.Text),MsgExc) THEN
+			
+			THROW USER EXCEPTION CATALOG 'ESB' MESSAGE 003100 VALUES ('TimeoutCancelException');
+			
+		END IF;
+		
+		RETURN FALSE;
+	END;
+END MODULE;

@@ -1,0 +1,21 @@
+CREATE FUNCTION doLPadCharEst(IN entVar CHARACTER, IN size INTEGER, IN fill CHARACTER) RETURNS CHARACTER
+BEGIN
+	DECLARE paddingFormat 	CHARACTER REPLICATE(fill, size);
+	DECLARE result 			CHARACTER '';
+	DECLARE paddingLong 	INTEGER 0;
+	
+	IF entVar IS NULL THEN
+		SET entVar = '';
+	END IF;	
+	
+	SET paddingLong = LENGTH(entVar);
+	SET paddingLong = size - paddingLong;
+	
+	IF paddingLong > 0 THEN
+		SET result = SUBSTRING(paddingFormat FROM 1 FOR paddingLong) || entVar;	
+	ELSE 
+		SET result = RIGHT(entVar,size);
+	END IF;
+	
+	RETURN result;
+END;

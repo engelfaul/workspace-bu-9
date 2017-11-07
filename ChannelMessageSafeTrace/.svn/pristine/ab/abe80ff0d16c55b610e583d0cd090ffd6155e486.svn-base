@@ -1,0 +1,6 @@
+ClearCase CopyAreaDB|4
+vFramework\CoreComp\ChannelMessageSafeTrace\ChannelMessageSafeTrace\com\davivienda\commons\traceHandler
+2
+2
+20:ChannelMessageLogHandler.msgflow|1|15386a2c43f|1665|d567b70f|9f058f4088cd473d854fa30af5249d06|0
+1d:ChannelMessageLogHandler.esql|1|15386a2c439|f8b|e840becc|af886e3cf47144f98e6d029473fa0b0a|0

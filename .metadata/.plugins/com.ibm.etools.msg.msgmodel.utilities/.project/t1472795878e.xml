@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MRMessageSet id="D2FQPBG002001"
+  name="SVC_PA_ConsultaClientesPorUsuarioMsgSet" parser="XMLNSC">
+  <MRMsgCollection
+    href="platform:/resource/SVC_PA_ConsultaClientesPorUsuarioMsgSet/SVC_PA_ConsultaClientesPorUsuarioMsgSet/soap.mxsd"
+    prefix="" targetNamespace="">
+    <message
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuarioMsgSet/SVC_PA_ConsultaClientesPorUsuarioMsgSet/soap.mxsd#/0/SOAP_Domain_Msg;XSDElementDeclaration$MRMessage" name="SOAP_Domain_Msg"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuarioMsgSet/SVC_PA_ConsultaClientesPorUsuarioMsgSet/soap.mxsd#/0/SOAP_Domain_Msg;XSDElementDeclaration"
+      name="SOAP_Domain_Msg" type="mset://SVC_PA_ConsultaClientesPorUsuarioMsgSet#/-/complexType{}SOAP_Msg_type"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaClientesPorUsuarioMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuarioMsgSet/SVC_PA_ConsultaClientesPorUsuarioMsgSet/soap.mxsd#/0/MIME_Headers_type;XSDComplexTypeDefinition" name="MIME_Headers_type"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaClientesPorUsuarioMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuarioMsgSet/SVC_PA_ConsultaClientesPorUsuarioMsgSet/soap.mxsd#/0/Attachment_type;XSDComplexTypeDefinition=1" name="Attachment_type"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaClientesPorUsuarioMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuarioMsgSet/SVC_PA_ConsultaClientesPorUsuarioMsgSet/soap.mxsd#/0/SOAP_Msg_type;XSDComplexTypeDefinition=2" name="SOAP_Msg_type"/>
+    <group
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuarioMsgSet/SVC_PA_ConsultaClientesPorUsuarioMsgSet/soap.mxsd#/0/MIME_header_fields;XSDModelGroupDefinition" name="MIME_header_fields"/>
+  </MRMsgCollection>
+</MRMessageSet>

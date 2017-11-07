@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" 
+xmlns:xmi="http://www.omg.org/XMI" xmlns:ComIbmFileRead.msgnode="ComIbmFileRead.msgnode" xmlns:ComIbmCompute.msgnode="ComIbmCompute.msgnode" xmlns:ComIbmFilter.msgnode="ComIbmFilter.msgnode" xmlns:ComIbmMQInput.msgnode="ComIbmMQInput.msgnode" xmlns:ComIbmThrow.msgnode="ComIbmThrow.msgnode" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow" 
+xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="com/ibm/ams/framework/adapters/rpg/LoadFile.subflow" 
+nsPrefix="com_ibm_ams_framework_adapters_rpg_LoadFile.subflow">
+<eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1">
+<eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+<eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.FileName" name="FileName"  defaultValueLiteral="safintplsqlconfig.xml">
+  <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+</eStructuralFeatures>
+<eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.inputDirectory" name="inputDirectory"  defaultValueLiteral="/ESB/config/">
+  <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+</eStructuralFeatures>
+<eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.ADP.INT.SP.RESET" name="ADP.INT.SP.RESET" lowerBound="1"  defaultValueLiteral="*">
+  <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+</eStructuralFeatures>
+<translation xmi:type="utility:TranslatableString" key="LoadFile" bundleName="com/ibm/ams/framework/adapters/rpg/LoadFile" pluginId="flowAPIgenerated"/>
+<colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/flowAPIgenerated/icons/full/obj16/LoadFile.gif"/>
+<colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/flowAPIgenerated/icons/full/obj30/LoadFile.gif"/>
+<version xmi:type="utility:ConstantString" string="1.0"/>
+<composition>
+<nodes xmi:type="ComIbmFileRead.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="205,159" inputDirectory="/ESB/config/" filenamePattern="safintplsqlconfig.xml" outputDataLocation="$OutputLocalEnvironment" messageDomainProperty="XMLNSC">
+<translation xmi:type="utility:ConstantString" string="LoadConfigurationFile"/>
+</nodes>
+<nodes xmi:type="eflow:FCMSink" xmi:id="OutTerminal.Output" location="450,84">
+<translation xmi:type="utility:TranslatableString" key="OutTerminal.Output" bundleName="com/ibm/ams/framework/adapters/rpg/LoadFile" pluginId="flowAPIgenerated"/>
+</nodes>
+<nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_4" location="397,155" computeExpression="esql://routine/com.ibm.ams.framework.adapters.rpg#AddDataToCacheCheckCache_Compute.Main">
+<translation xmi:type="utility:ConstantString" string="LoadCache"/>
+</nodes>
+<nodes xmi:type="eflow:FCMSource" xmi:id="InTerminal.Input" location="62,71">
+<translation xmi:type="utility:TranslatableString" key="InTerminal.Input" bundleName="com/ibm/ams/framework/adapters/rpg/LoadFile" pluginId="flowAPIgenerated"/>
+</nodes>
+<nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_6" location="300,83" computeExpression="esql://routine/com.ibm.ams.framework.adapters.rpg#SetConfiguration.Main">
+<translation xmi:type="utility:ConstantString" string="SetConfiguration"/>
+</nodes>
+<nodes xmi:type="ComIbmFilter.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_3" location="167,71" filterExpression="esql://routine/com.ibm.ams.framework.adapters.rpg#CheckCacheFilter.Main">
+<translation xmi:type="utility:ConstantString" string="CheckCacheFilter"/>
+</nodes>
+<nodes xmi:type="ComIbmMQInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_2" location="34,294" messageDomainProperty="XMLNSC">
+<translation xmi:type="utility:ConstantString" string="ADP.INT.SP.RESET.#ID#"/>
+</nodes>
+<nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_5" location="238,294" computeExpression="esql://routine/com.ibm.ams.framework.adapters.rpg#ResetCache.Main">
+<translation xmi:type="utility:ConstantString" string="ResetCache"/>
+</nodes>
+<nodes xmi:type="ComIbmThrow.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_7" location="396,236" messageText="No se encontró archivo de configuración para el Adaptador de Integración SP v1.1">
+<translation xmi:type="utility:ConstantString" string="Throw"/>
+</nodes>
+<connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="OutTerminal.Output" sourceNode="FCMComposite_1_4" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+<connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_2" targetNode="FCMComposite_1_4" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+<connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_3" targetNode="OutTerminal.Output" sourceNode="FCMComposite_1_6" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+<connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_4" targetNode="FCMComposite_1_3" sourceNode="InTerminal.Input" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+<connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_5" targetNode="FCMComposite_1_1" sourceNode="FCMComposite_1_3" sourceTerminalName="OutTerminal.unknown" targetTerminalName="InTerminal.in"/>
+<connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_6" targetNode="FCMComposite_1_1" sourceNode="FCMComposite_1_3" sourceTerminalName="OutTerminal.false" targetTerminalName="InTerminal.in"/>
+<connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_7" targetNode="FCMComposite_1_6" sourceNode="FCMComposite_1_3" sourceTerminalName="OutTerminal.true" targetTerminalName="InTerminal.in"/>
+<connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_8" targetNode="FCMComposite_1_5" sourceNode="FCMComposite_1_2" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+<connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_9" targetNode="FCMComposite_1_7" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.noMatch" targetTerminalName="InTerminal.in"/>
+</composition>
+<propertyOrganizer>
+<propertyDescriptor groupName="Group.ConfigurationFile" propertyEditor="com.ibm.etools.mft.ibmnodes.editors.file.FileReadNodeFilePropertyEditor" configurable="true" describedAttribute="Property.FileName">
+<propertyName xmi:type="utility:TranslatableString" key="Property.FileName" bundleName="com/davivienda/framework/adapters/sp/LoadFile" pluginId="FWK_RPGIntegrationAdapter"/>
+<propertyDescriptor groupName="Group.ConfigurationFile" configurable="true" describedAttribute="Property.inputDirectory">
+<propertyName xmi:type="utility:TranslatableString" key="Property.inputDirectory" bundleName="ComIbmFileRead" pluginId="com.ibm.etools.mft.ibmnodes"/>
+<propertyDescriptor groupName="Group.QueueNames" propertyEditor="com.ibm.etools.mft.ibmnodes.editors.mq.MQQueueNameEditor" configurable="true" describedAttribute="Property.ADP.INT.SP.RESET">
+<propertyName xmi:type="utility:TranslatableString" key="Property.ADP.INT.SP.RESET" bundleName="com/davivienda/framework/adapters/sp/LoadFile" pluginId="FWK_RPGIntegrationAdapter"/>
+</propertyDescriptor>
+</propertyDescriptor>
+</propertyDescriptor>
+</propertyOrganizer>
+<attributeLinks promotedAttribute="Property.FileName" overriddenNodes="FCMComposite_1_1">
+<overriddenAttribute href="ComIbmFileRead.msgnode#Property.filenamePattern"/>
+</attributeLinks>
+<attributeLinks promotedAttribute="Property.inputDirectory" overriddenNodes="FCMComposite_1_1">
+<overriddenAttribute href="ComIbmFileRead.msgnode#Property.inputDirectory"/>
+</attributeLinks>
+<attributeLinks promotedAttribute="Property.ADP.INT.SP.RESET" overriddenNodes="FCMComposite_1_2">
+<overriddenAttribute href="ComIbmMQInput.msgnode#Property.queueName"/>
+</attributeLinks>
+<stickyBoard/>
+</eClassifiers>
+</ecore:EPackage>

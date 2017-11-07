@@ -1,0 +1,9 @@
+CREATE FUNCTION noChild (IN refInputField REFERENCE)
+BEGIN
+	
+	DECLARE  value  CHARACTER;	
+	SET value = FIELDVALUE (refInputField);		 	
+	IF (value <> '') THEN
+	   CALL ReplaceCharacter(refInputField);
+	END IF;			            
+END;

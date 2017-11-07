@@ -1,0 +1,47 @@
+CREATE FUNCTION RemoveNamespace (In refInputTree REFERENCE, In oldNamespace CHARACTER)
+BEGIN
+
+    DECLARE namespaceReplace CHARACTER '';
+    DECLARE cursor		 	 BOOLEAN FALSE;
+    DECLARE flag 			 INTEGER 1;
+    
+	SET refInputTree.(XMLNSC.Element)*[1].*:schemaLocation = NULL;
+	DECLARE I1 INTEGER CARDINALITY(refInputTree.(XMLNSC.Element)*[1].(XMLNSC.NamespaceDecl)*[]);
+	DECLARE I2 INTEGER 1;
+	WHILE I2 <= I1 DO
+		SET refInputTree.(XMLNSC.Element)*[1].(XMLNSC.NamespaceDecl)*[1] = NULL;
+		SET I2 = I2 + 1;
+	END WHILE;	 
+	
+	-- Se recorre todo el árbol, para evaluar donde hay namespaces y removerlos
+	
+	WHILE flag <> 0 DO 
+		IF cursor = FALSE THEN 
+			MOVE refInputTree FirstChild;
+		 	IF LASTMOVE(refInputTree) = TRUE THEN
+				SET flag = flag + 1;
+				CALL ReplaceNamespace(refInputTree, oldNamespace, namespaceReplace);
+		 	ELSE
+		 		MOVE refInputTree NEXTSIBLING;
+			 	IF LASTMOVE(refInputTree) = TRUE THEN
+					CALL ReplaceNamespace(refInputTree, oldNamespace, namespaceReplace);
+					SET cursor = FALSE;
+			 	ELSE
+					SET flag = flag - 1;
+					Move refInputTree PARENT;		 		
+					SET cursor = TRUE;
+				END IF;
+		 	END IF;	
+		ELSE
+			MOVE refInputTree NEXTSIBLING;
+		 	IF LASTMOVE(refInputTree) = TRUE THEN
+				CALL ReplaceNamespace(refInputTree, oldNamespace, namespaceReplace);
+				SET cursor = FALSE;
+		 	ELSE
+				SET flag = flag - 1;
+				Move refInputTree PARENT;		 		
+				SET cursor = TRUE;
+			END IF;
+		END IF;
+	END WHILE;
+END;

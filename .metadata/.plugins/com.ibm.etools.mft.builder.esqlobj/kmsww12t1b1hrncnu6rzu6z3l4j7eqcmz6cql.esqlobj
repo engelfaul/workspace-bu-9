@@ -1,0 +1,51 @@
+CREATE COMPUTE MODULE BuildNotificationMessage
+	
+	-- referenciar el mensaje de entrada
+	DECLARE msgin REFERENCE TO InputRoot.XMLNSC.esbXML:esbXML;
+	DECLARE headerIn REFERENCE TO msgin.Header;
+	DECLARE bodyIn REFERENCE TO msgin.Body;
+	
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- mantener el CorrelId
+        CALL CopyMessageHeaders();
+		
+		-- construcción del mensaje de salida
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML.Header;
+        DECLARE headerOut REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML.Header;
+       
+        SET headerOut = headerIn;
+        
+        -- statuscode de excepción
+        CREATE FIELD headerOut.responseData.status.statusCode;
+        SET headerOut.responseData.status.statusCode = SYSEXCEPTION;
+        -- metadata de excepción
+		CREATE FIELD headerOut.responseData.status.systemException;
+		DECLARE sysException REFERENCE TO headerOut.responseData.status.systemException;
+		
+		SET sysException.faultcode 	 = TimeoutCode;
+		SET sysException.faultstring = TimeoutDescription;
+		SET sysException.faultactor  = 'ADP.INT.SP.RESP.' || faultactor;
+		SET sysException.detail 	 = TimeoutDescription;
+         
+        -- creación del mensaje de timeout  
+        CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML.Body;
+        DECLARE OutputBody REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML.Body;
+       
+       	CALL BuildMessageException (OutputBody, TimeoutCode, TimeoutDescription);
+        
+        PROPAGATE TO TERMINAL 'out' MESSAGE OutputRoot DELETE DEFAULT;
+        
+		RETURN FALSE;
+	END;
+	
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+END MODULE;

@@ -1,0 +1,12 @@
+CREATE PROCEDURE AddPropertyContext (INOUT refHeader REFERENCE, IN key CHARACTER, IN value CHARACTER)
+ BEGIN
+ 	--Crear nueva propiedad
+ 	CREATE FIELD refHeader.messageContext;		
+	DECLARE refProp REFERENCE TO refHeader.messageContext;
+	CREATE LASTCHILD OF refProp NAME 'property'; 
+	MOVE refProp LASTCHILD;
+			
+	--Establecer nombre y valor
+	SET refProp.key   = key;
+	SET refProp.value = value; 	
+ END;

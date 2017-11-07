@@ -1,0 +1,16 @@
+CREATE FUNCTION isHomologRequired(IN idCanal CHARACTER, IN idHomologacion CHARACTER, IN refHomologView REFERENCE) RETURNS CHARACTER
+BEGIN
+	--Declaración de variables
+	DECLARE result				ROW NULL;
+	DECLARE resultObligatorio	CHARACTER VACIO;
+	
+	--Obtener la obligatoriedad de una homologación de acuerdo al canal y el identificador de homologación
+	SET result.datos  = THE(	SELECT C.OBLIGATORIO
+								FROM refHomologView.row[] AS C
+								WHERE C.ID_HOMOLOGACION = idHomologacion
+								AND C.ID_CANAL = idCanal );
+	
+	--Alamacenar el valor del resultado de la consulta para obtener la obligatoriedad							
+	SET resultObligatorio	= FIELDVALUE(result.datos.OBLIGATORIO);
+	RETURN resultObligatorio;
+END;

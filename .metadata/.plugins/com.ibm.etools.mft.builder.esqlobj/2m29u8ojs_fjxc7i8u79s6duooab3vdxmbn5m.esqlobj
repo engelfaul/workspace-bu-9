@@ -1,0 +1,20 @@
+CREATE COMPUTE MODULE AddDataToCacheCheckCache_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		SET OutputRoot = InputRoot;
+		
+		-- referenciar archivo de entrada
+		DECLARE configXML		REFERENCE TO InputLocalEnvironment.XMLNSC;
+		
+		SET cache = configXML;
+		SET Environment.Variables.ConfigXML = cache.Configuration;
+		SET Environment.Variables.Traceable = cache.Configuration.traceable;
+		SET Environment.Variables.Timeout = cache.Configuration.timeout;
+		
+		SET cache.valid = true;
+		
+		RETURN TRUE;
+	END;
+
+END MODULE;

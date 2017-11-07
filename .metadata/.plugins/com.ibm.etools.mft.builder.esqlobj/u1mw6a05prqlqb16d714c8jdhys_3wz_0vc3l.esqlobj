@@ -1,0 +1,74 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+		--Mantener el CorrelId
+		CALL CopyMessageHeaders();
+		
+		-- Referencia al mensaje de entrada
+		DECLARE refMsgIn	REFERENCE TO InputRoot.XMLNSC.*:esbXML;
+		DECLARE refBodyIn	REFERENCE TO refMsgIn.Body;
+		
+		-- Referencia al contenedor de la carga útil
+		DECLARE refEndpointElem REFERENCE TO refBodyIn;
+		MOVE refEndpointElem FIRSTCHILD NAMESPACE *;
+		
+		-- Referencia a Variables del Environment
+		CREATE FIELD Environment.Variables;
+		DECLARE refEnvVar	REFERENCE TO Environment.Variables;
+		
+		CREATE FIELD OutputRoot.XMLNSC;
+		DECLARE refOut		REFERENCE TO OutputRoot.XMLNSC;
+		
+		-- Guardar Header del envolvente esbXML
+		SET refEnvVar.Header = refMsgIn.Header;
+		
+		-- Almacenar en Environment para posterior uso en la respuesta del componente
+		DECLARE refConIn		REFERENCE TO refEndpointElem.*:contextoSolicitud;
+		DECLARE refServIn		REFERENCE TO refConIn.*:servicio;
+		DECLARE refOperCanalIn	REFERENCE TO refConIn.*:operacionCanal;
+		
+		SET refEnvVar.NameSpace		  = FIELDNAMESPACE(refEndpointElem);
+		SET refEnvVar.nombreOperacion = refServIn.*:idServicio;
+		SET refEnvVar.idTransaccion   = refOperCanalIn.*:idTransaccion;
+
+		--Indicar propiedad del Message Set
+		SET OutputRoot.Properties.MessageSet = NMessageSet;
+					
+		--Armar mensaje de salida sin namespace
+		SET refOut = refBodyIn;		
+		
+		CALL StripNamespaces(refMsgIn);
+		CALL RemoveNamespace(refOut, FIELDVALUE(refEnvVar.NameSpace));
+		CALL RemoveNamespace(refOut, v1);
+		CALL RemoveNamespace(refOut, v11);
+		CALL RemoveNamespace(refOut, v12);
+		CALL RemoveNamespace(refOut, v13);
+		CALL RemoveNamespace(refOut, v14);
+		CALL RemoveNamespace(refOut, v15);
+		CALL RemoveNamespace(refOut, v16);
+		CALL RemoveNamespace(refOut, v17);
+		CALL RemoveNamespace(refOut, v18);
+		CALL RemoveNamespace(refOut, v19);
+		CALL RemoveNamespace(refOut, v110);
+		CALL RemoveNamespace(refOut, v111);
+		CALL RemoveNamespace(refOut, v112);
+		CALL RemoveNamespace(refOut, v113);
+		CALL RemoveNamespace(refOut, v114);
+		CALL RemoveNamespace(refOut, v115);
+		CALL RemoveNamespace(refOut, v116);
+		CALL RemoveNamespace(refOut, v117);
+		CALL RemoveNamespace(refOut, v118);
+		CALL RemoveNamespace(refOut, v119);
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+

@@ -1,0 +1,108 @@
+CREATE COMPUTE MODULE ApplyRequestTransformation
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- mantener el CorrelId
+		CALL CopyMessageHeaders();
+		
+		DECLARE refLocEnv	REFERENCE TO OutputLocalEnvironment;
+		DECLARE refEnvVar	REFERENCE TO Environment.Variables;
+		DECLARE refHeaderIn	REFERENCE TO refEnvVar.Header;
+
+		DECLARE refBodyIn		REFERENCE TO InputRoot.XMLNSC.ActualizacionParametrosNotificaciones; 
+		DECLARE refDataHeaderIn REFERENCE TO refBodyIn.Request.DataHeader;
+		DECLARE refDataIn 		REFERENCE TO refBodyIn.Request.Data;
+		
+		-- Crear mensaje de salida
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML;
+		DECLARE refMsgOut	REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML;
+		
+		-- Crear Header de salida
+		CREATE FIELD refMsgOut.Header;
+		DECLARE refHeaderOut		REFERENCE TO refMsgOut.Header;
+		
+		-- Transportar el header de la envoltura esbXML
+		SET refHeaderOut = refHeaderIn;
+		
+		-- Crear y referenciar contenedor Body de salida
+		CREATE FIELD refMsgOut.Body;
+		DECLARE refBodyOut	REFERENCE TO refMsgOut.Body;
+		
+		-- Declaración de variables
+		DECLARE numTransaccion CHARACTER '';
+		DECLARE nomTransaccion CHARACTER FIELDNAME(refBodyIn);
+		
+		-- Garantizar que se envía un messageId
+		IF refHeaderIn.messageId IS NULL OR FIELDVALUE(refHeaderIn.messageId) = VACIO THEN
+			SET refHeaderOut.messageId = InputRoot.MQMD.CorrelId;
+		ELSE
+			SET refHeaderOut.messageId = refHeaderIn.messageId;
+		END IF;
+		
+		
+		CREATE FIELD refBodyOut.TAPAN_REQ;
+		DECLARE refReqOut	REFERENCE TO refBodyOut.TAPAN_REQ;
+		
+		CREATE FIELD refReqOut.Header;
+		DECLARE headerOut		REFERENCE TO refReqOut.Header;
+
+		CREATE FIELD refReqOut.Body;
+		DECLARE bodyOut REFERENCE TO refReqOut.Body;
+
+		DECLARE ESPACIO	CONSTANT CHARACTER ' ';
+
+		-- Mapeo de servicio
+		SET headerOut.SERVICIO				= doRPadCharEst(UDP_SERVICIO, 20, ESPACIO);
+		SET headerOut.IDTRX					= doRPadCharEst(refDataHeaderIn.idTransaccion, 36, ESPACIO);
+		SET headerOut.IDSESION 				= doRPadCharEst(refDataIn.idSesion, 36, ESPACIO);
+		SET headerOut.FECHASIS		 		= doRPadCharEst(CAST(CURRENT_TIMESTAMP AS CHARACTER FORMAT 'YYYY-MM-dd hh:mm:ss'), 30, ESPACIO);
+		SET headerOut.CANAL					= doRPadCharEst(refDataHeaderIn.canal, 10, ESPACIO);
+		SET headerOut.PAIS					= doRPadCharEst(refDataIn.codPais, 3, ESPACIO);
+		SET headerOut.USUARIO				= doRPadCharEst(refDataHeaderIn.usuario, 20, ESPACIO);
+		SET headerOut.IDIOMA				= doRPadCharEst(refDataIn.codIdioma, 10, ESPACIO);
+		SET headerOut.IPCLIENTE				= doRPadCharEst(refDataIn.valOrigen, 50, ESPACIO);
+		
+		SET bodyOut.tipoID	                = doRPadCharEst(refDataIn.codTipoIdentificacion, 4, ESPACIO);
+		SET bodyOut.numeroID	            = doRPadCharEst(refDataIn.valNumeroIdentificacion, 30, ESPACIO);
+		SET bodyOut.email		            = doRPadCharEst(refDataIn.valEmailNotificaciones, 60, ESPACIO);
+	--lista
+--		DECLARE numParam	INTEGER;
+--		SET 	numParam		= 1; 
+--		WHILE numParam <= CARDINALITY(refDataIn.ParametrosNotificaciones) DO
+--		  SET numParam=numParam+1;
+--		END WHILE;
+--		
+--		DECLARE classSocietyValue CHARACTER THE(SELECT ITEM T.valValor 
+--		FROM refDataIn.PropiedadesEspecificas.Propiedad[] as T WHERE CONTAINS(T.valNombre, 'Familia'));
+--			
+--		SET refBodyOut1.FAMILIA		= COALESCE(doRPadCharEst(classSocietyValue, 20, WHITE_SPACE),' ');
+		
+		--CARDINALITY(refDataIn.ParametrosNotificaciones);
+	--politicas
+		SET bodyOut.archivo		            = doRPadCharEst(refDataIn.valNombre, 128, ESPACIO);
+		SET bodyOut.adjunto		            = doRPadCharEst(refDataIn.codTipoArchivo, 128, ESPACIO);
+		-- sorteo de cola en el cual el adaptador me retorna la respuesta correspondiente
+		SET refHeaderOut.internalRoutingData.replyToQueue.queueName = UDPreplyToQ;
+		
+		-- Setear la cola de salida para request
+		CALL SetDestinationList(UDPReqQ, VACIO, refLocEnv);
+		
+		-- Se elimina el arbol del mensaje de entrada almacenado en el environment
+		DELETE FIELD refEnvVar.Header;
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;

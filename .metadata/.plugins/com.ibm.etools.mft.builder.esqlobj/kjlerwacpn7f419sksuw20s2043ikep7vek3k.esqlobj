@@ -1,0 +1,7 @@
+CREATE PROCEDURE PopRTQ (IN header REFERENCE, OUT queue CHARACTER, OUT queueMgr CHARACTER)
+BEGIN
+	DECLARE cursor REFERENCE TO header.internalRoutingData.routingStack;
+	
+	SET queue = cursor.replyToLocation;
+	
+END;

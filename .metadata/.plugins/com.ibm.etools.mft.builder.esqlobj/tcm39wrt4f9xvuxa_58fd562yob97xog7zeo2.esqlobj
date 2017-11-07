@@ -1,0 +1,13 @@
+CREATE FUNCTION getBusReg_HomologEstProd (IN valorCampo CHARACTER) RETURNS CHARACTER
+BEGIN
+	DECLARE vistaHomologReference 	REFERENCE TO VISTA_HOMOLOG_EP;
+	DECLARE txOperacion				CHARACTER;
+	DECLARE msgRespuesta			CHARACTER;
+	--Obtener la tabla de homologación
+	IF CARDINALITY(VISTA_HOMOLOG_EP.row[]) = 0 THEN
+		CALL loadHomologView(COD_ESTADO_PRODUCTO, vistaHomologReference);
+	END IF;
+	-- Obtener la homologación del nombre de la operación
+	SET msgRespuesta = setHomologatedDescription(CANAL_CR, COD_ESTADO_PRODUCTO, valorCampo, VACIO, vistaHomologReference);
+	RETURN msgRespuesta;
+END;

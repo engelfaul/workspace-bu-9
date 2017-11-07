@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MRMessageSet id="DTQCPVC002001" name="SVC_PA_GenerarOTPMsgSet" parser="XMLNSC">
+  <MRMsgCollection
+    href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd"
+    prefix="" targetNamespace="">
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpValidarToken;XSDElementDeclaration$MRMessage" name="msjSolOpValidarToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjRespOpGenerarTokenOTP;XSDElementDeclaration=1$MRMessage" name="msjRespOpGenerarTokenOTP"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpConsultarTokenOTP;XSDElementDeclaration=2$MRMessage" name="msjSolOpConsultarTokenOTP"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpEliminarToken;XSDElementDeclaration=3$MRMessage" name="msjSolOpEliminarToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpActualizarToken;XSDElementDeclaration=4$MRMessage" name="msjSolOpActualizarToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpAsignarToken;XSDElementDeclaration=5$MRMessage" name="msjSolOpAsignarToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpValidarCodigoActivacion;XSDElementDeclaration=6$MRMessage" name="msjSolOpValidarCodigoActivacion"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjRespOpEliminarToken;XSDElementDeclaration=7$MRMessage" name="msjRespOpEliminarToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpValidarEstadoTokenPorUsuario;XSDElementDeclaration=8$MRMessage" name="msjSolOpValidarEstadoTokenPorUsuario"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjRespOpConsultarHistoricosToken;XSDElementDeclaration=9$MRMessage" name="msjRespOpConsultarHistoricosToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjRespOpActualizarToken;XSDElementDeclaration=10$MRMessage" name="msjRespOpActualizarToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjRespOpValidarCodigoActivacion;XSDElementDeclaration=11$MRMessage" name="msjRespOpValidarCodigoActivacion"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjRespOpValidarEstadoTokenPorUsuario;XSDElementDeclaration=12$MRMessage" name="msjRespOpValidarEstadoTokenPorUsuario"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpConsultarHistoricosToken;XSDElementDeclaration=13$MRMessage" name="msjSolOpConsultarHistoricosToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpGenerarTokenOTP;XSDElementDeclaration=14$MRMessage" name="msjSolOpGenerarTokenOTP"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjRespOpReemplazarToken;XSDElementDeclaration=15$MRMessage" name="msjRespOpReemplazarToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjRespOpValidarToken;XSDElementDeclaration=16$MRMessage" name="msjRespOpValidarToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjRespOpAsignarToken;XSDElementDeclaration=17$MRMessage" name="msjRespOpAsignarToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpReemplazarToken;XSDElementDeclaration=18$MRMessage" name="msjSolOpReemplazarToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpGenerarOTP;XSDElementDeclaration=19$MRMessage" name="msjSolOpGenerarOTP"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjRespOpConsultarTokenOTP;XSDElementDeclaration=20$MRMessage" name="msjRespOpConsultarTokenOTP"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpValidarCodigoActivacion;XSDElementDeclaration=21$MRMessage" name="MsjSolOpValidarCodigoActivacion"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpEliminarToken;XSDElementDeclaration=22$MRMessage" name="MsjSolOpEliminarToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpAsignarToken;XSDElementDeclaration=23$MRMessage" name="MsjRespOpAsignarToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpAsignarToken;XSDElementDeclaration=24$MRMessage" name="MsjSolOpAsignarToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpActualizarToken;XSDElementDeclaration=25$MRMessage" name="MsjSolOpActualizarToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpConsultarHistoricosToken;XSDElementDeclaration=26$MRMessage" name="MsjSolOpConsultarHistoricosToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpActualizarToken;XSDElementDeclaration=27$MRMessage" name="MsjRespOpActualizarToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpReemplazarToken;XSDElementDeclaration=28$MRMessage" name="MsjSolOpReemplazarToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpConsultarTokenOTP;XSDElementDeclaration=29$MRMessage" name="MsjRespOpConsultarTokenOTP"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpConsultarTokenOTP;XSDElementDeclaration=30$MRMessage" name="MsjSolOpConsultarTokenOTP"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpConsultarHistoricosToken;XSDElementDeclaration=31$MRMessage" name="MsjRespOpConsultarHistoricosToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpReemplazarToken;XSDElementDeclaration=32$MRMessage" name="MsjRespOpReemplazarToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpValidarCodigoActivacion;XSDElementDeclaration=33$MRMessage" name="MsjRespOpValidarCodigoActivacion"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpEliminarToken;XSDElementDeclaration=34$MRMessage" name="MsjRespOpEliminarToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpValidarEstadoTokenPorUsuario;XSDElementDeclaration=35$MRMessage" name="MsjSolOpValidarEstadoTokenPorUsuario"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpValidarToken;XSDElementDeclaration=36$MRMessage" name="MsjRespOpValidarToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpValidarToken;XSDElementDeclaration=37$MRMessage" name="MsjSolOpValidarToken"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpValidarEstadoTokenPorUsuario;XSDElementDeclaration=38$MRMessage" name="MsjRespOpValidarEstadoTokenPorUsuario"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ContextoRespuestaTipo;XSDElementDeclaration=39$MRMessage" name="ContextoRespuestaTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ResultadoTransaccionTipo;XSDElementDeclaration=40$MRMessage" name="ResultadoTransaccionTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ErrorTipo;XSDElementDeclaration=41$MRMessage" name="ErrorTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/PaginacionTipo;XSDElementDeclaration=42$MRMessage" name="PaginacionTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ContextoSolicitudTipo;XSDElementDeclaration=43$MRMessage" name="ContextoSolicitudTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/CriterioOrdenamientoTipo;XSDElementDeclaration=44$MRMessage" name="CriterioOrdenamientoTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ServicioTipo;XSDElementDeclaration=45$MRMessage" name="ServicioTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/OperacionCanalTipo;XSDElementDeclaration=46$MRMessage" name="OperacionCanalTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ConsumidorTipo;XSDElementDeclaration=47$MRMessage" name="ConsumidorTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/AplicacionTipo;XSDElementDeclaration=48$MRMessage" name="AplicacionTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/CanalTipo;XSDElementDeclaration=49$MRMessage" name="CanalTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/TerminalTipo;XSDElementDeclaration=50$MRMessage" name="TerminalTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/HuellaDigitalDispositivoTipo;XSDElementDeclaration=51$MRMessage" name="HuellaDigitalDispositivoTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ClienteNaturalTipo;XSDElementDeclaration=52$MRMessage" name="ClienteNaturalTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/PersonaNaturalTipo;XSDElementDeclaration=53$MRMessage" name="PersonaNaturalTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/PersonaTipo;XSDElementDeclaration=54$MRMessage" name="PersonaTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ContactoPersonaTipo;XSDElementDeclaration=55$MRMessage" name="ContactoPersonaTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/TelefonoTipo;XSDElementDeclaration=56$MRMessage" name="TelefonoTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/UbicacionPersonaTipo;XSDElementDeclaration=57$MRMessage" name="UbicacionPersonaTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MunicipioTipo;XSDElementDeclaration=58$MRMessage" name="MunicipioTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/DepartamentoTipo;XSDElementDeclaration=59$MRMessage" name="DepartamentoTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/TokenTipo;XSDElementDeclaration=60$MRMessage" name="TokenTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/Notificacion;XSDElementDeclaration=61$MRMessage" name="Notificacion"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/TokenOTP;XSDElementDeclaration=62$MRMessage" name="TokenOTP"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/SeguridadTokenTipo;XSDElementDeclaration=63$MRMessage" name="SeguridadTokenTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/CriterioConsultaTipo;XSDElementDeclaration=64$MRMessage" name="CriterioConsultaTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/RangoFechasTipo;XSDElementDeclaration=65$MRMessage" name="RangoFechasTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/InfoHistoricoRSATipo;XSDElementDeclaration=66$MRMessage" name="InfoHistoricoRSATipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/PersonaJuridicaTipo;XSDElementDeclaration=67$MRMessage" name="PersonaJuridicaTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ProductoTipo;XSDElementDeclaration=68$MRMessage" name="ProductoTipo"/>
+    <message
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/EmpresaTipo;XSDElementDeclaration=69$MRMessage" name="EmpresaTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpValidarToken;XSDElementDeclaration"
+      name="msjSolOpValidarToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjSolOpValidarToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjRespOpGenerarTokenOTP;XSDElementDeclaration=1"
+      name="msjRespOpGenerarTokenOTP" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}msjRespOpGenerarTokenOTP"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpConsultarTokenOTP;XSDElementDeclaration=2"
+      name="msjSolOpConsultarTokenOTP" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjSolOpConsultarTokenOTP"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpEliminarToken;XSDElementDeclaration=3"
+      name="msjSolOpEliminarToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjSolOpEliminarToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpActualizarToken;XSDElementDeclaration=4"
+      name="msjSolOpActualizarToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjSolOpActualizarToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpAsignarToken;XSDElementDeclaration=5"
+      name="msjSolOpAsignarToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjSolOpAsignarToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpValidarCodigoActivacion;XSDElementDeclaration=6"
+      name="msjSolOpValidarCodigoActivacion" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjSolOpValidarCodigoActivacion"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjRespOpEliminarToken;XSDElementDeclaration=7"
+      name="msjRespOpEliminarToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjRespOpEliminarToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpValidarEstadoTokenPorUsuario;XSDElementDeclaration=8"
+      name="msjSolOpValidarEstadoTokenPorUsuario" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjSolOpValidarEstadoTokenPorUsuario"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjRespOpConsultarHistoricosToken;XSDElementDeclaration=9"
+      name="msjRespOpConsultarHistoricosToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjRespOpConsultarHistoricosToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjRespOpActualizarToken;XSDElementDeclaration=10"
+      name="msjRespOpActualizarToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjRespOpActualizarToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjRespOpValidarCodigoActivacion;XSDElementDeclaration=11"
+      name="msjRespOpValidarCodigoActivacion" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjRespOpValidarCodigoActivacion"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjRespOpValidarEstadoTokenPorUsuario;XSDElementDeclaration=12"
+      name="msjRespOpValidarEstadoTokenPorUsuario" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjRespOpValidarEstadoTokenPorUsuario"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpConsultarHistoricosToken;XSDElementDeclaration=13"
+      name="msjSolOpConsultarHistoricosToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjSolOpConsultarHistoricosToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpGenerarTokenOTP;XSDElementDeclaration=14"
+      name="msjSolOpGenerarTokenOTP" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}msjSolOpGenerarTokenOTP"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjRespOpReemplazarToken;XSDElementDeclaration=15"
+      name="msjRespOpReemplazarToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjRespOpReemplazarToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjRespOpValidarToken;XSDElementDeclaration=16"
+      name="msjRespOpValidarToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjRespOpValidarToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjRespOpAsignarToken;XSDElementDeclaration=17"
+      name="msjRespOpAsignarToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjRespOpAsignarToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpReemplazarToken;XSDElementDeclaration=18"
+      name="msjSolOpReemplazarToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjSolOpReemplazarToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpGenerarOTP;XSDElementDeclaration=19"
+      name="msjSolOpGenerarOTP" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}msjSolOpGenerarOTP"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjRespOpConsultarTokenOTP;XSDElementDeclaration=20"
+      name="msjRespOpConsultarTokenOTP" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjRespOpConsultarTokenOTP"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpValidarCodigoActivacion;XSDElementDeclaration=21"
+      name="MsjSolOpValidarCodigoActivacion" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjSolOpValidarCodigoActivacion"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpEliminarToken;XSDElementDeclaration=22"
+      name="MsjSolOpEliminarToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjSolOpEliminarToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpAsignarToken;XSDElementDeclaration=23"
+      name="MsjRespOpAsignarToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjRespOpAsignarToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpAsignarToken;XSDElementDeclaration=24"
+      name="MsjSolOpAsignarToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjSolOpAsignarToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpActualizarToken;XSDElementDeclaration=25"
+      name="MsjSolOpActualizarToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjSolOpActualizarToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpConsultarHistoricosToken;XSDElementDeclaration=26"
+      name="MsjSolOpConsultarHistoricosToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjSolOpConsultarHistoricosToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpActualizarToken;XSDElementDeclaration=27"
+      name="MsjRespOpActualizarToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjRespOpActualizarToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpReemplazarToken;XSDElementDeclaration=28"
+      name="MsjSolOpReemplazarToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjSolOpReemplazarToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpConsultarTokenOTP;XSDElementDeclaration=29"
+      name="MsjRespOpConsultarTokenOTP" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjRespOpConsultarTokenOTP"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpConsultarTokenOTP;XSDElementDeclaration=30"
+      name="MsjSolOpConsultarTokenOTP" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjSolOpConsultarTokenOTP"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpConsultarHistoricosToken;XSDElementDeclaration=31"
+      name="MsjRespOpConsultarHistoricosToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjRespOpConsultarHistoricosToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpReemplazarToken;XSDElementDeclaration=32"
+      name="MsjRespOpReemplazarToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjRespOpReemplazarToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpValidarCodigoActivacion;XSDElementDeclaration=33"
+      name="MsjRespOpValidarCodigoActivacion" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjRespOpValidarCodigoActivacion"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpEliminarToken;XSDElementDeclaration=34"
+      name="MsjRespOpEliminarToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjRespOpEliminarToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpValidarEstadoTokenPorUsuario;XSDElementDeclaration=35"
+      name="MsjSolOpValidarEstadoTokenPorUsuario" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjSolOpValidarEstadoTokenPorUsuario"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpValidarToken;XSDElementDeclaration=36"
+      name="MsjRespOpValidarToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjRespOpValidarToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpValidarToken;XSDElementDeclaration=37"
+      name="MsjSolOpValidarToken" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjSolOpValidarToken"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpValidarEstadoTokenPorUsuario;XSDElementDeclaration=38"
+      name="MsjRespOpValidarEstadoTokenPorUsuario" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MsjRespOpValidarEstadoTokenPorUsuario"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ContextoRespuestaTipo;XSDElementDeclaration=39"
+      name="ContextoRespuestaTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}ContextoRespuestaTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ResultadoTransaccionTipo;XSDElementDeclaration=40"
+      name="ResultadoTransaccionTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}ResultadoTransaccionTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ErrorTipo;XSDElementDeclaration=41"
+      name="ErrorTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}ErrorTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/PaginacionTipo;XSDElementDeclaration=42"
+      name="PaginacionTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}PaginacionTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ContextoSolicitudTipo;XSDElementDeclaration=43"
+      name="ContextoSolicitudTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}ContextoSolicitudTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/CriterioOrdenamientoTipo;XSDElementDeclaration=44"
+      name="CriterioOrdenamientoTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}CriterioOrdenamientoTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ServicioTipo;XSDElementDeclaration=45"
+      name="ServicioTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}ServicioTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/OperacionCanalTipo;XSDElementDeclaration=46"
+      name="OperacionCanalTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}OperacionCanalTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ConsumidorTipo;XSDElementDeclaration=47"
+      name="ConsumidorTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}ConsumidorTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/AplicacionTipo;XSDElementDeclaration=48"
+      name="AplicacionTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}AplicacionTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/CanalTipo;XSDElementDeclaration=49"
+      name="CanalTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}CanalTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/TerminalTipo;XSDElementDeclaration=50"
+      name="TerminalTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}TerminalTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/HuellaDigitalDispositivoTipo;XSDElementDeclaration=51"
+      name="HuellaDigitalDispositivoTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}HuellaDigitalDispositivoTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ClienteNaturalTipo;XSDElementDeclaration=52"
+      name="ClienteNaturalTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}ClienteNaturalTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/PersonaNaturalTipo;XSDElementDeclaration=53"
+      name="PersonaNaturalTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}PersonaNaturalTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/PersonaTipo;XSDElementDeclaration=54"
+      name="PersonaTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}PersonaTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ContactoPersonaTipo;XSDElementDeclaration=55"
+      name="ContactoPersonaTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}ContactoPersonaTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/TelefonoTipo;XSDElementDeclaration=56"
+      name="TelefonoTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}TelefonoTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/UbicacionPersonaTipo;XSDElementDeclaration=57"
+      name="UbicacionPersonaTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}UbicacionPersonaTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MunicipioTipo;XSDElementDeclaration=58"
+      name="MunicipioTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}MunicipioTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/DepartamentoTipo;XSDElementDeclaration=59"
+      name="DepartamentoTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}DepartamentoTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/TokenTipo;XSDElementDeclaration=60"
+      name="TokenTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}TokenTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/Notificacion;XSDElementDeclaration=61"
+      name="Notificacion" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}Notificacion"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/TokenOTP;XSDElementDeclaration=62"
+      name="TokenOTP" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}TokenOTP"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/SeguridadTokenTipo;XSDElementDeclaration=63"
+      name="SeguridadTokenTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}SeguridadTokenTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/CriterioConsultaTipo;XSDElementDeclaration=64"
+      name="CriterioConsultaTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}CriterioConsultaTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/RangoFechasTipo;XSDElementDeclaration=65"
+      name="RangoFechasTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}RangoFechasTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/InfoHistoricoRSATipo;XSDElementDeclaration=66"
+      name="InfoHistoricoRSATipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}InfoHistoricoRSATipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/PersonaJuridicaTipo;XSDElementDeclaration=67"
+      name="PersonaJuridicaTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}PersonaJuridicaTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ProductoTipo;XSDElementDeclaration=68"
+      name="ProductoTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}ProductoTipo"/>
+    <element
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/EmpresaTipo;XSDElementDeclaration=69"
+      name="EmpresaTipo" type="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}EmpresaTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjRespOpGenerarTokenOTP;XSDComplexTypeDefinition" name="msjRespOpGenerarTokenOTP"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpValidarCodigoActivacion;XSDComplexTypeDefinition=1" name="MsjSolOpValidarCodigoActivacion"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpEliminarToken;XSDComplexTypeDefinition=2" name="MsjSolOpEliminarToken"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpAsignarToken;XSDComplexTypeDefinition=3" name="MsjRespOpAsignarToken"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpAsignarToken;XSDComplexTypeDefinition=4" name="MsjSolOpAsignarToken"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpActualizarToken;XSDComplexTypeDefinition=5" name="MsjSolOpActualizarToken"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpConsultarHistoricosToken;XSDComplexTypeDefinition=6" name="MsjSolOpConsultarHistoricosToken"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpGenerarTokenOTP;XSDComplexTypeDefinition=7" name="msjSolOpGenerarTokenOTP"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpActualizarToken;XSDComplexTypeDefinition=8" name="MsjRespOpActualizarToken"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpReemplazarToken;XSDComplexTypeDefinition=9" name="MsjSolOpReemplazarToken"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpConsultarTokenOTP;XSDComplexTypeDefinition=10" name="MsjRespOpConsultarTokenOTP"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpConsultarTokenOTP;XSDComplexTypeDefinition=11" name="MsjSolOpConsultarTokenOTP"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpConsultarHistoricosToken;XSDComplexTypeDefinition=12" name="MsjRespOpConsultarHistoricosToken"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpReemplazarToken;XSDComplexTypeDefinition=13" name="MsjRespOpReemplazarToken"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpValidarCodigoActivacion;XSDComplexTypeDefinition=14" name="MsjRespOpValidarCodigoActivacion"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpEliminarToken;XSDComplexTypeDefinition=15" name="MsjRespOpEliminarToken"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpValidarEstadoTokenPorUsuario;XSDComplexTypeDefinition=16" name="MsjSolOpValidarEstadoTokenPorUsuario"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpValidarToken;XSDComplexTypeDefinition=17" name="MsjRespOpValidarToken"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/msjSolOpGenerarOTP;XSDComplexTypeDefinition=18" name="msjSolOpGenerarOTP"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjSolOpValidarToken;XSDComplexTypeDefinition=19" name="MsjSolOpValidarToken"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MsjRespOpValidarEstadoTokenPorUsuario;XSDComplexTypeDefinition=20" name="MsjRespOpValidarEstadoTokenPorUsuario"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ContextoRespuestaTipo;XSDComplexTypeDefinition=21" name="ContextoRespuestaTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ResultadoTransaccionTipo;XSDComplexTypeDefinition=22" name="ResultadoTransaccionTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ErrorTipo;XSDComplexTypeDefinition=23" name="ErrorTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/PaginacionTipo;XSDComplexTypeDefinition=24" name="PaginacionTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ContextoSolicitudTipo;XSDComplexTypeDefinition=25" name="ContextoSolicitudTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/CriterioOrdenamientoTipo;XSDComplexTypeDefinition=26" name="CriterioOrdenamientoTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ServicioTipo;XSDComplexTypeDefinition=27" name="ServicioTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/OperacionCanalTipo;XSDComplexTypeDefinition=28" name="OperacionCanalTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ConsumidorTipo;XSDComplexTypeDefinition=29" name="ConsumidorTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/AplicacionTipo;XSDComplexTypeDefinition=30" name="AplicacionTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/CanalTipo;XSDComplexTypeDefinition=31" name="CanalTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/TerminalTipo;XSDComplexTypeDefinition=32" name="TerminalTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/HuellaDigitalDispositivoTipo;XSDComplexTypeDefinition=33" name="HuellaDigitalDispositivoTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}PersonaNaturalTipo"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ClienteNaturalTipo;XSDComplexTypeDefinition=34" name="ClienteNaturalTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}PersonaTipo"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/PersonaNaturalTipo;XSDComplexTypeDefinition=35" name="PersonaNaturalTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/PersonaTipo;XSDComplexTypeDefinition=36" name="PersonaTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ContactoPersonaTipo;XSDComplexTypeDefinition=37" name="ContactoPersonaTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/TelefonoTipo;XSDComplexTypeDefinition=38" name="TelefonoTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/UbicacionPersonaTipo;XSDComplexTypeDefinition=39" name="UbicacionPersonaTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/MunicipioTipo;XSDComplexTypeDefinition=40" name="MunicipioTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/DepartamentoTipo;XSDComplexTypeDefinition=41" name="DepartamentoTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/TokenTipo;XSDComplexTypeDefinition=42" name="TokenTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/Notificacion;XSDComplexTypeDefinition=43" name="Notificacion"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/TokenOTP;XSDComplexTypeDefinition=44" name="TokenOTP"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/SeguridadTokenTipo;XSDComplexTypeDefinition=45" name="SeguridadTokenTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/CriterioConsultaTipo;XSDComplexTypeDefinition=46" name="CriterioConsultaTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/RangoFechasTipo;XSDComplexTypeDefinition=47" name="RangoFechasTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/InfoHistoricoRSATipo;XSDComplexTypeDefinition=48" name="InfoHistoricoRSATipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}PersonaTipo"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/PersonaJuridicaTipo;XSDComplexTypeDefinition=49" name="PersonaJuridicaTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/ProductoTipo;XSDComplexTypeDefinition=50" name="ProductoTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_GenerarOTPMsgSet#/-/complexType{}PersonaJuridicaTipo"
+      href="platform:/resource/SVC_PA_GenerarOTPMsgSet/SVC_PA_GenerarOTPMsgSet/SrvScnToken.mxsd#/0/EmpresaTipo;XSDComplexTypeDefinition=51" name="EmpresaTipo"/>
+  </MRMsgCollection>
+</MRMessageSet>

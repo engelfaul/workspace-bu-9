@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="ProjectInterchangeZipFileExportWizard">
+		<list key="PROJ_INTER_EXPORT_interchange">
+			<item value="D:\davivienda\entrega 2\PI_ActualizacionParametrosNotificaciones.zip"/>
+		</list>
+	</section>
+	<section name="ProjectInterchangeImportWizard">
+		<list key="PROJ_INTER_IMPORT_interchange_import">
+			<item value="D:\davivienda\entrega\borrar\PI_ConsultaClientesPorUsuario.zip"/>
+			<item value="D:\davivienda\PI_MockRPG.zip"/>
+			<item value="D:\davivienda\PI_Panama.zip"/>
+		</list>
+	</section>
+</section>

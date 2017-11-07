@@ -1,0 +1,13 @@
+CREATE FUNCTION getBusReg_HomologServPA (IN nombreOp CHARACTER) RETURNS CHARACTER
+BEGIN
+	DECLARE vistaHomologReference 	REFERENCE TO VISTA_HOMOLOG;
+	DECLARE txOperacion				CHARACTER;
+	DECLARE msgRespuesta			CHARACTER;
+	--Obtener la tabla de homologación
+	IF CARDINALITY(VISTA_HOMOLOG.row[]) = 0 THEN
+		CALL loadHomologView(BUSREG_PA, vistaHomologReference);
+	END IF;
+	-- Obtener la homologación del nombre de la operación
+	SET msgRespuesta = setHomologatedDescription(CANAL_PA, BUSREG_PA, nombreOp, VACIO, vistaHomologReference);
+	RETURN msgRespuesta;
+END;

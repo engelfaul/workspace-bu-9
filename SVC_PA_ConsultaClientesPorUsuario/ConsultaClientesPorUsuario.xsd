@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.davivienda.com/xml/ConsultaClientesPorUsuario" xmlns:ibmSchExtn="http://www.ibm.com/schema/extensions" xmlns:tns="http://www.davivienda.com/xml/ConsultaClientesPorUsuario">
+  <xsd:element ibmSchExtn:docRoot="true" name="ConsultaClientesPorUsuario" type="tns:ConsultaClientesPorUsuarioType"/>
+  <xsd:element ibmSchExtn:docRoot="true" name="ConsultaClientesPorUsuarioResponse" type="tns:ConsultaClientesPorUsuarioResponseType"/>
+  <xsd:complexType name="ConsultaClientesPorUsuarioType">
+    <xsd:sequence>
+      <xsd:element name="Request" type="tns:RequestType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="RequestType">
+    <xsd:sequence>
+      <xsd:element name="DataHeader" type="tns:DataHeaderReqType"/>
+      <xsd:element name="Data" type="tns:DataReqType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="DataHeaderReqType">
+    <xsd:sequence>
+      <xsd:element default="ConsultaClientesPorUsuario" name="nombreOperacion" type="xsd:string"/>
+      <xsd:element name="total" type="xsd:int"/>
+      <xsd:element name="jornada" type="xsd:short"/>
+      <xsd:element name="canal" type="xsd:short"/>
+      <xsd:element name="modoDeOperacion" type="xsd:short"/>
+      <xsd:element name="usuario" type="xsd:string"/>
+      <xsd:element name="perfil" type="xsd:short"/>
+      <xsd:element default="1.0.0" name="versionServicio" type="xsd:string"/>
+      <xsd:element name="idTransaccion" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="DataReqType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="idSesion" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="codIdioma" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valOrigen" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="codPais" type="xsd:string"/>
+      <xsd:element name="valLogin" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ConsultaClientesPorUsuarioResponseType">
+    <xsd:sequence>
+      <xsd:element name="Response" type="tns:ResponseType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ResponseType">
+    <xsd:sequence>
+      <xsd:element name="DataHeader" type="tns:DataHeaderRespType"/>
+      <xsd:element minOccurs="0" name="Data" type="tns:DataRespType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="DataHeaderRespType">
+    <xsd:sequence>
+      <xsd:element default="ConsultaClientesPorUsuario" name="nombreOperacion" type="xsd:string"/>
+      <xsd:element name="total" type="xsd:int"/>
+      <xsd:element name="caracterAceptacion" type="xsd:string"/>
+      <xsd:element name="ultimoMensaje" type="xsd:short"/>
+      <xsd:element name="idTransaccion" type="xsd:string"/>
+      <xsd:element name="codMsgRespuesta" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="msgRespuesta" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="DataRespType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="Clientes" type="tns:ClientesRepRespType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ClientesRepRespType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" name="Cliente" type="tns:ClienteRespType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ClienteRespType">
+    <xsd:sequence>
+      <xsd:element name="codTipoIdentificacion" type="xsd:string"/>
+      <xsd:element name="valNumeroIdentificacion" type="xsd:string"/>
+      <xsd:element name="valNombre" type="xsd:string"/>
+      <xsd:element name="codTipoLogin" type="xsd:string"/>
+      <xsd:element name="valSegmento" type="xsd:string"/>
+      <xsd:element name="valMetodoAutenticacion" type="xsd:string"/>
+      <xsd:element name="codPais" type="xsd:string"/>
+      <xsd:element name="codTipoEmpresa" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

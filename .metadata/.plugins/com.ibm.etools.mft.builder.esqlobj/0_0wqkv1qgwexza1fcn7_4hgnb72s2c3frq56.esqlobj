@@ -1,0 +1,28 @@
+CREATE PROCEDURE getLastExceptionDetail(IN InputTree REFERENCE,OUT messageNumber INTEGER,
+OUT messageText CHARACTER, OUT parentName CHARACTER, OUT catlgName CHARACTER)	
+   BEGIN
+   	DECLARE ptrException REFERENCE TO InputTree.*[1];
+   	-- seguir con el bucle mientras actúan los desplazamientos al hijo de la lista de excepciones 
+		WHILE lastmove(ptrException) DO
+  			-- recorrer el árbol hasta el último hijo
+			MOVE ptrException LASTCHILD;
+		END WHILE;
+		MOVE ptrException PARENT;
+		MOVE ptrException PARENT;
+		
+		SET parentName = FIELDNAME(ptrException);
+		SET messageNumber = ptrException.Number;
+   		SET messageText = '';
+   		SET catlgName = FIELDVALUE(ptrException.Catalog);		
+   		
+   		DECLARE ptrExceptionInserts REFERENCE TO ptrException.Insert[1];
+		
+		DECLARE i INTEGER 1;
+		WHILE lastmove(ptrExceptionInserts) DO
+			-- almacenar los valores actuales para el texto
+				SET messageText = messageText || ' Insert ' || CAST(i AS CHARACTER) || ':' || ptrExceptionInserts.Text || '.';
+			SET i = i+1;
+			-- ahora continuar con el siguiente hermano
+			MOVE ptrExceptionInserts NEXTSIBLING;			
+		END WHILE;
+   END;

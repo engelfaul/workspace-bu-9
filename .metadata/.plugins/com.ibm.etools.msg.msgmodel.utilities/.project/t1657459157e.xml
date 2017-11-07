@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MRMessageSet id="H850UHG002001"
+  name="SVC_PA_ConsultaPadronCliente_MsgSet" parser="XMLNSC">
+  <MRMsgCollection
+    href="platform:/resource/SVC_PA_ConsultaPadronCliente_MsgSet/SVC_PA_ConsultaPadronCliente_MsgSet/ConsultaPadronCliente_MsgSet.mxsd"
+    prefix="" targetNamespace="">
+    <message
+      href="platform:/resource/SVC_PA_ConsultaPadronCliente_MsgSet/SVC_PA_ConsultaPadronCliente_MsgSet/ConsultaPadronCliente_MsgSet.mxsd#/0/ConsultaPadronCliente;XSDElementDeclaration$MRMessage" name="ConsultaPadronCliente"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaPadronCliente_MsgSet/SVC_PA_ConsultaPadronCliente_MsgSet/ConsultaPadronCliente_MsgSet.mxsd#/0/ConsultaPadronCliente;XSDElementDeclaration"
+      name="ConsultaPadronCliente" type="mset://SVC_PA_ConsultaPadronCliente_MsgSet#/-/complexType{}ConsultaPadronClienteType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaPadronCliente_MsgSet/SVC_PA_ConsultaPadronCliente_MsgSet/ConsultaPadronCliente_MsgSet.mxsd#/0/ConsultaPadronClienteResponse;XSDElementDeclaration=1"
+      name="ConsultaPadronClienteResponse" type="mset://SVC_PA_ConsultaPadronCliente_MsgSet#/-/complexType{}ConsultaPadronClienteResponseType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaPadronCliente_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaPadronCliente_MsgSet/SVC_PA_ConsultaPadronCliente_MsgSet/ConsultaPadronCliente_MsgSet.mxsd#/0/ConsultaPadronClienteType;XSDComplexTypeDefinition" name="ConsultaPadronClienteType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaPadronCliente_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaPadronCliente_MsgSet/SVC_PA_ConsultaPadronCliente_MsgSet/ConsultaPadronCliente_MsgSet.mxsd#/0/ConsultaPadronClienteResponseType;XSDComplexTypeDefinition=1" name="ConsultaPadronClienteResponseType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaPadronCliente_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaPadronCliente_MsgSet/SVC_PA_ConsultaPadronCliente_MsgSet/ConsultaPadronCliente_MsgSet.mxsd#/0/RequestType;XSDComplexTypeDefinition=2" name="RequestType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaPadronCliente_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaPadronCliente_MsgSet/SVC_PA_ConsultaPadronCliente_MsgSet/ConsultaPadronCliente_MsgSet.mxsd#/0/ResponseType;XSDComplexTypeDefinition=3" name="ResponseType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaPadronCliente_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaPadronCliente_MsgSet/SVC_PA_ConsultaPadronCliente_MsgSet/ConsultaPadronCliente_MsgSet.mxsd#/0/DataHeader_Type;XSDComplexTypeDefinition=4" name="DataHeader_Type"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaPadronCliente_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaPadronCliente_MsgSet/SVC_PA_ConsultaPadronCliente_MsgSet/ConsultaPadronCliente_MsgSet.mxsd#/0/DataHeader_RespType;XSDComplexTypeDefinition=5" name="DataHeader_RespType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaPadronCliente_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaPadronCliente_MsgSet/SVC_PA_ConsultaPadronCliente_MsgSet/ConsultaPadronCliente_MsgSet.mxsd#/0/DataType;XSDComplexTypeDefinition=6" name="DataType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaPadronCliente_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaPadronCliente_MsgSet/SVC_PA_ConsultaPadronCliente_MsgSet/ConsultaPadronCliente_MsgSet.mxsd#/0/DataResp_Type;XSDComplexTypeDefinition=7" name="DataResp_Type"/>
+  </MRMsgCollection>
+</MRMessageSet>

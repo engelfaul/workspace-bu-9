@@ -1,0 +1,679 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbench version="2.0">
+<workbenchAdvisor/>
+<window height="728" maximized="true" width="1024" x="156" y="0">
+<fastViewData fastViewLocation="1024">
+<orientation position="512" view="com.ibm.xtools.mde.guidance"/>
+</fastViewData>
+<perspectiveBar>
+<itemSize x="160"/>
+</perspectiveBar>
+<coolbarLayout locked="0">
+<coolItem id="group.file" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.ui.workbench.file" itemType="typeToolBarContribution" x="122" y="22"/>
+<coolItem id="additions" itemType="typeGroupMarker"/>
+<coolItem id="com.ibm.etools.msg.reporting.infrastructure.actionSet" itemType="typeToolBarContribution" x="38" y="22"/>
+<coolItem id="com.ibm.etools.patterns.PatternActionSet" itemType="typeToolBarContribution" x="38" y="22"/>
+<coolItem id="com.rational.clearcase.ActionSet" itemType="typeToolBarContribution" x="-1" y="-1"/>
+<coolItem id="org.eclipse.debug.ui.launchActionSet" itemType="typeToolBarContribution" x="167" y="22"/>
+<coolItem id="org.eclipse.search.searchActionSet" itemType="typeToolBarContribution" x="76" y="22"/>
+<coolItem id="org.eclipse.ui.edit.text.actionSet.presentation" itemType="typeToolBarContribution" x="107" y="22"/>
+<coolItem id="org.eclipse.wst.xml.ui.perspective.NewFileToolBar" itemType="typeToolBarContribution" x="-1" y="-1"/>
+<coolItem id="org.eclipse.wst.xml.ui.design.DesignToolBar" itemType="typeToolBarContribution" x="-1" y="-1"/>
+<coolItem id="com.ibm.etools.references.ui.debugTrimToolbarContributionToolbar" itemType="typeToolBarContribution" x="-1" y="-1"/>
+<coolItem id="group.nav" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.ui.workbench.navigate" itemType="typeToolBarContribution" x="190" y="22"/>
+<coolItem id="group.editor" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.jdt.ui.CompilationUnitEditor" itemType="typeToolBarContribution" x="-1" y="-1"/>
+<coolItem id="com.ibm.etools.mft.bar.editor" itemType="typePlaceholder" x="-1" y="-1"/>
+<coolItem id="com.ibm.etools.patterns.editor.PatternBrowse" itemType="typePlaceholder" x="-1" y="-1"/>
+<coolItem id="org.eclipse.wst.wsdl.ui.internal.WSDLEditor" itemType="typePlaceholder" x="104" y="22"/>
+<coolItem id="com.ibm.etools.mft.subflow.editor" itemType="typePlaceholder" x="387" y="22"/>
+<coolItem id="com.ibm.etools.msg.editor.ui.edit.MSetEditor.id" itemType="typePlaceholder" x="-1" y="-1"/>
+<coolItem id="org.eclipse.wst.xsd.ui.internal.editor.InternalXSDMultiPageEditor" itemType="typePlaceholder" x="38" y="22"/>
+<coolItem id="org.eclipse.ui.DefaultTextEditor" itemType="typePlaceholder" x="-1" y="-1"/>
+<coolItem id="com.ibm.etools.msg.editor.ui.edit.MXSDEditor.id" itemType="typePlaceholder" x="130" y="22"/>
+<coolItem id="com.ibm.etools.mft.esql.editor.EsqlEditor" itemType="typePlaceholder" x="-1" y="-1"/>
+<coolItem id="com.ibm.etools.mft.flow.editor" itemType="typeToolBarContribution" x="387" y="22"/>
+<coolItem id="group.help" itemType="typeGroupMarker"/>
+<coolItem id="com.ibm.support.feedback.errorreports.ui.crashReportToolbar" itemType="typeToolBarContribution" x="158" y="22"/>
+<coolItem id="com.ibm.cic.licensing.common.ui.controlContribution" itemType="typeToolBarContribution" x="-1" y="-1"/>
+<coolItem id="org.eclipse.ui.workbench.help" itemType="typeToolBarContribution" x="-1" y="-1"/>
+</coolbarLayout>
+<page aggregateWorkingSetId="Aggregate for window 1508362099584" focus="true" label="Espacio de trabajo - Depurar">
+<editors>
+<editorArea activeWorkbook="DefaultEditorWorkbook">
+<info part="DefaultEditorWorkbook">
+<folder appearance="1" expanded="2">
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+<part id="1"/>
+<part id="2"/>
+<part id="3"/>
+</presentation>
+</folder>
+</info>
+</editorArea>
+<editor id="com.ibm.etools.mft.flow.editor" name="RPGIntegrationAdapterRequest.msgflow" partName="RPGIntegrationAdapterRequest.msgflow" path="C:/Users/Assist/IBM/IntegrationToolkit90/workspace/FWK_RPGIntegrationAdapter/com/ibm/ams/framework/adapters/rpg/RPGIntegrationAdapterRequest.msgflow" title="RPGIntegrationAdapterRequest.msgflow" tooltip="FWK_RPGIntegrationAdapter/com/ibm/ams/framework/adapters/rpg/RPGIntegrationAdapterRequest.msgflow" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/FWK_RPGIntegrationAdapter/com/ibm/ams/framework/adapters/rpg/RPGIntegrationAdapterRequest.msgflow"/>
+</editor>
+<editor id="com.ibm.etools.mft.flow.editor" name="ApplicationExecute.msgflow" partName="ApplicationExecute.msgflow" path="C:/Users/Assist/IBM/IntegrationToolkit90/workspace/FWK_RPGIntegrationAdapter/com/ibm/ams/framework/adapters/rpg/ApplicationExecute.msgflow" title="ApplicationExecute.msgflow" tooltip="FWK_RPGIntegrationAdapter/com/ibm/ams/framework/adapters/rpg/ApplicationExecute.msgflow" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/FWK_RPGIntegrationAdapter/com/ibm/ams/framework/adapters/rpg/ApplicationExecute.msgflow"/>
+</editor>
+<editor activePart="true" focus="true" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="RpgIntegrationAdapter.java" partName="RpgIntegrationAdapter.java" path="C:/Users/Assist/IBM/IntegrationToolkit90/workspace/RPGIntegrationAdapterJava/com/ibm/gbs/ams/integration/adapters/RpgIntegrationAdapter.java" title="RpgIntegrationAdapter.java" tooltip="RPGIntegrationAdapterJava/com/ibm/gbs/ams/integration/adapters/RpgIntegrationAdapter.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/RPGIntegrationAdapterJava/com/ibm/gbs/ams/integration/adapters/RpgIntegrationAdapter.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="24" selectionOffset="2845" selectionTopPixel="662"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="CallRPGProgram.java" partName="CallRPGProgram.java" path="C:/Users/Assist/IBM/IntegrationToolkit90/workspace/RPGIntegrationAdapterJava/com/ibm/gbs/ams/integration/adapters/rpg/CallRPGProgram.java" title="CallRPGProgram.java" tooltip="RPGIntegrationAdapterJava/com/ibm/gbs/ams/integration/adapters/rpg/CallRPGProgram.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/RPGIntegrationAdapterJava/com/ibm/gbs/ams/integration/adapters/rpg/CallRPGProgram.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="10500" selectionTopPixel="3638"/>
+</editor>
+</editors>
+<views>
+<view id="org.eclipse.ui.views.ProgressView" partName="Vista de progreso">
+<viewState/>
+</view>
+<view id="org.eclipse.debug.ui.DebugView" partName="Depurar">
+<viewState/>
+</view>
+<view id="com.ibm.etools.mft.broker.runtime.views.BrokerRuntimeView" partName="Nodos de integración">
+<viewState/>
+</view>
+<view id="org.eclipse.pde.runtime.LogView" partName="Anotación de errores">
+<viewState activate="true" allSessions="true" column2="300" column3="150" column4="150" error="true" groupBy="0" info="true" limit="50" ok="true" orderType="2" orderValue="-1" show_filter_text="true" useLimit="true" warning="true"/>
+</view>
+<view id="org.eclipse.debug.ui.BreakpointView" partName="Puntos de interrupción">
+<viewState/>
+</view>
+<view id="org.eclipse.debug.ui.VariableView" partName="Variables">
+<viewState/>
+</view>
+<view id="org.eclipse.ui.views.TaskList" partName="Tareas">
+<viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.completionField" categoryGroup="none" markerContentGenerator="org.eclipse.ui.ide.tasksGenerator" partName="Tareas">
+<columnWidths org.eclipse.ui.ide.completionField="40" org.eclipse.ui.ide.descriptionField="304" org.eclipse.ui.ide.locationField="64" org.eclipse.ui.ide.markerType="94" org.eclipse.ui.ide.pathField="124" org.eclipse.ui.ide.priorityField="20" org.eclipse.ui.ide.resourceField="94"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.completionField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.priorityField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.descriptionField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.pathField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.locationField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.markerType"/>
+</viewState>
+</view>
+<view id="org.eclipse.ui.views.ContentOutline" partName="Esquema">
+<viewState/>
+</view>
+<view id="com.ibm.etools.mft.broker.runtime.views.DeploymentLogView" partName="Registro de despliegue">
+<viewState/>
+</view>
+<view id="org.eclipse.ui.views.PropertySheet" partName="Propiedades">
+<viewState/>
+</view>
+<view id="org.eclipse.ui.views.ProblemView" partName="Problemas">
+<viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.resourceField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problemas">
+<columnWidths org.eclipse.ui.ide.locationField="0" org.eclipse.ui.ide.markerType="0" org.eclipse.ui.ide.pathField="0" org.eclipse.ui.ide.resourceField="0" org.eclipse.ui.ide.severityAndDescriptionField="0"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.pathField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.locationField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.markerType"/>
+</viewState>
+</view>
+<view id="org.eclipse.datatools.connectivity.DataSourceExplorerNavigator" partName="Explorador de orígenes de datos"/>
+<view id="org.eclipse.ui.console.ConsoleView" partName="Consola">
+<viewState/>
+</view>
+<view id="com.ibm.etools.mft.navigator.resource" partName="Desarrollo de aplicaciones">
+<viewState ProjectsMode="AppLib" project_scrollbar_horizontal="0" project_scrollbar_vertical="15" sectionExpansion="ONLY_PROJECTS" sectionExpansionFirstWeight="100" sorter="0" workingSetName="">
+<filters>
+<filter element="Espacios de nombres de mensajes padre vacíos"/>
+<filter element="Grupos (Archivos de esquemas)"/>
+<filter element="Elementos y atributos (Archivos de esquemas)"/>
+<filter element="Esquemas de intermediario padre vacíos"/>
+<filter element=".*"/>
+<filter element="Tipos (Archivos de esquemas)"/>
+<filter element="Mensajes (Archivos de esquemas)"/>
+</filters>
+<selection>
+<element path="0*/RPGIntegrationAdapterJava/com/ibm/gbs/ams/integration/adapters/rpg/CallRPGProgram.java"/>
+</selection>
+<expanded>
+<element path="FWK_RPGIntegrationAdapter"/>
+<element path="FWK_RPGIntegrationAdapter|Flujos"/>
+<element path="FWK_RPGIntegrationAdapter|Flujos|com.ibm.ams.framework.adapters.rpg"/>
+<element path="Common_Lib_Utils"/>
+<element path="RPGIntegrationAdapterJavaLIB"/>
+<element path="RPGIntegrationAdapterJavaLIB|Java"/>
+<element path="RPGIntegrationAdapterJavaLIB|Java|RPGIntegrationAdapterJava"/>
+<element path="RPGIntegrationAdapterJavaLIB|Java|RPGIntegrationAdapterJava|com.ibm.gbs.ams.integration.adapters.rpg"/>
+<element path="Recursos independientes"/>
+</expanded>
+<elementMap name="[Common_Lib_Utils]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/Common_Lib_Utils" type="4"/>
+</elementMap>
+<elementMap name="[SVC_PA_ConsultaSaldosCliente]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_ConsultaSaldosClienteMsgSet" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_ConsultaSaldosCliente" type="4"/>
+</elementMap>
+<elementMap name="[SVC_PA_NitOrigen]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_NitOrigenMsgSet" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_NitOrigen" type="4"/>
+</elementMap>
+<elementMap name="[SVC_PA_ConsultaPadronCliente]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_ConsultaPadronCliente" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_ConsultaPadronCliente_MsgSet" type="4"/>
+</elementMap>
+<elementMap name="[SVC_PA_CambioUsuarioYClave]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_CambioUsuarioYClaveMsgSet" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_CambioUsuarioYClave" type="4"/>
+</elementMap>
+<elementMap name="[RPGIntegrationAdapterJavaLIB]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/RPGIntegrationAdapterJavaLIB" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/RPGIntegrationAdapterJava" type="4"/>
+</elementMap>
+<elementMap name="[Common_Call_TimeHandler]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/Common_Call_TimeHandler" type="4"/>
+</elementMap>
+<elementMap name="[Common_Call_ErrorHandler]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/Common_Call_ErrorHandler" type="4"/>
+</elementMap>
+<elementMap name="[Common_Call_LogHandler]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/Common_Call_LogHandler" type="4"/>
+</elementMap>
+<elementMap name="[FWK_RPGIntegrationAdapter]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/FWK_RPGIntegrationAdapter" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/RPGIntegrationAdapterJava" type="4"/>
+</elementMap>
+<elementMap name="[ChannelMessageSafeTrace]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/ChannelMessageSafeTrace" type="4"/>
+</elementMap>
+<elementMap name="[SVC_PA_Autenticacion]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_AutenticacionMsgSet" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_Autenticacion" type="4"/>
+</elementMap>
+<elementMap name="[SVC_PA_ActualizacionParametrosNotificaciones]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_ActualizacionParametrosNotificaciones" type="4"/>
+</elementMap>
+<elementMap name="[SVC_PA_ConsultaClientesPorUsuario_old]"/>
+<elementMap name="[SVC_PA_GenerarOTP]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_GenerarOTP" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_GenerarOTPMsgSet" type="4"/>
+</elementMap>
+<elementMap name="[SVC_PA_ConsultaDatosCuenta]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_ConsultaDatosCuentaMsgSet" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_ConsultaDatosCuenta" type="4"/>
+</elementMap>
+<elementMap name="[SVC_PA_ConsultaClientesPorUsuario]">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/SVC_PA_ConsultaClientesPorUsuario" type="4"/>
+</elementMap>
+</viewState>
+</view>
+<view id="com.ibm.xtools.mde.guidance" partName="Orientación de MDD"/>
+<view id="org.eclipse.wst.server.ui.ServersView" partName="Servidores">
+<viewState CommonNavigator.LINKING_ENABLED="0"/>
+</view>
+</views>
+<perspectives activePart="org.eclipse.debug.ui.VariableView" activePerspective="org.eclipse.debug.ui.DebugPerspective">
+<perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
+<descriptor class="com.ibm.etools.mft.perspectives.BrokerDevelopmentPerspective" id="com.ibm.etools.mft.perspectives.BrokerDevelopmentPerspective" label="Desarrollo de integración"/>
+<alwaysOnActionSet id="com.ibm.bpm.gettingstarted.actionset.id"/>
+<alwaysOnActionSet id="com.ibm.rational.welcome.core.helpSearchActionSet"/>
+<alwaysOnActionSet id="com.ibm.cic.licensing.common.ui.actionSet"/>
+<alwaysOnActionSet id="com.ibm.etools.msg.dictionary.actionSet1"/>
+<alwaysOnActionSet id="com.ibm.etools.msg.reporting.infrastructure.actionSet"/>
+<alwaysOnActionSet id="com.ibm.etools.patterns.PatternActionSet"/>
+<alwaysOnActionSet id="com.ibm.wbit.samples.framework.help_samplestutorials_actionset_id"/>
+<alwaysOnActionSet id="org.eclipse.ui.cheatsheets.actionSet"/>
+<alwaysOnActionSet id="org.eclipse.search.searchActionSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.annotationNavigation"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.navigation"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.convertLineDelimitersTo"/>
+<alwaysOnActionSet id="org.eclipse.ui.externaltools.ExternalToolsSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.actionSet.keyBindings"/>
+<alwaysOnActionSet id="org.eclipse.ui.actionSet.openFiles"/>
+<alwaysOnActionSet id="org.eclipse.debug.ui.launchActionSet"/>
+<alwaysOnActionSet id="com.rational.clearcase.ActionSet"/>
+<alwaysOffActionSet id="com.ibm.rational.welcome.core.webResourcesActionSet"/>
+<alwaysOffActionSet id="com.ibm.etools.miniwelcome.miniWelcomeActionSet"/>
+<show_view_action id="com.ibm.etools.mft.navigator.resource"/>
+<show_view_action id="com.ibm.etools.patterns.views.PatternExplorerView"/>
+<show_view_action id="com.ibm.etools.mft.broker.repository.views.RepositoryView"/>
+<show_view_action id="com.ibm.etools.mft.broker.runtime.views.BrokerRuntimeView"/>
+<show_view_action id="com.ibm.etools.mft.broker.runtime.views.DeploymentLogView"/>
+<show_view_action id="org.eclipse.ui.views.ContentOutline"/>
+<show_view_action id="org.eclipse.gef.ui.palette_view"/>
+<show_view_action id="org.eclipse.ui.views.ProblemView"/>
+<show_view_action id="org.eclipse.ui.views.PropertySheet"/>
+<show_view_action id="org.eclipse.ui.views.TaskList"/>
+<show_view_action id="com.ibm.datatools.project.ui.projectExplorer"/>
+<show_view_action id="org.eclipse.datatools.connectivity.DataSourceExplorerNavigator"/>
+<new_wizard_action id="com.ibm.etools.mft.util.ui.wizards.newApplication"/>
+<new_wizard_action id="com.ibm.etools.mft.util.ui.wizards.newServiceApplication"/>
+<new_wizard_action id="com.ibm.etools.mft.util.ui.wizards.newLibrary"/>
+<new_wizard_action id="com.ibm.etools.mft.dotnet.wizard1"/>
+<new_wizard_action id="com.ibm.etools.mft.util.ui.wizards.newMessageBrokerProject"/>
+<new_wizard_action id="com.ibm.etools.mft.pattern.capture.newprojectwizard.PatternCaptureNewWizard"/>
+<new_wizard_action id="com.ibm.etools.mft.wizards.newnodeproject"/>
+<new_wizard_action id="com.ibm.etools.mft.wizards.newflow"/>
+<new_wizard_action id="com.ibm.etools.mft.wizards.newsubflow"/>
+<new_wizard_action id="com.ibm.etools.msg.importer.dfdl.wizards.GenMsgModelWizard"/>
+<new_wizard_action id="com.ibm.etools.mapping.wizards.mappable.newesqlmap"/>
+<new_wizard_action id="com.ibm.etools.mft.wizards.newmfsql"/>
+<new_wizard_action id="com.ibm.etools.mft.adapter.emd.ui.wizards.EMDWizard"/>
+<new_wizard_action id="com.ibm.etools.mft.rdb.wizards.rdbimport.ImportRDBDefinitionsWizard"/>
+<new_wizard_action id="com.ibm.etools.mft.esql.lineage.ui.wizards.newdatalineagewizard"/>
+<new_wizard_action id="com.ibm.etools.mft.bar.wizards.newbar"/>
+<new_wizard_action id="com.ibm.etools.mft.unittest.wizards.newtest.mflowcat"/>
+<new_wizard_action id="com.ibm.etools.mft.decision.service.ui.wizards.newdecisionservice"/>
+<new_wizard_action id="com.ibm.etools.mft.connector.ui.editor.wizards.MQDiscoverServiceWizard"/>
+<new_wizard_action id="com.ibm.etools.mft.connector.ui.editor.wizards.DBDiscoverServiceWizard"/>
+<new_wizard_action id="com.ibm.etools.mft.wizards.newnode"/>
+<new_wizard_action id="com.ibm.hcls.sdg.ui.newprojectwizard.DataAnalysisNewWizard"/>
+<perspective_action id="com.ibm.datatools.core.internal.ui.perspective"/>
+<perspective_action id="com.ibm.dfdl.ui.dfdlTestPerspective"/>
+<perspective_action id="org.eclipse.debug.ui.DebugPerspective"/>
+<perspective_action id="org.eclipse.jdt.ui.JavaPerspective"/>
+<hide_toolbar_item_id id="org.eclipse.jdt.ui.actions.OpenProjectWizard"/>
+<hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
+<view id="com.ibm.etools.mft.navigator.resource"/>
+<view id="org.eclipse.ui.views.PropertySheet"/>
+<view id="org.eclipse.ui.views.ProblemView"/>
+<view id="org.eclipse.ui.views.ContentOutline"/>
+<view id="org.eclipse.ui.views.TaskList"/>
+<view id="com.ibm.etools.mft.broker.runtime.views.DeploymentLogView"/>
+<view id="org.eclipse.pde.runtime.LogView"/>
+<view id="org.eclipse.ui.views.ProgressView"/>
+<view id="com.ibm.etools.mft.broker.runtime.views.BrokerRuntimeView"/>
+<view id="org.eclipse.datatools.connectivity.DataSourceExplorerNavigator"/>
+<fastViews>
+<view id="com.ibm.xtools.mde.guidance" ratio="0.3"/>
+</fastViews>
+<fastViewBars/>
+<layout>
+<mainWindow>
+<info folder="true" part="topLeft">
+<folder activePageID="com.ibm.etools.mft.navigator.resource" appearance="2" expanded="2">
+<page content="com.ibm.etools.mft.navigator.resource" label="Desarrollo de aplicaciones"/>
+<page content="com.ibm.etools.patterns.views.PatternExplorerView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.views.BookmarkView" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+</presentation>
+</folder>
+</info>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@87893df6" ratio="0.75" ratioLeft="750" ratioRight="250" relationship="2" relative="topLeft">
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
+<page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
+</folder>
+</info>
+<info part="org.eclipse.gef.ui.palette_view" ratio="0.2501845" ratioLeft="339" ratioRight="1016" relationship="2" relative="topLeft"/>
+<info folder="true" part="taskArea" ratio="0.6219709" ratioLeft="385" ratioRight="234" relationship="4" relative="org.eclipse.gef.ui.palette_view">
+<folder activePageID="org.eclipse.ui.views.ProgressView" appearance="2" expanded="2">
+<page content="org.eclipse.ui.views.PropertySheet" label="Propiedades"/>
+<page content="org.eclipse.ui.views.ProblemView" label="Problemas"/>
+<page content="org.eclipse.ui.views.ContentOutline" label="Esquema"/>
+<page content="org.eclipse.ui.views.TaskList" label="Tareas"/>
+<page content="com.ibm.etools.mft.broker.runtime.views.DeploymentLogView" label="Registro de despliegue"/>
+<page content="org.eclipse.pde.runtime.LogView" label="Anotación de errores"/>
+<page content="org.eclipse.ui.views.ProgressView" label="Vista de progreso"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+<part id="1"/>
+<part id="2"/>
+<part id="3"/>
+<part id="4"/>
+<part id="5"/>
+<part id="6"/>
+</presentation>
+</folder>
+</info>
+<info part="org.eclipse.ui.editorss" ratio="0.18" ratioLeft="126" ratioRight="574" relationship="2" relative="org.eclipse.gef.ui.palette_view"/>
+<info folder="true" part="bottomLeft" ratio="0.65841585" ratioLeft="399" ratioRight="207" relationship="4" relative="topLeft">
+<folder activePageID="com.ibm.etools.mft.broker.runtime.views.BrokerRuntimeView" appearance="2" expanded="2">
+<page content="com.ibm.etools.mft.broker.runtime.views.BrokerRuntimeView" label="Nodos de integración"/>
+<page content="org.eclipse.datatools.connectivity.DataSourceExplorerNavigator" label="Explorador de orígenes de datos"/>
+<page content="com.ibm.datatools.project.ui.projectExplorer" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+<part id="1"/>
+</presentation>
+</folder>
+</info>
+</mainWindow>
+</layout>
+</perspective>
+<perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
+<descriptor class="org.eclipse.debug.internal.ui.DebugPerspectiveFactory" id="org.eclipse.debug.ui.DebugPerspective" label="Depurar"/>
+<alwaysOnActionSet id="com.ibm.bpm.gettingstarted.actionset.id"/>
+<alwaysOnActionSet id="com.ibm.rational.welcome.core.helpSearchActionSet"/>
+<alwaysOnActionSet id="com.ibm.rational.welcome.core.webResourcesActionSet"/>
+<alwaysOnActionSet id="com.ibm.cic.licensing.common.ui.actionSet"/>
+<alwaysOnActionSet id="com.ibm.etools.msg.dictionary.actionSet1"/>
+<alwaysOnActionSet id="com.ibm.etools.msg.reporting.infrastructure.actionSet"/>
+<alwaysOnActionSet id="com.ibm.etools.patterns.PatternActionSet"/>
+<alwaysOnActionSet id="com.ibm.etools.miniwelcome.miniWelcomeActionSet"/>
+<alwaysOnActionSet id="com.ibm.wbit.samples.framework.help_samplestutorials_actionset_id"/>
+<alwaysOnActionSet id="org.eclipse.ui.cheatsheets.actionSet"/>
+<alwaysOnActionSet id="org.eclipse.search.searchActionSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.annotationNavigation"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.navigation"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.convertLineDelimitersTo"/>
+<alwaysOnActionSet id="org.eclipse.ui.externaltools.ExternalToolsSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.actionSet.keyBindings"/>
+<alwaysOnActionSet id="org.eclipse.ui.actionSet.openFiles"/>
+<alwaysOnActionSet id="org.eclipse.debug.ui.launchActionSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.NavigateActionSet"/>
+<alwaysOnActionSet id="org.eclipse.debug.ui.breakpointActionSet"/>
+<alwaysOnActionSet id="org.eclipse.debug.ui.profileActionSet"/>
+<alwaysOnActionSet id="org.eclipse.jdt.debug.ui.JDTDebugActionSet"/>
+<alwaysOnActionSet id="org.eclipse.jdt.ui.JavaActionSet"/>
+<alwaysOnActionSet id="org.eclipse.debug.ui.debugActionSet"/>
+<show_view_action id="org.eclipse.debug.ui.DebugView"/>
+<show_view_action id="org.eclipse.debug.ui.VariableView"/>
+<show_view_action id="org.eclipse.debug.ui.BreakpointView"/>
+<show_view_action id="org.eclipse.debug.ui.ExpressionView"/>
+<show_view_action id="org.eclipse.ui.views.ContentOutline"/>
+<show_view_action id="org.eclipse.ui.console.ConsoleView"/>
+<show_view_action id="org.eclipse.ui.views.TaskList"/>
+<show_view_action id="org.eclipse.ant.ui.views.AntView"/>
+<show_view_action id="org.eclipse.datatools.sqltools.result.resultView"/>
+<show_view_action id="org.eclipse.pde.runtime.LogView"/>
+<show_view_action id="org.eclipse.jdt.debug.ui.DisplayView"/>
+<new_wizard_action id="org.eclipse.birt.report.designer.ui.ide.wizards.NewReportWizard"/>
+<new_wizard_action id="org.eclipse.birt.report.designer.ui.ide.wizards.NewTemplateWizard"/>
+<new_wizard_action id="org.eclipse.birt.report.designer.ui.wizards.NewLibraryWizard"/>
+<perspective_action id="com.ibm.dfdl.ui.dfdlTestPerspective"/>
+<perspective_action id="com.ibm.etools.mft.perspectives.BrokerDevelopmentPerspective"/>
+<perspective_action id="org.eclipse.birt.report.designer.ui.ReportPerspective"/>
+<perspective_action id="org.eclipse.datatools.sqltools.sqleditor.perspectives.EditorPerspective"/>
+<perspective_action id="org.eclipse.hyades.ui.perspective.TestPerspective"/>
+<perspective_action id="org.eclipse.hyades.trace.internal.ui.tracePerspective"/>
+<perspective_action id="org.eclipse.jdt.ui.JavaPerspective"/>
+<perspective_action id="org.eclipse.jdt.ui.JavaBrowsingPerspective"/>
+<perspective_action id="org.eclipse.wst.jsdt.ui.JavaPerspective"/>
+<perspective_action id="org.eclipse.wst.xml.ui.perspective"/>
+<hide_toolbar_item_id id="org.eclipse.jdt.ui.actions.OpenProjectWizard"/>
+<hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
+<view id="org.eclipse.ui.console.ConsoleView"/>
+<view id="org.eclipse.ui.views.TaskList"/>
+<view id="org.eclipse.debug.ui.DebugView"/>
+<view id="org.eclipse.wst.server.ui.ServersView"/>
+<view id="org.eclipse.ui.views.PropertySheet"/>
+<view id="org.eclipse.ui.views.ContentOutline"/>
+<view id="org.eclipse.debug.ui.VariableView"/>
+<view id="org.eclipse.debug.ui.BreakpointView"/>
+<fastViews>
+<view id="com.ibm.xtools.mde.guidance" ratio="0.3"/>
+</fastViews>
+<fastViewBars/>
+<layout>
+<mainWindow>
+<info folder="true" part="org.eclipse.debug.internal.ui.NavigatorFolderView">
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.ui.views.ResourceNavigator" label="LabelNotFound"/>
+<page content="org.eclipse.jdt.ui.PackageExplorer" label="LabelNotFound"/>
+<page content="org.eclipse.jdt.ui.TypeHierarchy" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
+</folder>
+</info>
+<info folder="true" part="stickyFolderRight" ratio="0.7496318" ratioLeft="1018" ratioRight="340" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
+<page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
+</folder>
+</info>
+<info folder="true" part="org.eclipse.debug.internal.ui.ConsoleFolderView" ratio="0.7491961" ratioLeft="466" ratioRight="156" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">
+<folder activePageID="org.eclipse.debug.ui.DebugView" appearance="2" expanded="2">
+<page content="org.eclipse.ui.console.ConsoleView" label="Consola"/>
+<page content="org.eclipse.ui.views.TaskList" label="Tareas"/>
+<page content="org.eclipse.debug.ui.DebugView" label="Depurar"/>
+<page content="org.eclipse.wst.server.ui.ServersView" label="Servidores"/>
+<page content="org.eclipse.ui.views.PropertySheet" label="Propiedades"/>
+<page content="org.eclipse.ui.views.BookmarkView" label="LabelNotFound"/>
+<page content="com.ibm.debug.xsl.TransformOutputView" label="LabelNotFound"/>
+<page content="org.eclipse.datatools.sqltools.result.resultView" label="LabelNotFound"/>
+<page content="org.eclipse.jdt.debug.ui.DisplayView" label="LabelNotFound"/>
+<page content="org.eclipse.search.SearchResultView" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+<part id="1"/>
+<part id="2"/>
+<part id="3"/>
+<part id="4"/>
+</presentation>
+</folder>
+</info>
+<info part="org.eclipse.ui.editorss" ratio="0.44849786" ratioLeft="209" ratioRight="257" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView"/>
+<info folder="true" part="org.eclipse.debug.internal.ui.OutlineFolderView" ratio="0.6287823" ratioLeft="852" ratioRight="503" relationship="2" relative="org.eclipse.ui.editorss">
+<folder activePageID="org.eclipse.debug.ui.VariableView" appearance="2" expanded="2">
+<page content="org.eclipse.ui.views.ContentOutline" label="Esquema"/>
+<page content="org.eclipse.debug.ui.VariableView" label="Variables"/>
+<page content="org.eclipse.debug.ui.BreakpointView" label="Puntos de interrupción"/>
+<page content="org.eclipse.ant.ui.views.AntView" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+<part id="1"/>
+<part id="2"/>
+</presentation>
+</folder>
+</info>
+<info folder="true" part="org.eclipse.debug.internal.ui.ToolsFolderView" ratio="0.5" ratioLeft="679" ratioRight="679" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.debug.ui.ExpressionView" label="LabelNotFound"/>
+<page content="org.eclipse.debug.ui.RegisterView" label="LabelNotFound"/>
+<page content="com.ibm.debug.xsl.ContextView" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
+</folder>
+</info>
+</mainWindow>
+</layout>
+</perspective>
+</perspectives>
+<workingSets/>
+<navigationHistory>
+<editors>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.ibm.etools.mft.flow.editor" path="/FWK_RPGIntegrationAdapter/com/ibm/ams/framework/adapters/rpg/RPGIntegrationAdapterRequest.msgflow"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.ibm.etools.mft.flow.editor" path="/FWK_RPGIntegrationAdapter/com/ibm/ams/framework/adapters/rpg/ApplicationExecute.msgflow"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/RPGIntegrationAdapterJava/com/ibm/gbs/ams/integration/adapters/RpgIntegrationAdapter.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/RPGIntegrationAdapterJava/com/ibm/gbs/ams/integration/adapters/rpg/CallRPGProgram.java"/>
+</editors>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="2623" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="2724" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="2761" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="3221" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="3246" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="2921" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="3315" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="3379" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="3246" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="3397" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="3412" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="3452" y="39"/>
+</item>
+<item historyLabel="RPGIntegrationAdapterRequest.msgflow" index="0"/>
+<item historyLabel="ApplicationExecute.msgflow" index="1"/>
+<item historyLabel="RPGIntegrationAdapterRequest.msgflow" index="0"/>
+<item historyLabel="ApplicationExecute.msgflow" index="1"/>
+<item historyLabel="RPGIntegrationAdapterRequest.msgflow" index="0"/>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="1515" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="1567" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="1617" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="1660" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="1729" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="1660" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="1747" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="1792" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="1833" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="1906" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="2005" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="2062" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="2145" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="2201" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="2003" y="0"/>
+</item>
+<item historyLabel="CallRPGProgram.java" index="3">
+<position info="not_deleted" x="9259" y="0"/>
+</item>
+<item historyLabel="CallRPGProgram.java" index="3">
+<position info="not_deleted" x="9366" y="0"/>
+</item>
+<item historyLabel="CallRPGProgram.java" index="3">
+<position info="not_deleted" x="9463" y="0"/>
+</item>
+<item historyLabel="CallRPGProgram.java" index="3">
+<position info="not_deleted" x="9487" y="0"/>
+</item>
+<item historyLabel="CallRPGProgram.java" index="3">
+<position info="not_deleted" x="9531" y="0"/>
+</item>
+<item historyLabel="CallRPGProgram.java" index="3">
+<position info="not_deleted" x="9601" y="0"/>
+</item>
+<item historyLabel="CallRPGProgram.java" index="3">
+<position info="not_deleted" x="9889" y="0"/>
+</item>
+<item historyLabel="CallRPGProgram.java" index="3">
+<position info="not_deleted" x="10121" y="0"/>
+</item>
+<item historyLabel="CallRPGProgram.java" index="3">
+<position info="not_deleted" x="10172" y="0"/>
+</item>
+<item historyLabel="CallRPGProgram.java" index="3">
+<position info="not_deleted" x="10223" y="0"/>
+</item>
+<item historyLabel="CallRPGProgram.java" index="3">
+<position info="not_deleted" x="10500" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="2481" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="2623" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="2679" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="2623" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="2724" y="0"/>
+</item>
+<item historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="2761" y="0"/>
+</item>
+<item active="true" historyLabel="RpgIntegrationAdapter.java" index="2">
+<position info="not_deleted" x="3221" y="0"/>
+</item>
+</navigationHistory>
+<input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
+</page>
+<workbenchWindowAdvisor/>
+<actionBarAdvisor/>
+<trimLayout>
+<trimArea IMemento.internal.id="16384">
+<trimItem IMemento.internal.id="topLeft"/>
+<trimItem IMemento.internal.id="bottomLeft"/>
+</trimArea>
+<trimArea IMemento.internal.id="131072">
+<trimItem IMemento.internal.id="org.eclipse.debug.internal.ui.ConsoleFolderView"/>
+<trimItem IMemento.internal.id="org.eclipse.debug.internal.ui.OutlineFolderView"/>
+</trimArea>
+<trimArea IMemento.internal.id="128">
+<trimItem IMemento.internal.id="org.eclipse.ui.internal.WorkbenchWindow.topBar"/>
+</trimArea>
+<trimArea IMemento.internal.id="1024">
+<trimItem IMemento.internal.id="org.eclise.ui.internal.FastViewBar"/>
+<trimItem IMemento.internal.id="org.eclipse.jface.action.StatusLineManager"/>
+<trimItem IMemento.internal.id="org.eclipse.ui.internal.progress.ProgressRegion"/>
+<trimItem IMemento.internal.id="taskArea"/>
+</trimArea>
+</trimLayout>
+</window>
+<mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="CallRPGProgram.java" tooltip="RPGIntegrationAdapterJava/com/ibm/gbs/ams/integration/adapters/rpg/CallRPGProgram.java">
+<persistable path="/RPGIntegrationAdapterJava/com/ibm/gbs/ams/integration/adapters/rpg/CallRPGProgram.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="RpgIntegrationAdapter.java" tooltip="RPGIntegrationAdapterJava/com/ibm/gbs/ams/integration/adapters/RpgIntegrationAdapter.java">
+<persistable path="/RPGIntegrationAdapterJava/com/ibm/gbs/ams/integration/adapters/RpgIntegrationAdapter.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.ibm.etools.mft.flow.editor" name="ApplicationExecute.msgflow" tooltip="FWK_RPGIntegrationAdapter/com/ibm/ams/framework/adapters/rpg/ApplicationExecute.msgflow">
+<persistable path="/FWK_RPGIntegrationAdapter/com/ibm/ams/framework/adapters/rpg/ApplicationExecute.msgflow"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.ibm.etools.mft.flow.editor" name="RPGIntegrationAdapterRequest.msgflow" tooltip="FWK_RPGIntegrationAdapter/com/ibm/ams/framework/adapters/rpg/RPGIntegrationAdapterRequest.msgflow">
+<persistable path="/FWK_RPGIntegrationAdapter/com/ibm/ams/framework/adapters/rpg/RPGIntegrationAdapterRequest.msgflow"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.ibm.etools.mft.esql.editor.EsqlEditor" name="SPIntegrationAdapter.esql" tooltip="FWK_RPGIntegrationAdapter/com/ibm/ams/framework/adapters/rpg/SPIntegrationAdapter.esql">
+<persistable path="/FWK_RPGIntegrationAdapter/com/ibm/ams/framework/adapters/rpg/SPIntegrationAdapter.esql"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.ibm.etools.mft.flow.editor" name="RPGIntegrationAdapterResponse.msgflow" tooltip="FWK_RPGIntegrationAdapter/com/ibm/ams/framework/adapters/rpg/RPGIntegrationAdapterResponse.msgflow">
+<persistable path="/FWK_RPGIntegrationAdapter/com/ibm/ams/framework/adapters/rpg/RPGIntegrationAdapterResponse.msgflow"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.ibm.etools.mft.flow.editor" name="ConsultaPadronCliente_Request.msgflow" tooltip="SVC_PA_ConsultaPadronCliente/com/davivienda/busregional/servicios/ConsultaPadronCliente_Request.msgflow">
+<persistable path="/SVC_PA_ConsultaPadronCliente/com/davivienda/busregional/servicios/ConsultaPadronCliente_Request.msgflow"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.ibm.etools.mft.esql.editor.EsqlEditor" name="ConsultaPadronCliente.esql" tooltip="SVC_PA_ConsultaPadronCliente/com/davivienda/busregional/servicios/ConsultaPadronCliente.esql">
+<persistable path="/SVC_PA_ConsultaPadronCliente/com/davivienda/busregional/servicios/ConsultaPadronCliente.esql"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.ibm.etools.mft.flow.editor" name="ActualizacionParametrosNotificaciones_Response.msgflow" tooltip="SVC_PA_ActualizacionParametrosNotificaciones/com/davivienda/busregional/servicios/ActualizacionParametrosNotificaciones_Response.msgflow">
+<persistable path="/SVC_PA_ActualizacionParametrosNotificaciones/com/davivienda/busregional/servicios/ActualizacionParametrosNotificaciones_Response.msgflow"/>
+</file>
+</mruList>
+</workbench>

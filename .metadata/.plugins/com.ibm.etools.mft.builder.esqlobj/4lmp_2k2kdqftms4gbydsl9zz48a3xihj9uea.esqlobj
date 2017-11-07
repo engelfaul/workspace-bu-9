@@ -1,0 +1,23 @@
+CREATE FUNCTION BuildHeaderSystemException(IN header REFERENCE, IN listexception REFERENCE, IN componentname CHARACTER) 
+BEGIN
+		--Declaración de los campos de salida del manejo de Excepciones en el data Header
+		SET header.responseData.status.statusCode = 'SystemException';
+		
+		--Creación de los campos del mensaje de salida para posteriormente mapear.
+		CREATE FIELD header.responseData.status.systemException;
+		DECLARE sysExcep 		 REFERENCE TO header.responseData.status.systemException;
+		
+		--Declaración de los tres parámetros de entrada para la función de manejo del ExceptionList
+		DECLARE messageText 	CHARACTER '';
+		DECLARE parentName 		CHARACTER '';
+		DECLARE catlgName 		CHARACTER '';
+		DECLARE messageNumber 	INTEGER   0;
+		
+		--Llamado a la función de detalles de excepción
+   	    CALL getLastExceptionDetail(listexception,messageNumber,messageText,parentName,catlgName);
+   	    
+   	    SET sysExcep.faultcode = catlgName ||  CAST(messageNumber AS CHARACTER); 
+		SET sysExcep.faultstring = 'An Exception has ocurred: ' || parentName || '. With the following Inserts:' || messageText;
+		SET sysExcep.faultactor = componentname;
+		SET sysExcep.detail = listexception;
+END;

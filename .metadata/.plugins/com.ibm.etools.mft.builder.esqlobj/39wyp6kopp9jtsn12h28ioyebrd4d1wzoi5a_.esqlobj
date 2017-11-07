@@ -1,0 +1,14 @@
+CREATE FUNCTION getPropertyContext (IN refHeader REFERENCE, IN key CHARACTER) RETURNS CHARACTER
+ BEGIN	
+	DECLARE refProp REFERENCE TO refHeader.messageContext;
+	
+	--Obtener la propiedad deseada
+	DECLARE prop ROW THE (	SELECT prop
+							FROM refProp.property[] AS prop
+							WHERE prop.key = key);
+							
+	--Obtener el valor de la propiedad deseada	
+	DECLARE value CHARACTER FIELDVALUE(prop.value);
+ 	
+ 	RETURN value; 
+ END;

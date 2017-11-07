@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MRMessageSet id="H6M0HAG002001" name="SVC_PA_ConsultaDatosCuentaMsgSet" parser="XMLNSC">
+  <MRMsgCollection
+    href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd"
+    prefix="" targetNamespace="">
+    <message
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/ConsultaDatosCuenta;XSDElementDeclaration$MRMessage" name="ConsultaDatosCuenta"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/ConsultaDatosCuentaResponse;XSDElementDeclaration=1$MRMessage" name="ConsultaDatosCuentaResponse"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/ConsultaDatosCuentaType;XSDElementDeclaration=2$MRMessage" name="ConsultaDatosCuentaType"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/ConsultaDatosCuentaResponseType;XSDElementDeclaration=3$MRMessage" name="ConsultaDatosCuentaResponseType"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/ConsultaDatosCuentaRequestType;XSDElementDeclaration=4$MRMessage" name="ConsultaDatosCuentaRequestType"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/DataheaderRequestType;XSDElementDeclaration=5$MRMessage" name="DataheaderRequestType"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/DataRequestType;XSDElementDeclaration=6$MRMessage" name="DataRequestType"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/ConsultaDatosCuentaRespType;XSDElementDeclaration=7$MRMessage" name="ConsultaDatosCuentaRespType"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/DataHeaderRespType;XSDElementDeclaration=8$MRMessage" name="DataHeaderRespType"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/DataRespType;XSDElementDeclaration=9$MRMessage" name="DataRespType"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/RegistrosDataType;XSDElementDeclaration=10$MRMessage" name="RegistrosDataType"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/RegistroDataType;XSDElementDeclaration=11$MRMessage" name="RegistroDataType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/ConsultaDatosCuenta;XSDElementDeclaration"
+      name="ConsultaDatosCuenta" type="mset://SVC_PA_ConsultaDatosCuentaMsgSet#/-/complexType{}ConsultaDatosCuentaType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/ConsultaDatosCuentaResponse;XSDElementDeclaration=1"
+      name="ConsultaDatosCuentaResponse" type="mset://SVC_PA_ConsultaDatosCuentaMsgSet#/-/complexType{}ConsultaDatosCuentaResponseType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/ConsultaDatosCuentaType;XSDElementDeclaration=2"
+      name="ConsultaDatosCuentaType" type="mset://SVC_PA_ConsultaDatosCuentaMsgSet#/-/complexType{}ConsultaDatosCuentaType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/ConsultaDatosCuentaResponseType;XSDElementDeclaration=3"
+      name="ConsultaDatosCuentaResponseType" type="mset://SVC_PA_ConsultaDatosCuentaMsgSet#/-/complexType{}ConsultaDatosCuentaResponseType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/ConsultaDatosCuentaRequestType;XSDElementDeclaration=4"
+      name="ConsultaDatosCuentaRequestType" type="mset://SVC_PA_ConsultaDatosCuentaMsgSet#/-/complexType{}ConsultaDatosCuentaRequestType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/DataheaderRequestType;XSDElementDeclaration=5"
+      name="DataheaderRequestType" type="mset://SVC_PA_ConsultaDatosCuentaMsgSet#/-/complexType{}DataheaderRequestType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/DataRequestType;XSDElementDeclaration=6"
+      name="DataRequestType" type="mset://SVC_PA_ConsultaDatosCuentaMsgSet#/-/complexType{}DataRequestType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/ConsultaDatosCuentaRespType;XSDElementDeclaration=7"
+      name="ConsultaDatosCuentaRespType" type="mset://SVC_PA_ConsultaDatosCuentaMsgSet#/-/complexType{}ConsultaDatosCuentaRespType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/DataHeaderRespType;XSDElementDeclaration=8"
+      name="DataHeaderRespType" type="mset://SVC_PA_ConsultaDatosCuentaMsgSet#/-/complexType{}DataHeaderRespType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/DataRespType;XSDElementDeclaration=9"
+      name="DataRespType" type="mset://SVC_PA_ConsultaDatosCuentaMsgSet#/-/complexType{}DataRespType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/RegistrosDataType;XSDElementDeclaration=10"
+      name="RegistrosDataType" type="mset://SVC_PA_ConsultaDatosCuentaMsgSet#/-/complexType{}RegistrosDataType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/RegistroDataType;XSDElementDeclaration=11"
+      name="RegistroDataType" type="mset://SVC_PA_ConsultaDatosCuentaMsgSet#/-/complexType{}RegistroDataType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaDatosCuentaMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/ConsultaDatosCuentaType;XSDComplexTypeDefinition" name="ConsultaDatosCuentaType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaDatosCuentaMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/ConsultaDatosCuentaResponseType;XSDComplexTypeDefinition=1" name="ConsultaDatosCuentaResponseType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaDatosCuentaMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/ConsultaDatosCuentaRequestType;XSDComplexTypeDefinition=2" name="ConsultaDatosCuentaRequestType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaDatosCuentaMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/DataheaderRequestType;XSDComplexTypeDefinition=3" name="DataheaderRequestType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaDatosCuentaMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/DataRequestType;XSDComplexTypeDefinition=4" name="DataRequestType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaDatosCuentaMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/ConsultaDatosCuentaRespType;XSDComplexTypeDefinition=5" name="ConsultaDatosCuentaRespType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaDatosCuentaMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/DataHeaderRespType;XSDComplexTypeDefinition=6" name="DataHeaderRespType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaDatosCuentaMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/DataRespType;XSDComplexTypeDefinition=7" name="DataRespType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaDatosCuentaMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/RegistrosDataType;XSDComplexTypeDefinition=8" name="RegistrosDataType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaDatosCuentaMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaDatosCuentaMsgSet/SVC_PA_ConsultaDatosCuentaMsgSet/ConsultaDatosCuenta.mxsd#/0/RegistroDataType;XSDComplexTypeDefinition=9" name="RegistroDataType"/>
+  </MRMsgCollection>
+</MRMessageSet>

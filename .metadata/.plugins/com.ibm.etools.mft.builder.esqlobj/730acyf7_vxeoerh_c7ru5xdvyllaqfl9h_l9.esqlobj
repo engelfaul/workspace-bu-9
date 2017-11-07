@@ -1,0 +1,98 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+		-- Mantener el CorrelId
+		CALL CopyMessageHeaders();
+		
+		--Referencia al Header y Body del envolvente
+		DECLARE refMsgIn	 	 REFERENCE TO InputRoot.XMLNSC.*:esbXML;
+		DECLARE refHeaderIn 	 REFERENCE TO refMsgIn.Header;
+		DECLARE refBodyIn   	 REFERENCE TO refMsgIn.Body;
+		DECLARE refRespIn		 REFERENCE TO refBodyIn.TNITO_RESP;
+		DECLARE refDataHeaderIn	 REFERENCE TO refRespIn.Header;
+		DECLARE refDataIn		 REFERENCE TO refRespIn.Body;
+		
+		--Referencia al Header y Body del mensaje entrante
+		DECLARE refMsgRes		REFERENCE TO refMsgIn.Body;
+
+				--Referencia al OutputLocalEnvironment
+		DECLARE refLocEnv 	 REFERENCE TO OutputLocalEnvironment;
+		
+		--Referencia al Environment
+		DECLARE refEnvVar 	 REFERENCE TO Environment.Variables;
+		
+		--Declaración de variables
+		DECLARE nameSpaceResp			CHARACTER FIELDVALUE(refEnvVar.NameSpace);
+		
+		--Crear mensaje de salida
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML;
+		DECLARE refMsgOut	 REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML;
+		
+		--Crear campo y referencia Header de salida.
+		CREATE FIELD refMsgOut.Header;
+		DECLARE refHeaderOut REFERENCE TO refMsgOut.Header;		
+		
+		--Declaración de variables
+		DECLARE codigoError		CHARACTER FIELDVALUE(refDataHeaderIn.codigoError);
+		DECLARE mensajeError	CHARACTER RTRIM(FIELDVALUE(refDataHeaderIn.mensajeError));		
+		
+		--Transportar el Header de la envoltura esbXML
+		SET refHeaderOut = refHeaderIn;
+		
+		--Garantizar que se envía un messageId
+		IF refHeaderIn.messageId IS NULL OR FIELDVALUE(refHeaderIn.messageId) = VACIO THEN 
+			SET refHeaderOut.messageId = InputRoot.MQMD.CorrelId; 
+		END IF;
+		
+		--Declaración referencia al statusReference de la metadata
+		CREATE FIELD refHeaderOut.responseData.status;
+		DECLARE statusReference	REFERENCE TO refHeaderOut.responseData.status;		
+		
+		--Mapeo del error para el HandleError
+		SET statusReference.statusCode							= BUSINESS_EXCEPTION; 
+		SET statusReference.businessException.businessCode		= codigoError;				
+		SET statusReference.businessException.businessMessage	= mensajeError;
+		
+		--Propagar mensaje al HandleError
+		PROPAGATE TO TERMINAL 'out1' MESSAGE OutputRoot DELETE NONE;		
+				
+		--Crear campo y referencia Body de salida
+		CREATE FIELD refMsgOut.Body;
+		DECLARE refBodyOut		REFERENCE TO refMsgOut.Body;	
+
+		--Declaración y referencias campos de la carga útil de salida
+		CREATE FIELD refBodyOut.{nameSpaceResp}:NitOrigenResponse;
+		DECLARE refFirstTagOut REFERENCE TO refBodyOut.{nameSpaceResp}:NitOrigenResponse;
+		
+		--Declarar prefijo de la carga útil
+		SET refFirstTagOut.(XMLNSC.NamespaceDecl)xmlns:nit = nameSpaceResp;
+		
+		--Crear campo y referencai al return de salida
+		CREATE FIELD refFirstTagOut.Response;	
+		DECLARE refReturnOut REFERENCE TO refFirstTagOut.Response;
+		
+		CREATE FIELD refFirstTagOut.Response.DataHeader;	
+		DECLARE refReturnHeaderOut REFERENCE TO refFirstTagOut.Response.DataHeader;
+
+		--Mapeos de salida
+		SET refReturnHeaderOut.nombreOperacion			= refEnvVar.nombreOperacion;
+		SET refReturnHeaderOut.total      				= refEnvVar.total;
+		SET refReturnHeaderOut.caracterAceptacion  		= 'M';
+		SET refReturnHeaderOut.ultimoMensaje			= CAST (refDataHeaderIn.flagFinBloque AS INTEGER);
+		SET refReturnHeaderOut.codMsgRespuesta			= CAST(FIELDVALUE(refDataHeaderIn.codigoError) AS INTEGER);
+		SET refReturnHeaderOut.msgRespuesta				= RTRIM(CAST(refDataHeaderIn.mensajeError AS CHARACTER));
+		
+		--Setear la cola de salida
+		CALL SetDestinationListHd(refHeaderOut, refLocEnv);
+        		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;

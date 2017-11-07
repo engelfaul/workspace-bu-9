@@ -1,0 +1,56 @@
+CREATE FUNCTION  HomologationType(IN VAL_IN CHARACTER,IN ID_DOMINIO CHARACTER,IN SIS_ORI CHARACTER, IN SIS_DES CHARACTER, IN HOMOLOGATION_TABLE REFERENCE)
+	RETURNS CHARACTER
+	BEGIN  	 
+    DECLARE result ROW;
+    DECLARE resultHomologation ROW;
+    DECLARE target ROW;
+    DECLARE nomTransaccion CHARACTER;
+    DECLARE homolog CHARACTER;
+	DECLARE temp ROW;
+	DECLARE temps int 0;
+	
+    SET temp = THE(SELECT H.VAL_IN FROM HOMOLOGATION_TABLE.row[] AS H WHERE H.ID_DOMINIO = ID_DOMINIO
+			            AND H.VAL_IN = VAL_IN AND H.SISTEMA_ORIGEN = SIS_ORI AND H.SISTEMA_DESTINO =SIS_DES );
+		
+	set temps = CARDINALITY(temp.[]); 					
+      IF CARDINALITY(temp.[]) = ZERO_INT THEN
+        SET resultHomologation.row[] = SELECT TBL_APL_DOM.ID_DOMINIO, 
+								      TBL_APL_DOM.SISTEMA_ORIGEN,
+								      TBL_APL_DOM.SISTEMA_DESTINO, 
+								      TBL_HOMOLOGACION.VAL_IN, 
+								      TBL_HOMOLOGACION.VAL_OUT,
+								      TBL_HOMOLOGACION.DESCRIPCION
+							FROM Database.IIBSCHM.TBL_APL_DOM, 
+								 Database.IIBSCHM.TBL_HOMOLOGACION 
+							WHERE TBL_HOMOLOGACION.ID_APL_DOM = TBL_APL_DOM.ID_APL_DOM
+							AND  TBL_APL_DOM.SISTEMA_DESTINO = SIS_DES
+							AND  TBL_APL_DOM.ID_DOMINIO  = ID_DOMINIO
+							AND  TBL_HOMOLOGACION.VAL_IN = VAL_IN ;	
+							
+		IF CARDINALITY(HOMOLOGATION_TABLE.row[]) <> ZERO_INT THEN
+			DECLARE targetcursor REFERENCE TO HOMOLOGATION_TABLE.row[<];			
+			CREATE NEXTSIBLING OF targetcursor AS targetcursor REPEAT;
+			SET HOMOLOGATION_TABLE.[<].[]  = resultHomologation.row[1].[];
+		ELSE
+			SET HOMOLOGATION_TABLE.row[] = resultHomologation.row[];
+		END IF;
+	END IF;
+	   	
+	    SET result.datos  = THE(	   
+			   SELECT T.VAL_OUT
+			   FROM HOMOLOGATION_TABLE.row[] AS T 
+			   WHERE T.ID_DOMINIO = ID_DOMINIO
+			   AND T.VAL_IN = VAL_IN
+			   AND T.SISTEMA_ORIGEN = SIS_ORI
+			   AND T.SISTEMA_DESTINO =SIS_DES
+			   );
+	    		   
+		SET nomTransaccion = result.datos.VAL_OUT;
+	    SET homolog = COALESCE(FIELDVALUE(result.datos.VAL_OUT),'null');
+	    IF 	homolog = 'null' THEN
+	    	THROW USER EXCEPTION CATALOG '00000' MESSAGE 10012 VALUES ('Error en homologacion en componente en Dominio: '|| ID_DOMINIO);
+	    ELSE 		
+	    	RETURN homolog;
+	    END IF;
+  
+END;

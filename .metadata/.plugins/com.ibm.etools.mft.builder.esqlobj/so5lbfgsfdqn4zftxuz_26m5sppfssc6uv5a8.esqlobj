@@ -1,0 +1,8 @@
+CREATE FUNCTION BuildMessageException (IN body REFERENCE, IN code CHARACTER, IN description CHARACTER)
+BEGIN
+		CREATE FIRSTCHILD OF body NAME 'MessageException';
+		MOVE body FIRSTCHILD;
+		
+		CREATE LASTCHILD OF body NAME 'Code' VALUE code;
+		CREATE LASTCHILD OF body NAME 'Description' VALUE description;
+END;

@@ -1,0 +1,25 @@
+CREATE FUNCTION putHeaderInMessageContext(IN refHeaderIn REFERENCE,IN HEADERVALUE CHARACTER,IN HEADERKEY CHARACTER)
+BEGIN
+	DECLARE count Int 0;
+		SET count = CARDINALITY(refHeaderIn.messageContext.property[]); 
+		DECLARE i INTEGER 1;  
+		DECLARE flag CHARACTER '0';
+	    
+	    
+	    WHILE (i <= count) DO
+			IF (refHeaderIn.messageContext.property[i].key = HEADERKEY) THEN	
+			 	SET refHeaderIn.messageContext.property[i].key= HEADERKEY;
+				SET refHeaderIn.messageContext.property[i].type= 'HTTPInputHeader';
+			 	SET refHeaderIn.messageContext.property[i].value= HEADERVALUE;
+			 	SET flag = '1';
+			END IF;	
+			SET i = i + 1;
+		END WHILE;
+		IF (flag = '0') THEN
+				CREATE LASTCHILD OF refHeaderIn.messageContext NAME 'property'; 
+				DECLARE refProperty REFERENCE TO refHeaderIn.messageContext.property[i];
+				SET refProperty.key = HEADERKEY;
+				SET refProperty.type = 'HTTPInputHeader';
+				SET refProperty.value = HEADERVALUE;
+			END IF;
+END;

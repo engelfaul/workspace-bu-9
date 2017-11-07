@@ -1,0 +1,11 @@
+CREATE PROCEDURE pushFacadeResp (INOUT refHeader REFERENCE, IN queueFacadeResp CHARACTER)
+ BEGIN
+ 	--grabar consecutivo en el messageContext del mensaje
+ 	CREATE FIELD refHeader.messageContext;		
+	DECLARE refProp REFERENCE TO refHeader.messageContext;
+	CREATE LASTCHILD OF refProp NAME 'property'; 
+	MOVE refProp LASTCHILD;		
+	
+	SET refProp.key   = 'FacadeResp';
+	SET refProp.value = queueFacadeResp; 	
+ END;

@@ -1,0 +1,21 @@
+CREATE FUNCTION  GetConstant(IN NOMBRE_CONST CHARACTER, IN CONSTANTS_TABLE REFERENCE)
+	RETURNS CHARACTER
+	BEGIN  	
+    DECLARE result ROW;
+    DECLARE nomTransaccion CHARACTER;
+    DECLARE homolog CHARACTER;
+	
+    SET result.datos  = THE(			   
+		   SELECT T.VALOR_CONST
+		   FROM CONSTANTS_TABLE.row[] AS T 
+		   WHERE T.NOMBRE_CONST =NOMBRE_CONST		  
+		   );
+		   
+	SET nomTransaccion = result.datos.VALOR_CONST;
+    SET homolog = COALESCE(FIELDVALUE(result.datos.VALOR_CONST),'NULL');	
+    IF 	homolog = 'NULL' THEN
+    	THROW USER EXCEPTION CATALOG '00000' MESSAGE 10012 VALUES ('Error en homologacion de constante en con valor: ' || NOMBRE_CONST);
+    ELSE 		
+    	RETURN homolog;
+    END IF;
+END;

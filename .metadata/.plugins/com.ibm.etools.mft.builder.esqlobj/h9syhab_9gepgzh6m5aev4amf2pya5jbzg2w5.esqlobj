@@ -1,0 +1,28 @@
+CREATE FUNCTION  searchEndpointAssociateServices( INOUT refMsgOut REFERENCE, IN servicesId CHARACTER, IN servicesIdAssociate CHARACTER, IN order CHARACTER, INOUT lcEnv REFERENCE)
+	BEGIN
+		
+    CREATE FIELD lcEnv.Destination.MQ.DestinationData;
+    DECLARE serviceAssociateTemp CHARACTER '';
+    
+    FOR refenpoint AS refMsgOut.Header.requestData.endpointReference[] DO
+    	IF refenpoint.serviceId = servicesId THEN
+    			FOR refAssociServices AS refenpoint.associatedService[] DO
+    				IF servicesIdAssociate <> '' THEN
+    					IF refAssociServices.invocationOrder = order AND refAssociServices.associatedServiceId = servicesIdAssociate THEN
+    						SET serviceAssociateTemp = refAssociServices.associatedServiceId; 
+    					END IF;
+    				ELSE
+    					IF refAssociServices.invocationOrder = order THEN
+    						SET serviceAssociateTemp = refAssociServices.associatedServiceId; 
+    					END IF;
+    				END IF;
+    			END FOR;
+    			
+    			FOR refenpoint2 AS refMsgOut.Header.requestData.endpointReference[] DO
+    				IF refenpoint2.serviceId = serviceAssociateTemp THEN
+    					SET refMsgOut.Header.requestData.endpointReference[1].routingData.endpoint = refenpoint2.routingData.endpoint; 
+    				END IF;
+    			END FOR;
+    	END IF;
+    END FOR;
+	END;

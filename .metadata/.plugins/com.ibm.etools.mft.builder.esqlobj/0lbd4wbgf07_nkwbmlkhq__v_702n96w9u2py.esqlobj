@@ -1,0 +1,14 @@
+CREATE COMPUTE MODULE SetConfiguration
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+
+		SET OutputRoot = InputRoot;
+		
+		SET Environment.Variables.ConfigXML = cache.Configuration;
+		SET Environment.Variables.Traceable = cache.Configuration.traceable;
+		SET Environment.Variables.Timeout = cache.Configuration.timeout;
+		
+		RETURN TRUE;
+
+	END;
+END MODULE;

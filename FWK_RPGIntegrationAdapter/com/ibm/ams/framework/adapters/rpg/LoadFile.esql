@@ -1,0 +1,103 @@
+BROKER SCHEMA com.ibm.ams.framework.adapters.rpg
+
+/*
+ *
+ * File name: LoadFile.esql
+ *
+ * Purpose:   Esquema ESQL que contiene las funciones relacionadas con el manejo de 
+ *			  cache del adaptador SAF. 
+ *
+ * Authors:  Francisco Andrés Santos Conde
+ *                 
+ * Date      16 Agosto 2011
+ * Version:  1.0
+ * 
+ *
+ */
+
+--declaracion de variable shared
+DECLARE cache SHARED ROW;
+
+/* Nodo que guarda en caché el archivo de configuración de las transacciones 
+ */
+CREATE COMPUTE MODULE AddDataToCacheCheckCache_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		SET OutputRoot = InputRoot;
+		
+		-- referenciar archivo de entrada
+		DECLARE configXML		REFERENCE TO InputLocalEnvironment.XMLNSC;
+		
+		SET cache = configXML;
+		SET Environment.Variables.ConfigXML = cache.Configuration;
+		SET Environment.Variables.Traceable = cache.Configuration.traceable;
+		SET Environment.Variables.Timeout = cache.Configuration.timeout;
+		
+		SET cache.valid = true;
+		
+		RETURN TRUE;
+	END;
+
+END MODULE;
+
+/* Nodo que resetea la cache 
+ */
+CREATE COMPUTE MODULE LoadFile_ResetCache
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+
+		SET cache.valid VALUE = NULL;
+
+	END;
+END MODULE;
+
+/*
+ *	Module name: SetConfiguration
+ *	Purpose: Carga en Environment el archivo de configuración que 
+ *				esta en la variable 
+ */
+CREATE COMPUTE MODULE SetConfiguration
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+
+		SET OutputRoot = InputRoot;
+		
+		SET Environment.Variables.ConfigXML = cache.Configuration;
+		SET Environment.Variables.Traceable = cache.Configuration.traceable;
+		SET Environment.Variables.Timeout = cache.Configuration.timeout;
+		
+		RETURN TRUE;
+
+	END;
+END MODULE;
+
+ /*
+ *	Module name: CheckCache
+ *	Purpose: Verifica si existe memoria cache para el componente.
+ */
+CREATE FILTER MODULE CheckCacheFilter
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		IF CAST(cache.valid AS BOOLEAN) THEN
+			RETURN TRUE;
+		ELSE 
+			RETURN FALSE;
+		END IF;
+	END;
+
+END MODULE;
+
+/*
+ *	Module name: ResetCache
+ *	Purpose: Inicializa la variable de caché 
+ *				 
+ */
+CREATE COMPUTE MODULE ResetCache
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		SET cache = NULL;
+				
+		RETURN FALSE;
+	END;
+END MODULE;

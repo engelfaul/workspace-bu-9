@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ComIbmMQOutput.msgnode="ComIbmMQOutput.msgnode" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow" xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="com/ibm/ams/framework/commons/timeout/TimeoutFlowNotification.subflow"
+    nsPrefix="com_ibm_ams_framework_commons_timeout_TimeoutFlowNotification.subflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.ADP.INT.TCP.CANCEL" name="ADP.INT.TCP.CANCEL" defaultValueLiteral="*">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <translation xmi:type="utility:TranslatableString" key="TimeoutFlowNotification" bundleName="com/ibm/ams/framework/commons/timeout/TimeoutFlowNotification" pluginId="Common_Call_TimeHandler"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Common_Call_TimeHandler/icons/full/obj16/TimeoutFlowNotification.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Common_Call_TimeHandler/icons/full/obj30/TimeoutFlowNotification.gif"/>
+    <version xmi:type="utility:ConstantString" string="1.0"/>
+    <composition>
+      <nodes xmi:type="eflow:FCMSource" xmi:id="InTerminal.Input" location="100,130">
+        <translation xmi:type="utility:TranslatableString" key="InTerminal.Input" bundleName="com/ibm/ams/framework/commons/timeout/TimeoutFlowNotification" pluginId="Common_Call_TimeHandler"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="276,130" transactionMode="no" persistenceMode="no">
+        <translation xmi:type="utility:ConstantString" string="ADP.INT.TCP.CANCEL.#ID#"/>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_1" sourceNode="InTerminal.Input" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+    </composition>
+    <propertyOrganizer>
+      <propertyDescriptor groupName="Group.QueueNames" propertyEditor="com.ibm.etools.mft.ibmnodes.editors.mq.MQQueueNameEditor" configurable="true" describedAttribute="Property.ADP.INT.TCP.CANCEL">
+        <propertyName xmi:type="utility:TranslatableString" key="Property.ADP.INT.TCP.CANCEL" bundleName="com/ibm/commons/timeout/TimeoutFlowNotification" pluginId="CoreCom_MsgFlow"/>
+      </propertyDescriptor>
+    </propertyOrganizer>
+    <attributeLinks promotedAttribute="Property.ADP.INT.TCP.CANCEL" overriddenNodes="FCMComposite_1_1">
+      <overriddenAttribute href="ComIbmMQOutput.msgnode#Property.queueName"/>
+    </attributeLinks>
+    <stickyBoard/>
+  </eClassifiers>
+</ecore:EPackage>

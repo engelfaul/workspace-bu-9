@@ -1,0 +1,7 @@
+ClearCase CopyAreaDB|4
+vServDavi\ServBusRegional\SVC_PA_ConsultaSaldosCliente\com\davivienda\busregional\servicios
+2
+3
+26:ConsultaSaldosCliente_Response.msgflow|1|15e7cf66c18|355e|c7c94e05|81679d24803a40b5b06edced6b089863|0
+25:ConsultaSaldosCliente_Request.msgflow|1|15e7cf66c18|43e6|5f92fb96|d66792417dce4ce791a0930144fceab3|0
+1a:ConsultaSaldosCliente.esql|1|15e7cf66c08|d6af|9f039ce1|b5c16d8384f840f4b25a8b2084187576|0

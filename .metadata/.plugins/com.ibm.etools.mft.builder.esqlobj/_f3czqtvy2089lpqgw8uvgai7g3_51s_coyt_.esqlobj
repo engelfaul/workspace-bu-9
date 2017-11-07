@@ -1,0 +1,8 @@
+CREATE FUNCTION loadServicesTable (INOUT servicesTableRow REFERENCE)
+
+BEGIN
+	
+	SET servicesTableRow.row[]  = SELECT T.COD_SERVICIO, T.CONSECUTIVO_TX, T.TX_SERVICIO, T.NOMBRE_SERVICIO   
+           							FROM Database.TABLA_HOMOLOGACION_SERVICIOS AS T;
+
+END;

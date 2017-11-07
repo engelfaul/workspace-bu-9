@@ -1,0 +1,18 @@
+CREATE FUNCTION  HomologError(IN errorCode CHARACTER, IN errorTable REFERENCE)
+	RETURNS CHARACTER
+	BEGIN
+  	
+    DECLARE result ROW;
+    DECLARE descripcionErrorhomolog CHARACTER;
+    DECLARE homolog CHARACTER;
+	
+    SET result.datos  = THE(			   
+		   SELECT T.DESCRIPCIONERROR
+		   FROM errorTable.row[] AS T --Database.TABLA_HOMOLOGACION_ERROR as T 
+		   WHERE T.CODIGOSTATUS = errorCode
+		   );
+	SET descripcionErrorhomolog=result.datos.DESCRIPCIONERROR;
+    SET homolog = COALESCE(FIELDVALUE(result.datos.DESCRIPCIONERROR),'0');
+	
+    RETURN homolog;
+END;

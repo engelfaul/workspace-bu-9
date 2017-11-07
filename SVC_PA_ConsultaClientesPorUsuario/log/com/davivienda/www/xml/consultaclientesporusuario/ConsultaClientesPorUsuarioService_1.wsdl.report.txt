@@ -1,0 +1,7 @@
+
+
+Se está importando el archivo: D:\davivienda\wsdl davivienda\ConsultaClientesPorUsuarioService_1.wsdl
+
+Parsing wsdl binding {http://www.davivienda.com/xml/ConsultaClientesPorUsuario}ConsultaClientesPorUsuarioSOAP_HTTP_Binding.
+Parsing wsdl binding input ConsultaClientesPorUsuario.
+Parsing wsdl binding output ConsultaClientesPorUsuario.

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ComIbmCompute.msgnode="ComIbmCompute.msgnode" xmlns:ComIbmFlowOrder.msgnode="ComIbmFlowOrder.msgnode" xmlns:ComIbmMQInput.msgnode="ComIbmMQInput.msgnode" xmlns:ComIbmMQOutput.msgnode="ComIbmMQOutput.msgnode" xmlns:ComIbmTryCatch.msgnode="ComIbmTryCatch.msgnode" xmlns:com_ibm_ams_framework_adapters_rpg_LoadFile.subflow="com/ibm/ams/framework/adapters/rpg/LoadFile.subflow" xmlns:com_ibm_ams_framework_commons_ErrorFlow.subflow="com/ibm/ams/framework/commons/ErrorFlow.subflow"
+    xmlns:com_ibm_ams_framework_commons_TraceBckEndFlow.subflow="com/ibm/ams/framework/commons/TraceBckEndFlow.subflow" xmlns:com_ibm_ams_framework_commons_TraceFlow.subflow="com/ibm/ams/framework/commons/TraceFlow.subflow" xmlns:com_ibm_ams_framework_commons_timeout_TimeoutFlowConfig.subflow="com/ibm/ams/framework/commons/timeout/TimeoutFlowConfig.subflow" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow" xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="com/ibm/ams/framework/adapters/rpg/RPGIntegrationAdapterRequest.msgflow"
+    nsPrefix="com_ibm_ams_framework_adapters_rpg_RPGIntegrationAdapterRequest.msgflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.faultactor" name="faultactor" lowerBound="1" defaultValueLiteral="ISERIES.RPG02">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.DefaultCode" name="DefaultCode" lowerBound="1" defaultValueLiteral="3200">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.DetaultDescription" name="DetaultDescription" defaultValueLiteral="Ha Ocurrido un Error no Esperado en el ESB">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.ADP.INT.RPG.IN" name="ADP.INT.RPG.IN" lowerBound="1" defaultValueLiteral="PA.ADP.INT.RPG.IN.02">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.ADP.INT.RPG.STORE" name="ADP.INT.RPG.STORE" defaultValueLiteral="PA.ADP.INT.RPG.STORE.02">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.ADP.INT.RPG.REQ" name="ADP.INT.RPG.REQ" defaultValueLiteral="PA.ADP.INT.RPG.REQ.02">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.ERROR.IN" name="ERROR.IN" defaultValueLiteral="PA.ERROR.IN">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.LOG.IN" name="LOG.IN" defaultValueLiteral="PA.LOG.IN">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.ADP.INT.RPG.RESET" name="ADP.INT.RPG.RESET" lowerBound="1" defaultValueLiteral="PA.ADP.INT.RPG.RESET.02">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.FileName" name="FileName" defaultValueLiteral="rpg03intadpconfig.xml">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.inputDirectory" name="inputDirectory" defaultValueLiteral="D:\davivienda\xml\">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.TRACE.REQ.IN" name="TRACE.REQ.IN" lowerBound="1" defaultValueLiteral="PA.ADP.INT.RPG.REQ.IN.02">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.TRACE.REQ.OUT" name="TRACE.REQ.OUT" lowerBound="1" defaultValueLiteral="PA.ADP.INT.RPG.REQ.OUT.02">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.TimeoutIdentifier" name="TimeoutIdentifier" lowerBound="1" defaultValueLiteral="paadpinrpg02">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <translation xmi:type="utility:TranslatableString" key="RPGIntegrationAdapterRequest" bundleName="com/ibm/ams/framework/adapters/rpg/RPGIntegrationAdapterRequest" pluginId="FWK_RPGIntegrationAdapter"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/FWK_RPGIntegrationAdapter/icons/full/obj16/RPGIntegrationAdapterRequest.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/FWK_RPGIntegrationAdapter/icons/full/obj30/RPGIntegrationAdapterRequest.gif"/>
+    <version xmi:type="utility:ConstantString" string="1.0"/>
+    <composition>
+      <nodes xmi:type="ComIbmMQInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="20,93" messageDomainProperty="XMLNSC" transactionMode="no">
+        <translation xmi:type="utility:ConstantString" string="ADP.INT.RPG.IN.#ID#"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTryCatch.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_2" location="156,93">
+        <translation xmi:type="utility:ConstantString" string="HandleExceptions"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_11" location="557,159" computeExpression="esql://routine/com.ibm.ams.framework.adapters.rpg#ProcessRequestData.Main">
+        <translation xmi:type="utility:ConstantString" string="ProcessRequestData"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_8" location="1029,165" transactionMode="no" persistenceMode="no">
+        <translation xmi:type="utility:ConstantString" string="ADP.INT.RPG.STORE.#ID#"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_17" location="268,89" computeExpression="esql://routine/com.ibm.ams.framework.adapters.rpg#ProcessErrorMessageRequest.Main" computeMode="destinationAndMessage">
+        <translation xmi:type="utility:ConstantString" string="ProcessErrorMessage"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_7" location="551,98" destinationMode="list" transactionMode="no" persistenceMode="no">
+        <translation xmi:type="utility:ConstantString" string="ADP.INT.RPG.OUT.#ID#"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_24" location="917,164" computeExpression="esql://routine/com.ibm.ams.framework.adapters.rpg#StoreEnvironment.Main">
+        <translation xmi:type="utility:ConstantString" string="StoreEnvironment"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_4" location="786,160" transactionMode="no" persistenceMode="no">
+        <translation xmi:type="utility:ConstantString" string="ADP.INT.RPG.REQ.#ID#"/>
+      </nodes>
+      <nodes xmi:type="ComIbmFlowOrder.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_3" location="401,90">
+        <translation xmi:type="utility:ConstantString" string="Flow Order"/>
+      </nodes>
+      <nodes xmi:type="com_ibm_ams_framework_commons_ErrorFlow.subflow:FCMComposite_1" xmi:id="FCMComposite_1_10" location="556,27" ERROR.IN="PA.ERROR.IN">
+        <translation xmi:type="utility:ConstantString" string="ErrorFlow"/>
+      </nodes>
+      <nodes xmi:type="com_ibm_ams_framework_commons_TraceFlow.subflow:FCMComposite_1" xmi:id="FCMComposite_1_12" location="330,159" traceabilityPoint="PA.ADP.INT.RPG.REQ.IN.01" ERROR.IN="PA.ERROR.IN" LOG.IN="PA.LOG.IN">
+        <translation xmi:type="utility:ConstantString" string="TRACE.REQ.IN"/>
+      </nodes>
+      <nodes xmi:type="com_ibm_ams_framework_commons_timeout_TimeoutFlowConfig.subflow:FCMComposite_1" xmi:id="FCMComposite_1_14" location="437,159">
+        <translation xmi:type="utility:ConstantString" string="TimeoutFlowConfig"/>
+      </nodes>
+      <nodes xmi:type="com_ibm_ams_framework_commons_TraceBckEndFlow.subflow:FCMComposite_1" xmi:id="FCMComposite_1_15" location="683,160" traceabilityPoint="PA.ADP.INT.SP.REQ.OUT.01">
+        <translation xmi:type="utility:ConstantString" string="TRACE.REQ.OUT"/>
+      </nodes>
+      <nodes xmi:type="com_ibm_ams_framework_adapters_rpg_LoadFile.subflow:FCMComposite_1" xmi:id="FCMComposite_1_16" location="196,159" FileName="rpg01fintplsqlconfig.xml">
+        <translation xmi:type="utility:ConstantString" string="LoadConfigurationFile"/>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_2" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_2" targetNode="FCMComposite_1_17" sourceNode="FCMComposite_1_2" sourceTerminalName="OutTerminal.catch" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_3" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_17" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_4" targetNode="FCMComposite_1_7" sourceNode="FCMComposite_1_3" sourceTerminalName="OutTerminal.second" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_5" targetNode="FCMComposite_1_24" sourceNode="FCMComposite_1_4" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_6" targetNode="FCMComposite_1_8" sourceNode="FCMComposite_1_24" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_7" targetNode="FCMComposite_1_10" sourceNode="FCMComposite_1_3" sourceTerminalName="OutTerminal.first" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_8" targetNode="FCMComposite_1_14" sourceNode="FCMComposite_1_12" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_9" targetNode="FCMComposite_1_11" sourceNode="FCMComposite_1_14" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_10" targetNode="FCMComposite_1_15" sourceNode="FCMComposite_1_11" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_11" targetNode="FCMComposite_1_4" sourceNode="FCMComposite_1_15" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_12" targetNode="FCMComposite_1_16" sourceNode="FCMComposite_1_2" sourceTerminalName="OutTerminal.try" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_13" targetNode="FCMComposite_1_12" sourceNode="FCMComposite_1_16" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.Input"/>
+    </composition>
+    <propertyOrganizer>
+      <propertyDescriptor groupName="Group.FaultActor" configurable="true" userDefined="true" describedAttribute="Property.faultactor">
+        <propertyName xmi:type="utility:TranslatableString" key="Property.faultactor" bundleName="com/ibm/ams/framework/adapters/rpg/RPGIntegrationAdapterRequest" pluginId="FWK_RPGIntegrationAdapter"/>
+        <propertyDescriptor groupName="Group.DefaultException" configurable="true" userDefined="true" describedAttribute="Property.DefaultCode">
+          <propertyName xmi:type="utility:TranslatableString" key="Property.DefaultCode" bundleName="com/ibm/ams/framework/adapters/rpg/RPGIntegrationAdapterRequest" pluginId="FWK_RPGIntegrationAdapter"/>
+          <propertyDescriptor groupName="Group.DefaultException" configurable="true" userDefined="true" describedAttribute="Property.DetaultDescription">
+            <propertyName xmi:type="utility:TranslatableString" key="Property.DetaultDescription" bundleName="com/ibm/ams/framework/adapters/rpg/RPGIntegrationAdapterRequest" pluginId="FWK_RPGIntegrationAdapter"/>
+            <propertyDescriptor groupName="Group.QueueNames" propertyEditor="com.ibm.etools.mft.ibmnodes.editors.mq.MQQueueNameEditor" configurable="true" describedAttribute="Property.ADP.INT.RPG.IN">
+              <propertyName xmi:type="utility:TranslatableString" key="Property.ADP.INT.RPG.IN" bundleName="com/davivienda/framework/adapters/sp/SPIntegrationAdapterRequest" pluginId="FWK_RPGIntegrationAdapter"/>
+              <propertyDescriptor groupName="Group.QueueNames" propertyEditor="com.ibm.etools.mft.ibmnodes.editors.mq.MQQueueNameEditor" configurable="true" describedAttribute="Property.ADP.INT.RPG.STORE">
+                <propertyName xmi:type="utility:TranslatableString" key="Property.ADP.INT.RPG.STORE" bundleName="com/davivienda/framework/adapters/sp/SPIntegrationAdapterRequest" pluginId="FWK_RPGIntegrationAdapter"/>
+                <propertyDescriptor groupName="Group.QueueNames" propertyEditor="com.ibm.etools.mft.ibmnodes.editors.mq.MQQueueNameEditor" configurable="true" describedAttribute="Property.ADP.INT.RPG.REQ">
+                  <propertyName xmi:type="utility:TranslatableString" key="Property.ADP.INT.RPG.REQ" bundleName="com/davivienda/framework/adapters/sp/SPIntegrationAdapterRequest" pluginId="FWK_RPGIntegrationAdapter"/>
+                  <propertyDescriptor groupName="Group.QueueNames" propertyEditor="com.ibm.etools.mft.ibmnodes.editors.mq.MQQueueNameEditor" configurable="true" describedAttribute="Property.ERROR.IN">
+                    <propertyName xmi:type="utility:TranslatableString" key="Property.ERROR.IN" bundleName="com/ibm/ams/framework/commons/ErrorFlow" pluginId="Common_Call_ErrorHandler"/>
+                    <propertyDescriptor groupName="Group.QueueNames" propertyEditor="com.ibm.etools.mft.ibmnodes.editors.mq.MQQueueNameEditor" configurable="true" describedAttribute="Property.LOG.IN">
+                      <propertyName xmi:type="utility:TranslatableString" key="Property.LOG.IN" bundleName="com/ibm/ams/framework/commons/TraceFlow" pluginId="Common_Call_LogHandler"/>
+                      <propertyDescriptor groupName="Group.QueueNames" propertyEditor="com.ibm.etools.mft.ibmnodes.editors.mq.MQQueueNameEditor" configurable="true" describedAttribute="Property.ADP.INT.RPG.RESET">
+                        <propertyName xmi:type="utility:TranslatableString" key="Property.ADP.INT.RPG.RESET" bundleName="com/davivienda/framework/adapters/sp/SPIntegrationAdapterRequest" pluginId="FWK_RPGIntegrationAdapter"/>
+                        <propertyDescriptor groupName="Group.ConfigurationFile" propertyEditor="com.ibm.etools.mft.ibmnodes.editors.file.FileReadNodeFilePropertyEditor" configurable="true" describedAttribute="Property.FileName">
+                          <propertyName xmi:type="utility:TranslatableString" key="Property.FileName" bundleName="com/davivienda/framework/adapters/sp/LoadFile" pluginId="FWK_RPGIntegrationAdapter"/>
+                          <propertyDescriptor groupName="Group.ConfigurationFile" configurable="true" describedAttribute="Property.inputDirectory">
+                            <propertyName xmi:type="utility:TranslatableString" key="Property.inputDirectory" bundleName="ComIbmFileRead" pluginId="com.ibm.etools.mft.ibmnodes"/>
+                            <propertyDescriptor groupName="Group.Traceability" configurable="true" userDefined="true" describedAttribute="Property.TRACE.REQ.IN">
+                              <propertyName xmi:type="utility:TranslatableString" key="Property.TRACE.REQ.IN" bundleName="com/davivienda/framework/adapters/sp/SPIntegrationAdapterRequest" pluginId="FWK_RPGIntegrationAdapter"/>
+                              <propertyDescriptor groupName="Group.Traceability" configurable="true" userDefined="true" describedAttribute="Property.TRACE.REQ.OUT">
+                                <propertyName xmi:type="utility:TranslatableString" key="Property.TRACE.REQ.OUT" bundleName="com/davivienda/framework/adapters/sp/SPIntegrationAdapterRequest" pluginId="FWK_RPGIntegrationAdapter"/>
+                                <propertyDescriptor groupName="Group.Timeout" configurable="true" describedAttribute="Property.TimeoutIdentifier">
+                                  <propertyName xmi:type="utility:TranslatableString" key="Property.TimeoutIdentifier" bundleName="com/ibm/commons/timeout/TimeoutFlowConfig" pluginId="CoreCom_MsgFlow"/>
+                                </propertyDescriptor>
+                              </propertyDescriptor>
+                            </propertyDescriptor>
+                          </propertyDescriptor>
+                        </propertyDescriptor>
+                      </propertyDescriptor>
+                    </propertyDescriptor>
+                  </propertyDescriptor>
+                </propertyDescriptor>
+              </propertyDescriptor>
+            </propertyDescriptor>
+          </propertyDescriptor>
+        </propertyDescriptor>
+      </propertyDescriptor>
+    </propertyOrganizer>
+    <attributeLinks promotedAttribute="Property.ADP.INT.RPG.IN" overriddenNodes="FCMComposite_1_1">
+      <overriddenAttribute href="ComIbmMQInput.msgnode#Property.queueName"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.ADP.INT.RPG.STORE" overriddenNodes="FCMComposite_1_8">
+      <overriddenAttribute href="ComIbmMQOutput.msgnode#Property.queueName"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.ADP.INT.RPG.REQ" overriddenNodes="FCMComposite_1_4">
+      <overriddenAttribute href="ComIbmMQOutput.msgnode#Property.queueName"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.ERROR.IN" overriddenNodes="FCMComposite_1_12">
+      <overriddenAttribute href="com/ibm/ams/framework/commons/TraceFlow.subflow#Property.ERROR.IN"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.LOG.IN" overriddenNodes="FCMComposite_1_12">
+      <overriddenAttribute href="com/ibm/ams/framework/commons/TraceFlow.subflow#Property.LOG.IN"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.ADP.INT.RPG.RESET" overriddenNodes="FCMComposite_1_16">
+      <overriddenAttribute href="com/ibm/ams/framework/adapters/rpg/LoadFile.subflow#Property.ADP.INT.SP.RESET"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.FileName" overriddenNodes="FCMComposite_1_16">
+      <overriddenAttribute href="com/ibm/ams/framework/adapters/rpg/LoadFile.subflow#Property.FileName"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.inputDirectory" overriddenNodes="FCMComposite_1_16">
+      <overriddenAttribute href="com/ibm/ams/framework/adapters/rpg/LoadFile.subflow#Property.inputDirectory"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.TRACE.REQ.IN" overriddenNodes="FCMComposite_1_12">
+      <overriddenAttribute href="com/ibm/ams/framework/commons/TraceFlow.subflow#Property.traceabilityPoint"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.TRACE.REQ.OUT" overriddenNodes="FCMComposite_1_15">
+      <overriddenAttribute href="com/ibm/ams/framework/commons/TraceBckEndFlow.subflow#Property.traceabilityPoint"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.TimeoutIdentifier" overriddenNodes="FCMComposite_1_14">
+      <overriddenAttribute href="com/ibm/ams/framework/commons/timeout/TimeoutFlowConfig.subflow#Property.TimeoutIdentifier"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.ERROR.IN" overriddenNodes="FCMComposite_1_10">
+      <overriddenAttribute href="com/ibm/ams/framework/commons/ErrorFlow.subflow#Property.ERROR.IN"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.ERROR.IN" overriddenNodes="FCMComposite_1_15">
+      <overriddenAttribute href="com/ibm/ams/framework/commons/TraceBckEndFlow.subflow#Property.ERROR.IN"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.LOG.IN" overriddenNodes="FCMComposite_1_15">
+      <overriddenAttribute href="com/ibm/ams/framework/commons/TraceBckEndFlow.subflow#Property.LOG.IN"/>
+    </attributeLinks>
+    <stickyBoard/>
+  </eClassifiers>
+</ecore:EPackage>

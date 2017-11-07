@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MRMessageSet id="M7G5FH0002001"
+  name="SVC_PA_ConsultaSaldosClienteMsgSet" parser="XMLNSC">
+  <MRMsgCollection
+    href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd"
+    prefix="" targetNamespace="">
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/ConsultaSaldosCliente;XSDElementDeclaration$MRMessage" name="ConsultaSaldosCliente"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/ConsultaSaldosClienteResponse;XSDElementDeclaration=1$MRMessage" name="ConsultaSaldosClienteResponse"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/ConsultaSaldosClienteType;XSDElementDeclaration=2$MRMessage" name="ConsultaSaldosClienteType"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/ConsultaSaldosClienteResponseType;XSDElementDeclaration=3$MRMessage" name="ConsultaSaldosClienteResponseType"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/ConsultaSaldosClienteRequestType;XSDElementDeclaration=4$MRMessage" name="ConsultaSaldosClienteRequestType"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/DataHeaderReqType;XSDElementDeclaration=5$MRMessage" name="DataHeaderReqType"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/ConsultaSaldosClienteDataReqType;XSDElementDeclaration=6$MRMessage" name="ConsultaSaldosClienteDataReqType"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/Response;XSDElementDeclaration=7$MRMessage" name="Response"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/ConsultaSaldosClienteRespType;XSDElementDeclaration=8$MRMessage" name="ConsultaSaldosClienteRespType"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/DataHeaderRespType;XSDElementDeclaration=9$MRMessage" name="DataHeaderRespType"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/DataRespType;XSDElementDeclaration=10$MRMessage" name="DataRespType"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productos;XSDElementDeclaration=11$MRMessage" name="productos"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/datosCliente;XSDElementDeclaration=12$MRMessage" name="datosCliente"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosAhorros;XSDElementDeclaration=13$MRMessage" name="productosAhorros"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosCtaCte;XSDElementDeclaration=14$MRMessage" name="productosCtaCte"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosNoConsumo;XSDElementDeclaration=15$MRMessage" name="productosNoConsumo"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosTituloDaBuenaVida;XSDElementDeclaration=16$MRMessage" name="productosTituloDaBuenaVida"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosConsumo;XSDElementDeclaration=17$MRMessage" name="productosConsumo"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosCDT;XSDElementDeclaration=18$MRMessage" name="productosCDT"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosFondosInversion;XSDElementDeclaration=19$MRMessage" name="productosFondosInversion"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosEstablecimientos;XSDElementDeclaration=20$MRMessage" name="productosEstablecimientos"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoAhorro;XSDElementDeclaration=21$MRMessage" name="productoAhorro"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/datosProducto;XSDElementDeclaration=22$MRMessage" name="datosProducto"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosAhorros;XSDElementDeclaration=23$MRMessage" name="saldosAhorros"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoCtaCte;XSDElementDeclaration=24$MRMessage" name="productoCtaCte"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosCtaCte;XSDElementDeclaration=25$MRMessage" name="saldosCtaCte"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoNoConsumo;XSDElementDeclaration=26$MRMessage" name="productoNoConsumo"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosNoConsumo;XSDElementDeclaration=27$MRMessage" name="saldosNoConsumo"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoConsumo;XSDElementDeclaration=28$MRMessage" name="productoConsumo"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/informacionExtendidaConsumo;XSDElementDeclaration=29$MRMessage" name="informacionExtendidaConsumo"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosConsumo;XSDElementDeclaration=30$MRMessage" name="saldosConsumo"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoTituloDaBuenaVida;XSDElementDeclaration=31$MRMessage" name="productoTituloDaBuenaVida"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/informacionExtendidaDabuenavida;XSDElementDeclaration=32$MRMessage" name="informacionExtendidaDabuenavida"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosTitulosDabuenavida;XSDElementDeclaration=33$MRMessage" name="saldosTitulosDabuenavida"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoCDT;XSDElementDeclaration=34$MRMessage" name="productoCDT"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/informacionExtendidaCDT;XSDElementDeclaration=35$MRMessage" name="informacionExtendidaCDT"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosCDT;XSDElementDeclaration=36$MRMessage" name="saldosCDT"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoFondosInversion;XSDElementDeclaration=37$MRMessage" name="productoFondosInversion"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/informacionExtendidaFondosInversion;XSDElementDeclaration=38$MRMessage" name="informacionExtendidaFondosInversion"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosFondosInversion;XSDElementDeclaration=39$MRMessage" name="saldosFondosInversion"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/informacionExtendidaEstablecimientos;XSDElementDeclaration=40$MRMessage" name="informacionExtendidaEstablecimientos"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosEstablecimientos;XSDElementDeclaration=41$MRMessage" name="saldosEstablecimientos"/>
+    <message
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoEstablecimientos;XSDElementDeclaration=42$MRMessage" name="productoEstablecimientos"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/ConsultaSaldosCliente;XSDElementDeclaration"
+      name="ConsultaSaldosCliente" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}ConsultaSaldosClienteType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/ConsultaSaldosClienteResponse;XSDElementDeclaration=1"
+      name="ConsultaSaldosClienteResponse" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}ConsultaSaldosClienteResponseType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/ConsultaSaldosClienteType;XSDElementDeclaration=2"
+      name="ConsultaSaldosClienteType" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}ConsultaSaldosClienteType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/ConsultaSaldosClienteResponseType;XSDElementDeclaration=3"
+      name="ConsultaSaldosClienteResponseType" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}ConsultaSaldosClienteResponseType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/ConsultaSaldosClienteRequestType;XSDElementDeclaration=4"
+      name="ConsultaSaldosClienteRequestType" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}ConsultaSaldosClienteRequestType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/DataHeaderReqType;XSDElementDeclaration=5"
+      name="DataHeaderReqType" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}DataHeaderReqType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/ConsultaSaldosClienteDataReqType;XSDElementDeclaration=6"
+      name="ConsultaSaldosClienteDataReqType" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}ConsultaSaldosClienteDataReqType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/Response;XSDElementDeclaration=7"
+      name="Response" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}Response"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/ConsultaSaldosClienteRespType;XSDElementDeclaration=8"
+      name="ConsultaSaldosClienteRespType" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}ConsultaSaldosClienteRespType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/DataHeaderRespType;XSDElementDeclaration=9"
+      name="DataHeaderRespType" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}DataHeaderRespType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/DataRespType;XSDElementDeclaration=10"
+      name="DataRespType" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}DataRespType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productos;XSDElementDeclaration=11"
+      name="productos" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}productos"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/datosCliente;XSDElementDeclaration=12"
+      name="datosCliente" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}datosCliente"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosAhorros;XSDElementDeclaration=13"
+      name="productosAhorros" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}productosAhorros"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosCtaCte;XSDElementDeclaration=14"
+      name="productosCtaCte" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}productosCtaCte"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosNoConsumo;XSDElementDeclaration=15"
+      name="productosNoConsumo" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}productosNoConsumo"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosTituloDaBuenaVida;XSDElementDeclaration=16"
+      name="productosTituloDaBuenaVida" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}productosTituloDaBuenaVida"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosConsumo;XSDElementDeclaration=17"
+      name="productosConsumo" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}productosConsumo"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosCDT;XSDElementDeclaration=18"
+      name="productosCDT" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}productosCDT"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosFondosInversion;XSDElementDeclaration=19"
+      name="productosFondosInversion" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}productosFondosInversion"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosEstablecimientos;XSDElementDeclaration=20"
+      name="productosEstablecimientos" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}productosEstablecimientos"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoAhorro;XSDElementDeclaration=21"
+      name="productoAhorro" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}productoAhorro"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/datosProducto;XSDElementDeclaration=22"
+      name="datosProducto" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}datosProducto"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosAhorros;XSDElementDeclaration=23"
+      name="saldosAhorros" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}saldosAhorros"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoCtaCte;XSDElementDeclaration=24"
+      name="productoCtaCte" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}productoCtaCte"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosCtaCte;XSDElementDeclaration=25"
+      name="saldosCtaCte" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}saldosCtaCte"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoNoConsumo;XSDElementDeclaration=26"
+      name="productoNoConsumo" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}productoNoConsumo"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosNoConsumo;XSDElementDeclaration=27"
+      name="saldosNoConsumo" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}saldosNoConsumo"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoConsumo;XSDElementDeclaration=28"
+      name="productoConsumo" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}productoConsumo"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/informacionExtendidaConsumo;XSDElementDeclaration=29"
+      name="informacionExtendidaConsumo" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}informacionExtendidaConsumo"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosConsumo;XSDElementDeclaration=30"
+      name="saldosConsumo" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}saldosConsumo"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoTituloDaBuenaVida;XSDElementDeclaration=31"
+      name="productoTituloDaBuenaVida" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}productoTituloDaBuenaVida"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/informacionExtendidaDabuenavida;XSDElementDeclaration=32"
+      name="informacionExtendidaDabuenavida" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}informacionExtendidaDabuenavida"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosTitulosDabuenavida;XSDElementDeclaration=33"
+      name="saldosTitulosDabuenavida" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}saldosTitulosDabuenavida"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoCDT;XSDElementDeclaration=34"
+      name="productoCDT" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}productoCDT"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/informacionExtendidaCDT;XSDElementDeclaration=35"
+      name="informacionExtendidaCDT" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}informacionExtendidaCDT"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosCDT;XSDElementDeclaration=36"
+      name="saldosCDT" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}saldosCDT"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoFondosInversion;XSDElementDeclaration=37"
+      name="productoFondosInversion" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}productoFondosInversion"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/informacionExtendidaFondosInversion;XSDElementDeclaration=38"
+      name="informacionExtendidaFondosInversion" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}informacionExtendidaFondosInversion"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosFondosInversion;XSDElementDeclaration=39"
+      name="saldosFondosInversion" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}saldosFondosInversion"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/informacionExtendidaEstablecimientos;XSDElementDeclaration=40"
+      name="informacionExtendidaEstablecimientos" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}informacionExtendidaEstablecimientos"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosEstablecimientos;XSDElementDeclaration=41"
+      name="saldosEstablecimientos" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}saldosEstablecimientos"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoEstablecimientos;XSDElementDeclaration=42"
+      name="productoEstablecimientos" type="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{}productoEstablecimientos"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/ConsultaSaldosClienteType;XSDComplexTypeDefinition" name="ConsultaSaldosClienteType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/ConsultaSaldosClienteResponseType;XSDComplexTypeDefinition=1" name="ConsultaSaldosClienteResponseType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/ConsultaSaldosClienteRequestType;XSDComplexTypeDefinition=2" name="ConsultaSaldosClienteRequestType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/DataHeaderReqType;XSDComplexTypeDefinition=3" name="DataHeaderReqType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/ConsultaSaldosClienteDataReqType;XSDComplexTypeDefinition=4" name="ConsultaSaldosClienteDataReqType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/Response;XSDComplexTypeDefinition=5" name="Response"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/ConsultaSaldosClienteRespType;XSDComplexTypeDefinition=6" name="ConsultaSaldosClienteRespType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/DataHeaderRespType;XSDComplexTypeDefinition=7" name="DataHeaderRespType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/DataRespType;XSDComplexTypeDefinition=8" name="DataRespType"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productos;XSDComplexTypeDefinition=9" name="productos"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/datosCliente;XSDComplexTypeDefinition=10" name="datosCliente"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosAhorros;XSDComplexTypeDefinition=11" name="productosAhorros"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosCtaCte;XSDComplexTypeDefinition=12" name="productosCtaCte"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosNoConsumo;XSDComplexTypeDefinition=13" name="productosNoConsumo"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosTituloDaBuenaVida;XSDComplexTypeDefinition=14" name="productosTituloDaBuenaVida"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosConsumo;XSDComplexTypeDefinition=15" name="productosConsumo"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosCDT;XSDComplexTypeDefinition=16" name="productosCDT"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosFondosInversion;XSDComplexTypeDefinition=17" name="productosFondosInversion"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productosEstablecimientos;XSDComplexTypeDefinition=18" name="productosEstablecimientos"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoAhorro;XSDComplexTypeDefinition=19" name="productoAhorro"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/datosProducto;XSDComplexTypeDefinition=20" name="datosProducto"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosAhorros;XSDComplexTypeDefinition=21" name="saldosAhorros"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoCtaCte;XSDComplexTypeDefinition=22" name="productoCtaCte"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosCtaCte;XSDComplexTypeDefinition=23" name="saldosCtaCte"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoNoConsumo;XSDComplexTypeDefinition=24" name="productoNoConsumo"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosNoConsumo;XSDComplexTypeDefinition=25" name="saldosNoConsumo"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoConsumo;XSDComplexTypeDefinition=26" name="productoConsumo"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/informacionExtendidaConsumo;XSDComplexTypeDefinition=27" name="informacionExtendidaConsumo"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosConsumo;XSDComplexTypeDefinition=28" name="saldosConsumo"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoTituloDaBuenaVida;XSDComplexTypeDefinition=29" name="productoTituloDaBuenaVida"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/informacionExtendidaDabuenavida;XSDComplexTypeDefinition=30" name="informacionExtendidaDabuenavida"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosTitulosDabuenavida;XSDComplexTypeDefinition=31" name="saldosTitulosDabuenavida"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoCDT;XSDComplexTypeDefinition=32" name="productoCDT"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/informacionExtendidaCDT;XSDComplexTypeDefinition=33" name="informacionExtendidaCDT"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosCDT;XSDComplexTypeDefinition=34" name="saldosCDT"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoFondosInversion;XSDComplexTypeDefinition=35" name="productoFondosInversion"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/informacionExtendidaFondosInversion;XSDComplexTypeDefinition=36" name="informacionExtendidaFondosInversion"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosFondosInversion;XSDComplexTypeDefinition=37" name="saldosFondosInversion"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/informacionExtendidaEstablecimientos;XSDComplexTypeDefinition=38" name="informacionExtendidaEstablecimientos"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/saldosEstablecimientos;XSDComplexTypeDefinition=39" name="saldosEstablecimientos"/>
+    <complexType
+      baseType="mset://SVC_PA_ConsultaSaldosClienteMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaSaldosClienteMsgSet/SVC_PA_ConsultaSaldosClienteMsgSet/ConsultaSaldosCliente.mxsd#/0/productoEstablecimientos;XSDComplexTypeDefinition=40" name="productoEstablecimientos"/>
+  </MRMsgCollection>
+</MRMessageSet>

@@ -1,0 +1,169 @@
+BROKER SCHEMA com.ibm.ams.framework.commons
+PATH com.davivienda.utils;
+
+DECLARE ns  NAMESPACE 'http://davivienda.com/envelope/esbxml';
+-- declaración de variables UDP
+DECLARE traceabilityPoint	EXTERNAL CHARACTER '';
+DECLARE traceableDefault	EXTERNAL CHARACTER '';
+DECLARE auditableDefault	EXTERNAL CHARACTER '';
+DECLARE LogQueueName 		EXTERNAL CHARACTER '';
+DECLARE AuditQueueName		EXTERNAL CHARACTER '';
+
+ /*
+ *	Module name: TraceAndAudit
+ *	Purpose: Escribe la traza y la auditoria del mensaje
+ *			que se esta recibiendo.
+ */
+CREATE COMPUTE MODULE TraceAndAudit
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		-- Se calcula el tiempo de Traza y auditoria
+		DECLARE valTimeStamp TIMESTAMP CURRENT_TIMESTAMP;
+		
+		-- referencias al mensaje de entrada
+		DECLARE msgin 		REFERENCE TO InputRoot.XMLNSC.*:esbXML;
+		DECLARE headerin	REFERENCE TO msgin.Header;
+		DECLARE bodyin		REFERENCE TO msgin.Body;
+		
+		-- Verificacion de propiedad traceable y auditable, si no viene en el header, se toma la variable UDP		
+		DECLARE traceable BOOLEAN;
+		DECLARE auditable BOOLEAN;
+		
+		SET traceable = COALESCE(headerin.requestData.endpointReference.configuration.traceable, traceableDefault);
+		SET auditable = COALESCE(headerin.requestData.endpointReference.configuration.auditable, auditableDefault);
+					
+		-- verificar flag de log
+		IF CAST(traceable AS BOOLEAN) THEN
+		
+			-- Copiar cabeceras
+			CALL CopyMessageHeaders();
+				
+			-- construcción de mensaje de log
+			CREATE FIELD OutputRoot.XMLNSC.LogHandlerMsgSet;
+			
+			SET OutputRoot.XMLNSC.LogHandlerMsgSet.systemId		= InputRoot.XMLNSC.*:esbXML.Header.systemId;
+			SET OutputRoot.XMLNSC.LogHandlerMsgSet.messageId	= InputRoot.XMLNSC.*:esbXML.Header.messageId;
+			SET OutputRoot.XMLNSC.LogHandlerMsgSet.componentId 	= traceabilityPoint;
+			SET OutputRoot.XMLNSC.LogHandlerMsgSet.timeStamp	= valTimeStamp;
+			SET OutputRoot.XMLNSC.LogHandlerMsgSet.serviceId	= InputRoot.XMLNSC.*:esbXML.Header.requestData.endpointReference.serviceId;
+			
+			-- Configuracion del destination list
+			CREATE FIELD OutputLocalEnvironment.Destination.MQDestinationList;
+			DECLARE destination REFERENCE TO OutputLocalEnvironment.Destination.MQDestinationList;
+			SET destination.DestinationData[1].queueName = LogQueueName ;
+			
+			-- propagar metadata del mensaje a la interface correspondiente
+			PROPAGATE TO TERMINAL 'out' MESSAGE OutputRoot DELETE NONE;
+			SET OutputRoot.XMLNSC = NULL;
+			
+		END IF;	
+		
+		-- verificar flag de audit
+		IF 	CAST(auditable AS BOOLEAN) THEN
+			
+			-- Copiar cabeceras
+			CALL CopyMessageHeaders();
+			SET OutputRoot.XMLNSC.esbXML:esbXML.Header                         = msgin.Header;
+			
+			-- Copiar traceabilityPoint y mensaje completo, la transformacion se hace en el Audit_MsgFlow
+			SET OutputRoot.XMLNSC.esbXML:esbXML.Header.tracingData.componentId = traceabilityPoint;
+			SET OutputRoot.XMLNSC.esbXML:esbXML.Header.tracingData.timeStamp   = valTimeStamp;
+			SET OutputRoot.XMLNSC.esbXML:esbXML.Body 						   = msgin.Body;
+			
+			-- Configuracion del destination list			
+			CREATE FIELD OutputLocalEnvironment.Destination.MQDestinationList;
+			DECLARE destination	REFERENCE TO OutputLocalEnvironment.Destination.MQDestinationList;					
+			
+			-- propagar metadata del mensaje a la interface correspondiente
+			SET destination.DestinationData[1].queueName = AuditQueueName ;
+			PROPAGATE TO TERMINAL 'out' MESSAGE OutputRoot DELETE DEFAULT;
+			
+		END IF;
+		
+		RETURN FALSE;
+
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+	
+END MODULE;
+
+ /*
+ *	Module name: BuildErrorMessage
+ *	Purpose: Envia el error presentado en el flujo  
+ *			al error handler.
+ */
+CREATE COMPUTE MODULE BuildErrorMessage_TraceAndAuditFlow
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		-- mantener las cabeceras
+		CALL CopyMessageHeaders();
+		
+		--Referencia al Header y Body del envolvente
+		DECLARE msgIn	 REFERENCE TO InputRoot.XMLNSC.*:esbXML;
+		DECLARE headerIn REFERENCE TO msgIn.Header;
+		
+		--Crear envoltura esbXml
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML;
+		DECLARE msgOut REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML;
+		
+		--Crear contenedor Header de salida
+		CREATE FIELD msgOut.Header;
+		
+		--Declarar referencias a campos de salida
+		DECLARE headerOut REFERENCE TO msgOut.Header;
+		
+		--Declaración de los parámetros de entrada para la función de manejo del ExceptionList
+		DECLARE messageText 	CHARACTER '';
+		DECLARE parentName 		CHARACTER '';
+		DECLARE catlgName 		CHARACTER '';
+		DECLARE messageNumber 	INTEGER 0;
+				
+		--Transportar el Header de la envoltura esbXML
+		SET headerOut = headerIn;		
+		
+		--Garantizar que se envía un messageId
+		IF headerIn.messageId IS NULL OR FIELDVALUE(headerIn.messageId) = '' THEN 
+			SET headerOut.messageId = InputRoot.MQMD.CorrelId; 
+		END IF;
+					 
+		--Llamado a la función de detalles de excepción
+   	    CALL getLastExceptionDetail(InputExceptionList, messageNumber, messageText, parentName, catlgName);
+   	    
+   	    --Reportar una excepción en la metaData de salida para del manejo de Excepciones
+		SET headerOut.responseData.status.statusCode = 'SystemException';
+   	    
+   	    --Crear contenedor y referencia al systemException	
+		CREATE FIELD 				  headerOut.responseData.status.systemException;
+		DECLARE sysExcep REFERENCE TO headerOut.responseData.status.systemException;
+		
+		--Grabar detalles de la excepcion en la metadata
+   	    SET sysExcep.faultcode   = '9000'; 
+		SET sysExcep.faultstring = 'Error al generar mensaje';
+		SET sysExcep.faultactor  = 'TraceAndAudit';
+		SET sysExcep.detail		 = InputExceptionList;
+				
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+END MODULE;

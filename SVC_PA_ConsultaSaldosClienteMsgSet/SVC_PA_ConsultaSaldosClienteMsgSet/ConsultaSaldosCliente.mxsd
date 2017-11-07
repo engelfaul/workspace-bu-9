@@ -1,0 +1,712 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:complexType name="ConsultaSaldosClienteType">
+        <xsd:sequence>
+            <xsd:element name="Request" type="ConsultaSaldosClienteRequestType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="ConsultaSaldosCliente" type="ConsultaSaldosClienteType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ConsultaSaldosCliente;XSDElementDeclaration$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:complexType name="ConsultaSaldosClienteResponseType">
+        <xsd:sequence>
+            <xsd:element name="Response" type="ConsultaSaldosClienteRespType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="ConsultaSaldosClienteResponse" type="ConsultaSaldosClienteResponseType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ConsultaSaldosClienteResponse;XSDElementDeclaration=1$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:complexType name="ConsultaSaldosClienteRequestType">
+        <xsd:sequence maxOccurs="1" minOccurs="1">
+            <xsd:element name="DataHeader" type="DataHeaderReqType"/>
+            <xsd:element name="Data" type="ConsultaSaldosClienteDataReqType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="DataHeaderReqType">
+        <xsd:sequence maxOccurs="1" minOccurs="1">
+            <xsd:element default="ConsultaSaldosCliente" name="nombreOperacion" type="xsd:string"/>
+            <xsd:element name="total" type="xsd:int"/>
+            <xsd:element name="jornada" type="xsd:short"/>
+            <xsd:element name="canal" type="xsd:short"/>
+            <xsd:element name="modoDeOperacion" type="xsd:short"/>
+            <xsd:element name="usuario" type="xsd:string"/>
+            <xsd:element name="perfil" type="xsd:short"/>
+            <xsd:element default="1.0.0" name="versionServicio" type="xsd:string"/>
+            <xsd:element name="idTransaccion" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="ConsultaSaldosClienteDataReqType">
+        <xsd:sequence maxOccurs="1" minOccurs="1">
+        	<xsd:element minOccurs="0" name="idSesion" type="xsd:string"/>
+        	<xsd:element minOccurs="0" name="codIdioma" type="xsd:string"/>
+        	<xsd:element minOccurs="0" name="valOrigen" type="xsd:string"/>
+        	<xsd:element minOccurs="0" name="valVersionApp" type="xsd:string"/>
+        	<xsd:element name="idCliente" type="xsd:string"/>
+        	<xsd:element name="tipoId" type="xsd:string"/>
+        	<xsd:element minOccurs="0" name="compania" type="xsd:short"/>
+        	<xsd:element minOccurs="0" name="vinculacion" type="xsd:int"/>
+        	<xsd:element minOccurs="0" name="codigoProducto" type="xsd:string"/>
+        	<xsd:element minOccurs="0" name="codigoSubproducto" type="xsd:string"/>
+        	<xsd:element minOccurs="0" name="numeroProducto" type="xsd:string"/>
+        	<xsd:element minOccurs="0" name="indicadorTipoConsulta" type="xsd:short"/>
+        	<xsd:element minOccurs="0" name="cantidadProductosRta" type="xsd:short"/>
+        	<xsd:element minOccurs="0" name="valUsuarioApp" type="xsd:string"/>
+        	<xsd:element maxOccurs="1" minOccurs="0" name="codMoneda" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Response">
+        <xsd:sequence maxOccurs="1" minOccurs="1"/>
+    </xsd:complexType>
+    <xsd:complexType name="ConsultaSaldosClienteRespType">
+        <xsd:sequence maxOccurs="1" minOccurs="1">
+            <xsd:element name="DataHeader" type="DataHeaderRespType"/>
+            <xsd:element name="Data" type="DataRespType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="DataHeaderRespType">
+        <xsd:sequence maxOccurs="1" minOccurs="1">
+            <xsd:element name="nombreOperacion" type="xsd:string"/>
+            <xsd:element name="total" type="xsd:int"/>
+            <xsd:element name="caracterAceptacion" type="xsd:string"/>
+            <xsd:element name="ultimoMensaje" type="xsd:short"/>
+            <xsd:element name="idTransaccion" type="xsd:string"/>
+            <xsd:element name="codMsgRespuesta" type="xsd:short"/>
+            <xsd:element minOccurs="0" name="msgRespuesta" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="DataRespType">
+        <xsd:sequence maxOccurs="1" minOccurs="1">
+            <xsd:element minOccurs="0" name="DatosCliente" type="datosCliente"/>
+            <xsd:element minOccurs="0" name="Productos" type="productos"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="productos">
+        <xsd:sequence>
+            <xsd:element minOccurs="0" name="ProductosAhorros" type="productosAhorros"/>
+            <xsd:element minOccurs="0" name="ProductosCtaCte" type="productosCtaCte"/>
+            <xsd:element minOccurs="0" name="ProductosNoConsumo" type="productosNoConsumo"/>
+            <xsd:element minOccurs="0" name="ProductosConsumo" type="productosConsumo"/>
+            <xsd:element minOccurs="0" name="ProductosTituloDaBuenaVida" type="productosTituloDaBuenaVida"/>
+            <xsd:element minOccurs="0" name="ProductosCDT" type="productosCDT"/>
+            <xsd:element minOccurs="0" name="ProductosFondosInversion" type="productosFondosInversion"/>
+            <xsd:element minOccurs="0" name="ProductosEstablecimientos" type="productosEstablecimientos"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="datosCliente">
+        <xsd:sequence>
+            <xsd:element name="numeroDeIdentificacion" nillable="true" type="xsd:string"/>
+            <xsd:element name="tipoDeIdentificacion" nillable="true" type="xsd:string"/>
+            <xsd:element name="nombres" nillable="true" type="xsd:string"/>
+            <xsd:element name="primerApellido" nillable="true" type="xsd:string"/>
+            <xsd:element name="segundoApellido" nillable="true" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="direccion" nillable="true" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="telefono" nillable="true" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="ciudad" type="xsd:long"/>
+            <xsd:element minOccurs="0" name="fechaDeNacimiento" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="naturaleza" nillable="true" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="indicadorClienteEspecial" type="xsd:short"/>
+            <xsd:element minOccurs="0" name="indicadorClienteNoDeseado" nillable="true" type="xsd:short"/>
+            <xsd:element minOccurs="0" name="retencionEnlaFuente" type="xsd:short"/>
+            <xsd:element minOccurs="0" name="tipoEmpresa" nillable="true" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="claseEmpresa" type="xsd:short"/>
+            <xsd:element minOccurs="0" name="indicadorActividad" type="xsd:short"/>
+            <xsd:element minOccurs="0" name="indicadorEconomicaSegmento" type="xsd:short"/>
+            <xsd:element minOccurs="0" name="cuentaExcenta" type="xsd:long"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="productosAhorros">
+        <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" name="ProductoAhorro" type="productoAhorro"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="productosCtaCte">
+        <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" name="ProductoCtaCte" type="productoCtaCte"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="productosNoConsumo">
+        <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" name="ProductoNoConsumo" type="productoNoConsumo"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="productosTituloDaBuenaVida">
+        <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" name="ProductoTituloDaBuenaVida" type="productoTituloDaBuenaVida"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="productosConsumo">
+        <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" name="ProductoConsumo" type="productoConsumo"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="productosCDT">
+        <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" name="ProductoCDT" type="productoCDT"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="productosFondosInversion">
+        <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" name="ProductoFondosInversion" type="productoFondosInversion"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="productosEstablecimientos">
+        <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" name="ProductoEstablecimientos" type="productoEstablecimientos"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="productoAhorro">
+        <xsd:sequence>
+            <xsd:element name="DatosProducto" type="datosProducto"/>
+            <xsd:element name="SaldosAhorros" type="saldosAhorros"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="datosProducto">
+        <xsd:sequence>
+        	<xsd:element maxOccurs="1" minOccurs="0" name="claseManejo" type="xsd:string"/>
+        	<xsd:element name="codigoProducto" type="xsd:short"/>
+        	<xsd:element name="codigoSubproducto" type="xsd:short"/>
+        	<xsd:element maxOccurs="1" minOccurs="0" name="compania" type="xsd:short"/>
+        	<xsd:element name="descProducto" type="xsd:string"/>
+        	<xsd:element name="aliasProducto" nillable="true" type="xsd:string"/>
+        	<xsd:element maxOccurs="1" minOccurs="0" name="codigoStatus" type="xsd:short"/>
+        	<xsd:element maxOccurs="1" minOccurs="0" name="descripcionStatus" nillable="true" type="xsd:string"/>
+        	<xsd:element maxOccurs="1" minOccurs="0" name="estadoSegundaClave" type="xsd:short"/>
+        	<xsd:element maxOccurs="1" minOccurs="0" name="indicadorTarjeta" type="xsd:short"/>
+        	<xsd:element maxOccurs="1" minOccurs="0" name="tipoPortafolio" type="xsd:long"/>
+        	<xsd:element name="numeroPortafolio" type="xsd:short"/>
+        	<xsd:element name="numeroProducto" type="xsd:string"/>
+        	<xsd:element maxOccurs="1" minOccurs="0" name="numeroTarjeta" type="xsd:long"/>
+        	<xsd:element maxOccurs="1" minOccurs="0" name="vinculacion" type="xsd:short"/>
+        	<xsd:element minOccurs="0" name="estadoProducto" type="xsd:short"/>
+        	<xsd:element maxOccurs="1" minOccurs="0" name="titularProducto" type="xsd:short"/>
+        	<xsd:element maxOccurs="1" minOccurs="0" name="fechaApertura" nillable="true" type="xsd:string"/>
+        	<xsd:element name="vigencia" type="xsd:short"/>
+        	<xsd:element maxOccurs="1" minOccurs="0" name="indicadorBloqueoTransaccional" type="xsd:short"/>
+        	<xsd:element maxOccurs="1" minOccurs="0" name="indicadorBloqueoProducto" type="xsd:short"/>
+        	<xsd:element maxOccurs="1" minOccurs="0" name="indicadorEmbargo" type="xsd:short"/>
+        	<xsd:element maxOccurs="1" minOccurs="0" name="indicadorFondosCongeladosEmbargo" type="xsd:short"/>
+        	<xsd:element name="indicadorBolsillo" type="xsd:short"/>
+        	<xsd:element name="cantidadBolsillos" type="xsd:short"/>
+
+        	<xsd:element maxOccurs="1" minOccurs="0" name="valNumeroProductoInterno" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="saldosAhorros">
+        <xsd:sequence>
+            <xsd:element name="saldoBolsillos" type="xsd:decimal"/>
+            <xsd:element name="saldoContingente" type="xsd:decimal"/>
+            <xsd:element name="saldoDisponible" type="xsd:decimal"/>
+            <xsd:element name="saldoEmbargos" type="xsd:decimal"/>
+            <xsd:element name="saldoTotal" type="xsd:decimal"/>
+            <xsd:element name="saldoCanjeLocal" type="xsd:decimal"/>
+            <xsd:element name="saldoCanjePlaza" type="xsd:decimal"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="valIndicadorMoneda" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="productoCtaCte">
+        <xsd:sequence>
+            <xsd:element name="DatosProducto" type="datosProducto"/>
+            <xsd:element name="SaldosCtaCte" type="saldosCtaCte"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="saldosCtaCte">
+        <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="0" name="cuenta" nillable="true" type="xsd:string"/>
+            <xsd:element name="diasSobregiro" type="xsd:int"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="saldoDisponible" type="xsd:decimal"/>
+            <xsd:element name="disponibleRemesas" type="xsd:decimal"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="indicadorMulticuenta" type="xsd:short"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="interesSobregiro" type="xsd:decimal"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="numeroCupoSobregiro" type="xsd:long"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="numeroDiasMoraSobregiro" type="xsd:int"/>
+            <xsd:element name="saldoEnCanje" type="xsd:decimal"/>
+            <xsd:element name="saldoCanjePlaza" type="xsd:decimal"/>
+            <xsd:element name="saldoCongeladoPorEmbargo" type="xsd:decimal"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="disponibleSobregiro" type="xsd:decimal"/>
+            <xsd:element name="saldoTotal" type="xsd:decimal"/>
+            <xsd:element name="usadoRemesas" type="xsd:decimal"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="valIndicadorMoneda" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="productoNoConsumo">
+        <xsd:sequence>
+            <xsd:element name="DatosProducto" type="datosProducto"/>
+            <xsd:element name="SaldosNoConsumo" type="saldosNoConsumo"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="saldosNoConsumo">
+        <xsd:sequence>
+            <xsd:element name="diasMora" type="xsd:int"/>
+            <xsd:element name="fechaCuota" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="fechaMora" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="fechaSaldo" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="indicadorLink" nillable="true" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="valorAprobado" type="xsd:decimal"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="valorCanje" type="xsd:decimal"/>
+            <xsd:element name="valorCuota" type="xsd:decimal"/>
+            <xsd:element name="valorDisponibleCx" type="xsd:decimal"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="valorMora" type="xsd:decimal"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="valorPorAplicar" type="xsd:decimal"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="valorSaldo" type="xsd:decimal"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="valIndicadorMoneda" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="productoConsumo">
+        <xsd:sequence>
+            <xsd:element name="DatosProducto" type="datosProducto"/>
+            <xsd:element name="InformacionExtendidaConsumo" type="informacionExtendidaConsumo"/>
+            <xsd:element name="SaldosConsumo" type="saldosConsumo"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="informacionExtendidaConsumo">
+        <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="0" name="codConvenioLibranza" type="xsd:string"/>
+            <xsd:element name="davipuntos" type="xsd:int"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="davipuntosProntosAVencer" type="xsd:int"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="fechaProxFacturaCapital" nillable="true" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="fechaProxFacturaInteres" nillable="true" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="fechaVencimientoPlastico" nillable="true" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="fechaVencimientoPuntos" nillable="true" type="xsd:string"/>
+            <xsd:element name="franquicia" type="xsd:short"/>
+            <xsd:element minOccurs="0" name="frecuenciaCapital" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="frecuenciaInteres" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="indSistAmortFlexible" type="xsd:short"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="nitEmpresaLibranza" type="xsd:long"/>
+            <xsd:element minOccurs="0" name="nombreEmpresaLibranza" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="plazo" type="xsd:short"/>
+            <xsd:element minOccurs="0" name="tasaDeCambio" type="xsd:decimal"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="saldosConsumo">
+        <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="0" name="diasMora" type="xsd:short"/>
+            <xsd:element name="cupoDisponible" type="xsd:decimal"/>
+            <xsd:element name="disponibleAvance" type="xsd:decimal"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="fechaCorte" nillable="true" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="fechaPagoMinimo" nillable="true" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="fechaVencimientoCupo" nillable="true" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="indicadorCartera" type="xsd:short"/>
+            <xsd:element name="pagMinCarteraEnPesos" type="xsd:decimal"/>
+            <xsd:element name="pagMinCartUSDEnUSD" type="xsd:decimal"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="pagMinCartUSDEnPesos" type="xsd:decimal"/>
+            <xsd:element name="pagTotCarteraEnPesos" type="xsd:decimal"/>
+            <xsd:element name="pagTotCartUSDEnUSD" type="xsd:decimal"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="pagTotCartUSDEnPesos" type="xsd:decimal"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="valorMora" type="xsd:decimal"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="valrsPagPorAnticipado" type="xsd:decimal"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="valSaldoTotalColones" type="xsd:decimal"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="valSaldoTotalDolares" type="xsd:decimal"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="valIndicadorMoneda" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="productoTituloDaBuenaVida">
+        <xsd:sequence>
+            <xsd:element name="DatosProducto" type="datosProducto"/>
+            <xsd:element name="InformacionExtendidaDabuenavida" type="informacionExtendidaDabuenavida"/>
+            <xsd:element name="SaldosTituloDabuenavida" type="saldosTitulosDabuenavida"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="informacionExtendidaDabuenavida">
+        <xsd:sequence>
+            <xsd:element name="costoAdministracion" type="xsd:decimal"/>
+            <xsd:element name="cuenta" type="xsd:long"/>
+            <xsd:element name="fechaDeVenta" nillable="true" type="xsd:string"/>
+            <xsd:element name="fechaPosicionCliente" nillable="true" type="xsd:string"/>
+            <xsd:element name="fechaPosicionGanadora" nillable="true" type="xsd:string"/>
+            <xsd:element name="indicadorDeClausula" nillable="true" type="xsd:string"/>
+            <xsd:element name="numeroDeMesesTransacurridos" type="xsd:short"/>
+            <xsd:element name="posicionEnLaQueJugo" nillable="true" type="xsd:string"/>
+            <xsd:element name="posicionGanadora" nillable="true" type="xsd:string"/>
+            <xsd:element name="premioPorElQueJugo" type="xsd:decimal"/>
+            <xsd:element name="upacMonto" type="xsd:decimal"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="saldosTitulosDabuenavida">
+        <xsd:sequence>
+            <xsd:element name="saldoTotal" type="xsd:decimal"/>
+            <xsd:element name="cuotaInicial" type="xsd:decimal"/>
+            <xsd:element name="saldoDisponibleRetiroParcial" type="xsd:decimal"/>
+            <xsd:element name="saldoParaCancelacion" type="xsd:decimal"/>
+            <xsd:element name="valorCuotaMensual" type="xsd:decimal"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="productoCDT">
+        <xsd:sequence>
+            <xsd:element name="DatosProducto" type="datosProducto"/>
+            <xsd:element name="InformacionExtendidaCDT" type="informacionExtendidaCDT"/>
+            <xsd:element name="SaldosCDT" type="saldosCDT"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="informacionExtendidaCDT">
+        <xsd:sequence>
+            <xsd:element name="digitoChequeo" type="xsd:short"/>
+            <xsd:element name="numero" type="xsd:long"/>
+            <xsd:element name="serie" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="saldosCDT">
+        <xsd:sequence>
+            <xsd:element name="intereses" type="xsd:decimal"/>
+            <xsd:element name="interesesPlazoExtendido" type="xsd:decimal"/>
+            <xsd:element name="retencionIntereses" type="xsd:decimal"/>
+            <xsd:element name="retencionVariacion" type="xsd:decimal"/>
+            <xsd:element name="valorIncial" type="xsd:decimal"/>
+            <xsd:element name="valorNetoAPagar" type="xsd:decimal"/>
+            <xsd:element name="valorNetoIntereses" type="xsd:decimal"/>
+            <xsd:element name="variacion" type="xsd:decimal"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="productoFondosInversion">
+        <xsd:sequence>
+            <xsd:element name="DatosProducto" type="datosProducto"/>
+            <xsd:element name="InformacionExtendidaFondosInversion" type="informacionExtendidaFondosInversion"/>
+            <xsd:element name="SaldosFondosInversion" type="saldosFondosInversion"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="informacionExtendidaFondosInversion">
+        <xsd:sequence>
+            <xsd:element name="cuentaAsociadaRetiro" nillable="true" type="xsd:string"/>
+            <xsd:element name="cuentaDebitoAutomatico" nillable="true" type="xsd:string"/>
+            <xsd:element name="entidadRetiros" nillable="true" type="xsd:short"/>
+            <xsd:element name="fechaAportePeriodico" nillable="true" type="xsd:string"/>
+            <xsd:element name="fechaPago" nillable="true" type="xsd:string"/>
+            <xsd:element name="fechaPrimerAporte" nillable="true" type="xsd:string"/>
+            <xsd:element name="fechaVencimiento" nillable="true" type="xsd:string"/>
+            <xsd:element name="indicadorControlMensaje" nillable="true" type="xsd:short"/>
+            <xsd:element name="montoApertura" nillable="true" type="xsd:decimal"/>
+            <xsd:element name="nitEmpleador" nillable="true" type="xsd:string"/>
+            <xsd:element name="nombrePlan" nillable="true" type="xsd:string"/>
+            <xsd:element name="objetivo" nillable="true" type="xsd:short"/>
+            <xsd:element name="periodicidad" nillable="true" type="xsd:short"/>
+            <xsd:element name="rentabilidadClienteUltimoMes" nillable="true" type="xsd:decimal"/>
+            <xsd:element name="rentabilidadClienteUltimoAno" nillable="true" type="xsd:decimal"/>
+            <xsd:element name="rentabilidadClienteUltimoTresAnos" nillable="true" type="xsd:decimal"/>
+            <xsd:element name="signoRentabilidadULtimoMes" nillable="true" type="xsd:string"/>
+            <xsd:element name="signoRentabilidadUltimoAno" nillable="true" type="xsd:string"/>
+            <xsd:element name="signoRentabilidadUltimoTresAnos" nillable="true" type="xsd:string"/>
+            <xsd:element name="tipoPlan" nillable="true" type="xsd:short"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="saldosFondosInversion">
+        <xsd:sequence>
+            <xsd:element name="saldoCancelacion" nillable="true" type="xsd:decimal"/>
+            <xsd:element name="saldoConsolidado" nillable="true" type="xsd:decimal"/>
+            <xsd:element name="saldoConsolidadoInmobilizado" nillable="true" type="xsd:decimal"/>
+            <xsd:element name="saldoConsolidadoNoDisponible" nillable="true" type="xsd:decimal"/>
+            <xsd:element name="saldoDisponibleRetiro" nillable="true" type="xsd:decimal"/>
+            <xsd:element name="saldoDisponibleRetiroAfc" nillable="true" type="xsd:decimal"/>
+            <xsd:element name="saldoDisponibleSinAfectarBeneficioTributario" nillable="true" type="xsd:decimal"/>
+            <xsd:element name="saldoNoconsolidado" nillable="true" type="xsd:decimal"/>
+            <xsd:element name="saldoTotal" nillable="true" type="xsd:decimal"/>
+            <xsd:element name="valorAportePeriodico" nillable="true" type="xsd:decimal"/>
+            <xsd:element name="valorCancelacionTransferencia" nillable="true" type="xsd:decimal"/>
+            <xsd:element name="valorCanje" nillable="true" type="xsd:decimal"/>
+            <xsd:element name="valorContingente" nillable="true" type="xsd:decimal"/>
+            <xsd:element name="valorDisponibleProgramar" nillable="true" type="xsd:decimal"/>
+            <xsd:element name="valorPignorado" nillable="true" type="xsd:decimal"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="informacionExtendidaEstablecimientos"/>
+    <xsd:complexType name="saldosEstablecimientos"/>
+    <xsd:complexType name="productoEstablecimientos">
+        <xsd:sequence>
+            <xsd:element name="DatosProducto" type="datosProducto"/>
+            <xsd:element name="InformacionExtendidaEstablecimiento" type="informacionExtendidaEstablecimientos"/>
+            <xsd:element name="SaldosEstablecimiento" type="saldosEstablecimientos"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="ConsultaSaldosClienteType" type="ConsultaSaldosClienteType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ConsultaSaldosClienteType;XSDElementDeclaration=2$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="ConsultaSaldosClienteResponseType" type="ConsultaSaldosClienteResponseType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ConsultaSaldosClienteResponseType;XSDElementDeclaration=3$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="ConsultaSaldosClienteRequestType" type="ConsultaSaldosClienteRequestType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ConsultaSaldosClienteRequestType;XSDElementDeclaration=4$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="DataHeaderReqType" type="DataHeaderReqType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/DataHeaderReqType;XSDElementDeclaration=5$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="ConsultaSaldosClienteDataReqType" type="ConsultaSaldosClienteDataReqType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ConsultaSaldosClienteDataReqType;XSDElementDeclaration=6$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="Response" type="Response">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/Response;XSDElementDeclaration=7$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="ConsultaSaldosClienteRespType" type="ConsultaSaldosClienteRespType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ConsultaSaldosClienteRespType;XSDElementDeclaration=8$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="DataHeaderRespType" type="DataHeaderRespType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/DataHeaderRespType;XSDElementDeclaration=9$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="DataRespType" type="DataRespType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/DataRespType;XSDElementDeclaration=10$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="productos" type="productos">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/productos;XSDElementDeclaration=11$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="datosCliente" type="datosCliente">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/datosCliente;XSDElementDeclaration=12$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="productosAhorros" type="productosAhorros">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/productosAhorros;XSDElementDeclaration=13$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="productosCtaCte" type="productosCtaCte">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/productosCtaCte;XSDElementDeclaration=14$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="productosNoConsumo" type="productosNoConsumo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/productosNoConsumo;XSDElementDeclaration=15$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="productosTituloDaBuenaVida" type="productosTituloDaBuenaVida">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/productosTituloDaBuenaVida;XSDElementDeclaration=16$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="productosConsumo" type="productosConsumo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/productosConsumo;XSDElementDeclaration=17$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="productosCDT" type="productosCDT">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/productosCDT;XSDElementDeclaration=18$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="productosFondosInversion" type="productosFondosInversion">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/productosFondosInversion;XSDElementDeclaration=19$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="productosEstablecimientos" type="productosEstablecimientos">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/productosEstablecimientos;XSDElementDeclaration=20$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="productoAhorro" type="productoAhorro">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/productoAhorro;XSDElementDeclaration=21$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="datosProducto" type="datosProducto">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/datosProducto;XSDElementDeclaration=22$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="saldosAhorros" type="saldosAhorros">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/saldosAhorros;XSDElementDeclaration=23$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="productoCtaCte" type="productoCtaCte">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/productoCtaCte;XSDElementDeclaration=24$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="saldosCtaCte" type="saldosCtaCte">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/saldosCtaCte;XSDElementDeclaration=25$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="productoNoConsumo" type="productoNoConsumo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/productoNoConsumo;XSDElementDeclaration=26$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="saldosNoConsumo" type="saldosNoConsumo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/saldosNoConsumo;XSDElementDeclaration=27$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="productoConsumo" type="productoConsumo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/productoConsumo;XSDElementDeclaration=28$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="informacionExtendidaConsumo" type="informacionExtendidaConsumo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/informacionExtendidaConsumo;XSDElementDeclaration=29$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="saldosConsumo" type="saldosConsumo">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/saldosConsumo;XSDElementDeclaration=30$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="productoTituloDaBuenaVida" type="productoTituloDaBuenaVida">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/productoTituloDaBuenaVida;XSDElementDeclaration=31$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="informacionExtendidaDabuenavida" type="informacionExtendidaDabuenavida">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/informacionExtendidaDabuenavida;XSDElementDeclaration=32$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="saldosTitulosDabuenavida" type="saldosTitulosDabuenavida">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/saldosTitulosDabuenavida;XSDElementDeclaration=33$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="productoCDT" type="productoCDT">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/productoCDT;XSDElementDeclaration=34$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="informacionExtendidaCDT" type="informacionExtendidaCDT">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/informacionExtendidaCDT;XSDElementDeclaration=35$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="saldosCDT" type="saldosCDT">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/saldosCDT;XSDElementDeclaration=36$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="productoFondosInversion" type="productoFondosInversion">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/productoFondosInversion;XSDElementDeclaration=37$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="informacionExtendidaFondosInversion" type="informacionExtendidaFondosInversion">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/informacionExtendidaFondosInversion;XSDElementDeclaration=38$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="saldosFondosInversion" type="saldosFondosInversion">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/saldosFondosInversion;XSDElementDeclaration=39$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="informacionExtendidaEstablecimientos" type="informacionExtendidaEstablecimientos">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/informacionExtendidaEstablecimientos;XSDElementDeclaration=40$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="saldosEstablecimientos" type="saldosEstablecimientos">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/saldosEstablecimientos;XSDElementDeclaration=41$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="productoEstablecimientos" type="productoEstablecimientos">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/productoEstablecimientos;XSDElementDeclaration=42$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+</xsd:schema>

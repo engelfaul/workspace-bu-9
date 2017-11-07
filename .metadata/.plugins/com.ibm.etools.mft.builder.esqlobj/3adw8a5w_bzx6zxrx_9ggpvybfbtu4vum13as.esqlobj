@@ -1,0 +1,22 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+		
+		-- mantener el correlid
+		SET OutputRoot = InputRoot;
+			 			
+		-- notificar al flujo de error que hubo una respuesta por mensaje de excepción
+		PROPAGATE TO TERMINAL 'out1' MESSAGE OutputRoot DELETE NONE;
+		
+		--- enrutar la respuesta al componente de servicio que invocó al adaptador
+		CREATE FIELD OutputLocalEnvironment.Destination.MQDestinationList;
+		DECLARE destination REFERENCE TO OutputLocalEnvironment.Destination.MQDestinationList;
+		
+		SET destination.DestinationData[1].queueName =  OutputRoot.XMLNSC.esbXML:esbXML.Header.internalRoutingData.replyToQueue.queueName;
+		SET destination.DestinationData[1].queueManagerName =  OutputRoot.XMLNSC.esbXML:esbXML.Header.internalRoutingData.replyToQueue.queueManagerName;
+		
+		PROPAGATE TO TERMINAL 'out' MESSAGE OutputRoot DELETE NONE;
+				
+		RETURN FALSE;
+		
+	END;
+

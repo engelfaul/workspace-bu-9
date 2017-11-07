@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MRMessageSet id="D2LR2HO002001"
+  name="ConsultaClientesPorUsuario_MsgSet" parser="XMLNSC">
+  <MRMsgCollection
+    href="platform:/resource/ConsultaClientesPorUsuario_MsgSet/ConsultaClientesPorUsuario_MsgSet/ConsultaClientesPorUsuario_MsgSet.mxsd"
+    prefix="" targetNamespace="">
+    <message
+      href="platform:/resource/ConsultaClientesPorUsuario_MsgSet/ConsultaClientesPorUsuario_MsgSet/ConsultaClientesPorUsuario_MsgSet.mxsd#/0/ConsultaClientesPorUsuario;XSDElementDeclaration$MRMessage" name="ConsultaClientesPorUsuario"/>
+    <element
+      href="platform:/resource/ConsultaClientesPorUsuario_MsgSet/ConsultaClientesPorUsuario_MsgSet/ConsultaClientesPorUsuario_MsgSet.mxsd#/0/ConsultaClientesPorUsuario;XSDElementDeclaration"
+      name="ConsultaClientesPorUsuario" type="mset://ConsultaClientesPorUsuario_MsgSet#/-/complexType{}ConsultaClientesPorUsuarioType"/>
+    <complexType
+      baseType="mset://ConsultaClientesPorUsuario_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/ConsultaClientesPorUsuario_MsgSet/ConsultaClientesPorUsuario_MsgSet/ConsultaClientesPorUsuario_MsgSet.mxsd#/0/ConsultaClientesPorUsuarioType;XSDComplexTypeDefinition" name="ConsultaClientesPorUsuarioType"/>
+    <complexType
+      baseType="mset://ConsultaClientesPorUsuario_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/ConsultaClientesPorUsuario_MsgSet/ConsultaClientesPorUsuario_MsgSet/ConsultaClientesPorUsuario_MsgSet.mxsd#/0/RequestType;XSDComplexTypeDefinition=1" name="RequestType"/>
+    <complexType
+      baseType="mset://ConsultaClientesPorUsuario_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/ConsultaClientesPorUsuario_MsgSet/ConsultaClientesPorUsuario_MsgSet/ConsultaClientesPorUsuario_MsgSet.mxsd#/0/DataHeaderReqType;XSDComplexTypeDefinition=2" name="DataHeaderReqType"/>
+    <complexType
+      baseType="mset://ConsultaClientesPorUsuario_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/ConsultaClientesPorUsuario_MsgSet/ConsultaClientesPorUsuario_MsgSet/ConsultaClientesPorUsuario_MsgSet.mxsd#/0/DataReqType;XSDComplexTypeDefinition=3" name="DataReqType"/>
+  </MRMsgCollection>
+</MRMessageSet>

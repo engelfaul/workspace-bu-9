@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MRMessageSet id="K7VONNC002001" name="SVC_PA_AutenticacionMsgSet" parser="XMLNSC">
+  <MRMsgCollection
+    href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd"
+    prefix="" targetNamespace="">
+    <message
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/Autenticacion;XSDElementDeclaration$MRMessage" name="Autenticacion"/>
+    <message
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/mjsValidarClaveCanalVirtual;XSDElementDeclaration=1$MRMessage" name="mjsValidarClaveCanalVirtual"/>
+    <message
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/mjsSolCerrarSesion;XSDElementDeclaration=3$MRMessage" name="mjsSolCerrarSesion"/>
+    <message
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/mjsSolValidarTokenOTP;XSDElementDeclaration=4$MRMessage" name="mjsSolValidarTokenOTP"/>
+    <element
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/Autenticacion;XSDElementDeclaration"
+      name="Autenticacion" type="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{}AutenticacionType"/>
+    <element
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/mjsValidarClaveCanalVirtual;XSDElementDeclaration=1"
+      name="mjsValidarClaveCanalVirtual" type="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{}MjsSolValidarClaveCanalVirtual"/>
+    <element
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/MjsSolValidarClaveCanalVirtual;XSDElementDeclaration=2"
+      name="MjsSolValidarClaveCanalVirtual" type="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{}MjsSolValidarClaveCanalVirtual"/>
+    <element
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/mjsSolCerrarSesion;XSDElementDeclaration=3"
+      name="mjsSolCerrarSesion" type="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{}MjsSolCerrarSesion"/>
+    <element
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/mjsSolValidarTokenOTP;XSDElementDeclaration=4"
+      name="mjsSolValidarTokenOTP" type="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{}MjsSolValidarTokenOTP"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/AutenticacionType;XSDComplexTypeDefinition" name="AutenticacionType"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/AutenticacionRequestType;XSDComplexTypeDefinition=1" name="AutenticacionRequestType"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/AutenticacionDataHeaderType;XSDComplexTypeDefinition=2" name="AutenticacionDataHeaderType"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/AutenticacionDataType;XSDComplexTypeDefinition=3" name="AutenticacionDataType"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/MjsSolValidarClaveCanalVirtual;XSDComplexTypeDefinition=4" name="MjsSolValidarClaveCanalVirtual"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/ContextoSolicitudTipo;XSDComplexTypeDefinition=5" name="ContextoSolicitudTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{}PersonaNaturalTipo"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/ClienteNaturalTipo;XSDComplexTypeDefinition=6" name="ClienteNaturalTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/SeguridadTokenTipo;XSDComplexTypeDefinition=7" name="SeguridadTokenTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/ServicioTipo;XSDComplexTypeDefinition=8" name="ServicioTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/OperacionCanalTipo;XSDComplexTypeDefinition=9" name="OperacionCanalTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/ConsumidorTipo;XSDComplexTypeDefinition=10" name="ConsumidorTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/HuellaDigitalDispositivoTipo;XSDComplexTypeDefinition=11" name="HuellaDigitalDispositivoTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/CriterioOrdenamientoTipo;XSDComplexTypeDefinition=12" name="CriterioOrdenamientoTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/PaginacionTipo;XSDComplexTypeDefinition=13" name="PaginacionTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{}PersonaTipo"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/PersonaNaturalTipo;XSDComplexTypeDefinition=14" name="PersonaNaturalTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/PersonaTipo;XSDComplexTypeDefinition=15" name="PersonaTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/ContactoPersonaTipo;XSDComplexTypeDefinition=16" name="ContactoPersonaTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/TelefonoTipo;XSDComplexTypeDefinition=17" name="TelefonoTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/UbicacionPersonaTipo;XSDComplexTypeDefinition=18" name="UbicacionPersonaTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/MunicipioTipo;XSDComplexTypeDefinition=19" name="MunicipioTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/DepartamentoTipo;XSDComplexTypeDefinition=20" name="DepartamentoTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/AplicacionTipo;XSDComplexTypeDefinition=21" name="AplicacionTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/CanalTipo;XSDComplexTypeDefinition=22" name="CanalTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/TerminalTipo;XSDComplexTypeDefinition=23" name="TerminalTipo"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/MjsSolValidarTokenOTP;XSDComplexTypeDefinition=24" name="MjsSolValidarTokenOTP"/>
+    <complexType
+      baseType="mset://SVC_PA_AutenticacionMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet/SVC_PA_AutenticacionMsgSet.mxsd#/0/MjsSolCerrarSesion;XSDComplexTypeDefinition=25" name="MjsSolCerrarSesion"/>
+  </MRMsgCollection>
+</MRMessageSet>

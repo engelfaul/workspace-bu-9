@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MRMessageSet id="FITIH6G002001"
+  name="ActualizacionParametrosNotificaciones_MsgSet.mxsd" parser="XMLNSC">
+  <MRMsgCollection
+    href="platform:/resource/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones.mxsd"
+    prefix="" targetNamespace="">
+    <element
+      href="platform:/resource/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones.mxsd#/0/ActualizacionParametrosNotificaciones;XSDElementDeclaration"
+      name="ActualizacionParametrosNotificaciones" type="mset://ActualizacionParametrosNotificaciones_MsgSet.mxsd#/-/complexType{}ActualizacionParametrosNotificacionesType"/>
+    <element
+      href="platform:/resource/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones.mxsd#/0/ActualizacionParametrosNotificacionesResponse;XSDElementDeclaration=1"
+      name="ActualizacionParametrosNotificacionesResponse" type="mset://ActualizacionParametrosNotificaciones_MsgSet.mxsd#/-/complexType{}ActualizacionParametrosNotificacionesResponseType"/>
+    <complexType
+      baseType="mset://ActualizacionParametrosNotificaciones_MsgSet.mxsd#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones.mxsd#/0/ActualizacionParametrosNotificacionesType;XSDComplexTypeDefinition" name="ActualizacionParametrosNotificacionesType"/>
+    <complexType
+      baseType="mset://ActualizacionParametrosNotificaciones_MsgSet.mxsd#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones.mxsd#/0/RequestType;XSDComplexTypeDefinition=1" name="RequestType"/>
+    <complexType
+      baseType="mset://ActualizacionParametrosNotificaciones_MsgSet.mxsd#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones.mxsd#/0/ActualizacionParametrosNotificacionesDataHeaderReqType;XSDComplexTypeDefinition=2" name="ActualizacionParametrosNotificacionesDataHeaderReqType"/>
+    <complexType
+      baseType="mset://ActualizacionParametrosNotificaciones_MsgSet.mxsd#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones.mxsd#/0/ActualizacionParametrosNotificacionesDataReqType;XSDComplexTypeDefinition=3" name="ActualizacionParametrosNotificacionesDataReqType"/>
+    <complexType
+      baseType="mset://ActualizacionParametrosNotificaciones_MsgSet.mxsd#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones.mxsd#/0/ParametrosNotificacionesReqType;XSDComplexTypeDefinition=4" name="ParametrosNotificacionesReqType"/>
+    <complexType
+      baseType="mset://ActualizacionParametrosNotificaciones_MsgSet.mxsd#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones.mxsd#/0/ParametrosNotificacionReqType;XSDComplexTypeDefinition=5" name="ParametrosNotificacionReqType"/>
+    <complexType
+      baseType="mset://ActualizacionParametrosNotificaciones_MsgSet.mxsd#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones.mxsd#/0/ParametrosAdicionalesReqType;XSDComplexTypeDefinition=6" name="ParametrosAdicionalesReqType"/>
+    <complexType
+      baseType="mset://ActualizacionParametrosNotificaciones_MsgSet.mxsd#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones.mxsd#/0/ParametroAdicionalReqType;XSDComplexTypeDefinition=7" name="ParametroAdicionalReqType"/>
+    <complexType
+      baseType="mset://ActualizacionParametrosNotificaciones_MsgSet.mxsd#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones.mxsd#/0/ArchivosReqType;XSDComplexTypeDefinition=8" name="ArchivosReqType"/>
+    <complexType
+      baseType="mset://ActualizacionParametrosNotificaciones_MsgSet.mxsd#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones.mxsd#/0/ArchivoReqType;XSDComplexTypeDefinition=9" name="ArchivoReqType"/>
+    <complexType
+      baseType="mset://ActualizacionParametrosNotificaciones_MsgSet.mxsd#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones.mxsd#/0/PoliticasReqType;XSDComplexTypeDefinition=10" name="PoliticasReqType"/>
+    <complexType
+      baseType="mset://ActualizacionParametrosNotificaciones_MsgSet.mxsd#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones.mxsd#/0/ActualizacionParametrosNotificacionesResponseType;XSDComplexTypeDefinition=11" name="ActualizacionParametrosNotificacionesResponseType"/>
+    <complexType
+      baseType="mset://ActualizacionParametrosNotificaciones_MsgSet.mxsd#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones.mxsd#/0/ResponseType;XSDComplexTypeDefinition=12" name="ResponseType"/>
+    <complexType
+      baseType="mset://ActualizacionParametrosNotificaciones_MsgSet.mxsd#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones.mxsd#/0/ActualizacionParametrosNotificacionesDataHeaderRespType;XSDComplexTypeDefinition=13" name="ActualizacionParametrosNotificacionesDataHeaderRespType"/>
+    <complexType
+      baseType="mset://ActualizacionParametrosNotificaciones_MsgSet.mxsd#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones_MsgSet.mxsd/ActualizacionParametrosNotificaciones.mxsd#/0/ActualizacionParametrosNotificacionesDataRespType;XSDComplexTypeDefinition=14" name="ActualizacionParametrosNotificacionesDataRespType"/>
+  </MRMsgCollection>
+</MRMessageSet>

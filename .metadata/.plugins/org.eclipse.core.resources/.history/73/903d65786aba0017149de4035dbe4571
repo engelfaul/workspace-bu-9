@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.davivienda.com/xml/ActualizacionParametrosNotificaciones" >
+  <xsd:element name="ActualizacionParametrosNotificaciones" type="tns:ActualizacionParametrosNotificacionesType"/>
+  <xsd:element name="ActualizacionParametrosNotificacionesResponse" type="tns:ActualizacionParametrosNotificacionesResponseType"/>
+  <xsd:complexType name="ActualizacionParametrosNotificacionesType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="Request" type="tns:RequestType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="RequestType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="DataHeader" type="tns:ActualizacionParametrosNotificacionesDataHeaderReqType"/>
+      <xsd:element maxOccurs="1" minOccurs="1" name="Data" type="tns:ActualizacionParametrosNotificacionesDataReqType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ActualizacionParametrosNotificacionesDataHeaderReqType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="nombreOperacion" type="xsd:string" default="ActualizacionParametrosNotificaciones"/>
+      <xsd:element maxOccurs="1" minOccurs="1" name="total" type="xsd:int"/>
+      <xsd:element maxOccurs="1" minOccurs="1" name="jornada" type="xsd:short"/>
+      <xsd:element maxOccurs="1" minOccurs="1" name="canal" type="xsd:short"/>
+      <xsd:element maxOccurs="1" minOccurs="1" name="modoDeOperacion" type="xsd:short"/>
+      <xsd:element maxOccurs="1" minOccurs="1" name="usuario" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="1" name="perfil" type="xsd:short"/>
+      <xsd:element maxOccurs="1" minOccurs="1" name="versionServicio" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="1" name="idTransaccion" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ActualizacionParametrosNotificacionesDataReqType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="idSesion" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="codIdioma" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="valOrigen" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="codPais" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="1" name="codTipoIdentificacion" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="1" name="valNumeroIdentificacion" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="1" name="valEmailNotificaciones" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="ParametrosNotificaciones" type="tns:ParametrosNotificacionesReqType"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="Archivos" type="tns:ArchivosReqType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ParametrosNotificacionesReqType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="1" name="ParametrosNotificacion" type="tns:ParametrosNotificacionReqType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ParametrosNotificacionReqType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="codTipoNotificacion" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="1" name="valNumeroProducto" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="1" name="codMoneda" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="valOperador" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="valCelular" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="valOperadorAdicional" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="valCelularAdicional" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="valMontoMaximo" type="xsd:decimal"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="valEmail" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="ParametrosAdicionales" type="tns:ParametrosAdicionalesReqType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ParametrosAdicionalesReqType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="1" name="ParametroAdicional" type="tns:ParametroAdicionalReqType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ParametroAdicionalReqType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="valLlave" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="1" name="valValor" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ArchivosReqType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="1" name="Archivo" type="tns:ArchivoReqType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ArchivoReqType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="valNombre" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="codTipoArchivo" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="Politicas" type="tns:PoliticasReqType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PoliticasReqType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="1" name="valPolitica" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ActualizacionParametrosNotificacionesResponseType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="Response" type="tns:ResponseType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ResponseType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="DataHeader" type="tns:ActualizacionParametrosNotificacionesDataHeaderRespType"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="Data" type="tns:ActualizacionParametrosNotificacionesDataRespType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ActualizacionParametrosNotificacionesDataHeaderRespType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="nombreOperacion" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="1" name="total" type="xsd:int"/>
+      <xsd:element maxOccurs="1" minOccurs="1" name="caracterAceptacion" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="1" name="ultimoMensaje" type="xsd:short"/>
+      <xsd:element maxOccurs="1" minOccurs="1" name="idTransaccion" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="1" name="codMsgRespuesta" type="xsd:int"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="msgRespuesta" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ActualizacionParametrosNotificacionesDataRespType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="valNumeroComprobante" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="1" name="valFechaHora" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

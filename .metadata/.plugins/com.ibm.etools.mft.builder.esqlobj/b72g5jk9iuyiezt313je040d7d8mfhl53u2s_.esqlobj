@@ -1,0 +1,12 @@
+CREATE FUNCTION getBusReg_HomologTipoTransCR (IN tipoTrans CHARACTER) RETURNS CHARACTER
+BEGIN
+	DECLARE vistaHomologReference 	REFERENCE TO CACHE_TIPO_TRANSFERENCIA;
+	DECLARE msgRespuesta			CHARACTER;
+	--Obtener la tabla de homologación
+	IF CARDINALITY(CACHE_TIPO_TRANSFERENCIA.row[]) = 0 THEN
+		CALL loadHomologView(CODTTRANS, vistaHomologReference);
+	END IF;
+	-- Obtener la homologación del nombre de la operación
+	SET msgRespuesta = setHomologatedDescription(CANAL_CR, CODTTRANS, tipoTrans, VACIO, vistaHomologReference);
+	RETURN msgRespuesta;
+END;

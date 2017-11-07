@@ -1,0 +1,53 @@
+CREATE FUNCTION ProcessErrorTransformationDataHeaderBranch(IN refInMsg REFERENCE, IN refEnvVar  REFERENCE, INOUT msgOut REFERENCE, IN messageNumber INTEGER)
+BEGIN
+	
+	DECLARE TAG_NAME_DATAHEADER CONSTANT CHARACTER 'DataHeader';
+	
+	--Mover referencia en el árbol de entrada hasta el contenedor DataHeader
+	DECLARE refDataHeaderIn	REFERENCE TO refInMsg;
+	MOVE refDataHeaderIn LASTCHILD;
+	MOVE refDataHeaderIn LASTCHILD;
+
+	--Validar si referencia ya apunta al DataHeader en caso de flujo response.
+	IF FIELDNAME(refDataHeaderIn) <> TAG_NAME_DATAHEADER THEN
+	--Si el mensaje proviene del flujo de request, mueva la referencia un ítem más adentro del árbol
+		MOVE refDataHeaderIn FIRSTCHILD NAMESPACE * NAME TAG_NAME_DATAHEADER;	
+	END IF;	
+	
+	
+	--Creación y referencia al mensaje de Salida
+	CREATE FIELD msgOut.DataHeader;		
+	DECLARE refDataHeaderOut	REFERENCE TO msgOut.DataHeader;
+		
+	--Declaración de variables
+	DECLARE nombreOperacion					CHARACTER COALESCE( FIELDVALUE(refDataHeaderIn.nombreOperacion),
+																FIELDVALUE(refEnvVar.nombreOperacion) );
+																
+	DECLARE total							CHARACTER COALESCE( FIELDVALUE(refDataHeaderIn.total),
+																FIELDVALUE(refEnvVar.total) );
+	
+	DECLARE idTransaccion					CHARACTER COALESCE( FIELDVALUE(refDataHeaderIn.idTransaccion),
+																FIELDVALUE(refEnvVar.idTransaccion) );	
+	
+	--Mapeo campos de salida
+	SET refDataHeaderOut.nombreOperacion	= nombreOperacion;
+	SET refDataHeaderOut.total				= total;
+	SET refDataHeaderOut.caracterAceptacion	= ACEPTA_MAL;
+	SET refDataHeaderOut.ultimoMensaje		= UNO;	
+	SET refDataHeaderOut.idTransaccion		= idTransaccion;
+	
+	IF CONTAINS(CODIGOS_ERROR_VALIDACION, CAST (messageNumber AS CHARACTER)) THEN
+		--Mapeo en caso de error de validación mensaje de entrada
+		SET refDataHeaderOut.codMsgRespuesta	= COD_DATA_IN_ERROR;
+		SET refDataHeaderOut.msgRespuesta		= DESC_DATA_IN_ERROR;
+	ELSEIF(messageNumber = 2951)THEN
+		--Mapeo en caso de error de homologación
+		SET refDataHeaderOut.codMsgRespuesta	= COD_HOMOLOG_ERROR;
+		SET refDataHeaderOut.msgRespuesta		= DESC_HOMOLOG_ERROR; 
+	ELSE
+		--Mapeo en caso de error de ejecución del ESB
+		SET refDataHeaderOut.codMsgRespuesta	= DefaultCode;
+		SET refDataHeaderOut.msgRespuesta		= DefaultDescription;
+	END IF;		
+			
+END;

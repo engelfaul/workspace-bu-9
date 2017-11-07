@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MRMessageSet id="MR4KQL4002001" name="SVC_PA_NitOrigenMsgSet" parser="XMLNSC">
+  <MRMsgCollection
+    href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd"
+    prefix="" targetNamespace="">
+    <message
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/NitOrigen;XSDElementDeclaration$MRMessage" name="NitOrigen"/>
+    <message
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/NitOrigenResponse;XSDElementDeclaration=1$MRMessage" name="NitOrigenResponse"/>
+    <message
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/DataType;XSDElementDeclaration=2$MRMessage" name="DataType"/>
+    <message
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/RequestType;XSDElementDeclaration=3$MRMessage" name="RequestType"/>
+    <message
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/NitOrigenResponseType;XSDElementDeclaration=4$MRMessage" name="NitOrigenResponseType"/>
+    <message
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/DataHeaderType;XSDElementDeclaration=5$MRMessage" name="DataHeaderType"/>
+    <message
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/NitOrigenType;XSDElementDeclaration=6$MRMessage" name="NitOrigenType"/>
+    <message
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/ResponseType;XSDElementDeclaration=7$MRMessage" name="ResponseType"/>
+    <message
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/DataHeaderResponseType;XSDElementDeclaration=8$MRMessage" name="DataHeaderResponseType"/>
+    <message
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/DataResponseType;XSDElementDeclaration=9$MRMessage" name="DataResponseType"/>
+    <message
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/RegistrosRepetitivosResponseType;XSDElementDeclaration=10$MRMessage" name="RegistrosRepetitivosResponseType"/>
+    <element
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/NitOrigen;XSDElementDeclaration"
+      name="NitOrigen" type="mset://SVC_PA_NitOrigenMsgSet#/-/complexType{}NitOrigenType"/>
+    <element
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/NitOrigenResponse;XSDElementDeclaration=1"
+      name="NitOrigenResponse" type="mset://SVC_PA_NitOrigenMsgSet#/-/complexType{}NitOrigenResponseType"/>
+    <element
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/DataType;XSDElementDeclaration=2"
+      name="DataType" type="mset://SVC_PA_NitOrigenMsgSet#/-/complexType{}DataType"/>
+    <element
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/RequestType;XSDElementDeclaration=3"
+      name="RequestType" type="mset://SVC_PA_NitOrigenMsgSet#/-/complexType{}RequestType"/>
+    <element
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/NitOrigenResponseType;XSDElementDeclaration=4"
+      name="NitOrigenResponseType" type="mset://SVC_PA_NitOrigenMsgSet#/-/complexType{}NitOrigenResponseType"/>
+    <element
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/DataHeaderType;XSDElementDeclaration=5"
+      name="DataHeaderType" type="mset://SVC_PA_NitOrigenMsgSet#/-/complexType{}DataHeaderType"/>
+    <element
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/NitOrigenType;XSDElementDeclaration=6"
+      name="NitOrigenType" type="mset://SVC_PA_NitOrigenMsgSet#/-/complexType{}NitOrigenType"/>
+    <element
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/ResponseType;XSDElementDeclaration=7"
+      name="ResponseType" type="mset://SVC_PA_NitOrigenMsgSet#/-/complexType{}ResponseType"/>
+    <element
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/DataHeaderResponseType;XSDElementDeclaration=8"
+      name="DataHeaderResponseType" type="mset://SVC_PA_NitOrigenMsgSet#/-/complexType{}DataHeaderResponseType"/>
+    <element
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/DataResponseType;XSDElementDeclaration=9"
+      name="DataResponseType" type="mset://SVC_PA_NitOrigenMsgSet#/-/complexType{}DataResponseType"/>
+    <element
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/RegistrosRepetitivosResponseType;XSDElementDeclaration=10"
+      name="RegistrosRepetitivosResponseType" type="mset://SVC_PA_NitOrigenMsgSet#/-/complexType{}RegistrosRepetitivosResponseType"/>
+    <complexType
+      baseType="mset://SVC_PA_NitOrigenMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/DataType;XSDComplexTypeDefinition" name="DataType"/>
+    <complexType
+      baseType="mset://SVC_PA_NitOrigenMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/RequestType;XSDComplexTypeDefinition=1" name="RequestType"/>
+    <complexType
+      baseType="mset://SVC_PA_NitOrigenMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/NitOrigenResponseType;XSDComplexTypeDefinition=2" name="NitOrigenResponseType"/>
+    <complexType
+      baseType="mset://SVC_PA_NitOrigenMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/DataHeaderType;XSDComplexTypeDefinition=3" name="DataHeaderType"/>
+    <complexType
+      baseType="mset://SVC_PA_NitOrigenMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/NitOrigenType;XSDComplexTypeDefinition=4" name="NitOrigenType"/>
+    <complexType
+      baseType="mset://SVC_PA_NitOrigenMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/ResponseType;XSDComplexTypeDefinition=5" name="ResponseType"/>
+    <complexType
+      baseType="mset://SVC_PA_NitOrigenMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/DataHeaderResponseType;XSDComplexTypeDefinition=6" name="DataHeaderResponseType"/>
+    <complexType
+      baseType="mset://SVC_PA_NitOrigenMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/DataResponseType;XSDComplexTypeDefinition=7" name="DataResponseType"/>
+    <complexType
+      baseType="mset://SVC_PA_NitOrigenMsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_NitOrigenMsgSet/SVC_PA_NitOrigenMsgSet/NitOrigen.mxsd#/0/RegistrosRepetitivosResponseType;XSDComplexTypeDefinition=8" name="RegistrosRepetitivosResponseType"/>
+  </MRMsgCollection>
+</MRMessageSet>

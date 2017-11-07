@@ -1,0 +1,21 @@
+CREATE PROCEDURE StripNamespaces(IN StartRefPtr REFERENCE) 
+BEGIN 
+	DECLARE FieldRefPtr REFERENCE TO StartRefPtr; 
+	
+	MOVE FieldRefPtr FIRSTCHILD; 
+	IF LASTMOVE(FieldRefPtr) THEN 
+		IF FIELDTYPE(FieldRefPtr) IN (0x01000000, 0x03000000) THEN 
+			SET FieldRefPtr.(XML.NamespaceDecl)* = NULL; 
+			SET FieldRefPtr NAMESPACE = ''; 
+		END IF; 
+	END IF;	
+	
+	WHILE LASTMOVE(FieldRefPtr) DO 
+		CALL StripNamespaces(FieldRefPtr); 
+		IF FIELDTYPE(FieldRefPtr) IN (0x01000000, 0x03000000) THEN 
+			SET FieldRefPtr.(XML.NamespaceDecl)* = NULL; 
+			SET FieldRefPtr NAMESPACE = ''; 
+		END IF; 
+		MOVE FieldRefPtr NEXTSIBLING; 
+	END WHILE; 
+END;

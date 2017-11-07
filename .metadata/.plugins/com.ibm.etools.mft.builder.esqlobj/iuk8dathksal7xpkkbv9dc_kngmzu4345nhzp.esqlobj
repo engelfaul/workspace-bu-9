@@ -1,0 +1,18 @@
+CREATE COMPUTE MODULE RestoreEnvironment
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- dejar pasar el mensaje de respuesta
+		SET OutputRoot = InputRoot;
+		
+		PROPAGATE TO TERMINAL 'out' MESSAGE OutputRoot DELETE DEFAULT;
+		
+		-- construir mensaje de cancelar timeout
+		SET OutputRoot.XMLNSC.TimeoutCancel.Action = Environment.Variables.TimeoutCancel.Action;
+		SET OutputRoot.XMLNSC.TimeoutCancel.Identifier = Environment.Variables.TimeoutCancel.Identifier;
+		
+		PROPAGATE TO TERMINAL 'out1' MESSAGE OutputRoot DELETE NONE;
+		
+		RETURN FALSE;
+	END;
+
+	END MODULE;

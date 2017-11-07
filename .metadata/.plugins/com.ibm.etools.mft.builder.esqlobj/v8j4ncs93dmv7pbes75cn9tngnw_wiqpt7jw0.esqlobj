@@ -1,0 +1,15 @@
+CREATE FUNCTION getBusReg_HomologTipoProdCharacterPA(IN codTP CHARACTER,IN codHomolog CHARACTER) RETURNS CHARACTER
+BEGIN
+	DECLARE vistaHomologReference 	REFERENCE TO VISTA_HOMOLOG_TP;
+	DECLARE msgRespuesta			CHARACTER;
+	DECLARE CONV_COD_TP             CHARACTER VACIO;
+	SET CONV_COD_TP = CAST(codTP AS CHARACTER);
+	
+	--Obtener la tabla de homologación
+	IF CARDINALITY(VISTA_HOMOLOG_TP.row[]) = 0 THEN
+		CALL loadHomologView(codHomolog, vistaHomologReference);
+	END IF;
+	-- Obtener la homologación del nombre de la operación
+	SET msgRespuesta = setHomologatedDescription(CANAL_PA,codHomolog,CONV_COD_TP, VACIO, vistaHomologReference);
+	RETURN msgRespuesta;
+END;

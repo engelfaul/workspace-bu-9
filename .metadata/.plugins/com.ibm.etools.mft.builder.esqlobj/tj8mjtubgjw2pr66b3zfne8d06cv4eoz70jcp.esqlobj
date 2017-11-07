@@ -1,0 +1,20 @@
+CREATE FUNCTION  HomoloServiceCod(IN serviceName CHARACTER, IN consecutive INTEGER, IN serviceTable REFERENCE)
+	RETURNS CHARACTER
+	BEGIN
+  	
+    DECLARE result ROW;
+    DECLARE nomTransaccion CHARACTER;
+    DECLARE homolog CHARACTER;
+	
+    SET result.datos  = THE(			   
+		   SELECT T.COD_SERVICIO
+		   FROM serviceTable.row[] AS T 
+		   WHERE T.NOMBRE_SERVICIO=serviceName
+		   AND T.CONSECUTIVO_TX=consecutive
+		   );
+		   
+	SET nomTransaccion = result.datos.COD_SERVICIO;
+    SET homolog = COALESCE(FIELDVALUE(result.datos.COD_SERVICIO),'0');
+	
+    RETURN homolog;
+END;

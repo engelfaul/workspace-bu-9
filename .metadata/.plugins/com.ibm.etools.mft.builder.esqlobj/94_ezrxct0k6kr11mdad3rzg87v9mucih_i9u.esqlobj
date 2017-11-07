@@ -1,0 +1,25 @@
+CREATE FUNCTION FormatearNumeroDosDecimales(IN cadena CHARACTER) RETURNS DECIMAL
+BEGIN
+
+	--Declaracion de Constantes
+	DECLARE sizeEntVar 		INTEGER 0;
+	DECLARE rigthDigits 	CHARACTER '';
+	DECLARE leftDigits		CHARACTER '';
+	DECLARE integerDigits 	INTEGER 1;
+	DECLARE initial 		INTEGER;
+	DECLARE decimalDigits 	CONSTANT INTEGER 2;
+	DECLARE resultCharacter CHARACTER '';
+	DECLARE point   		CHARACTER '.';
+	DECLARE decimalReturn	DECIMAL;
+	
+	-- Realizacion de la transformacion
+	SET sizeEntVar = LENGTH(cadena);
+	SET integerDigits 	= sizeEntVar - decimalDigits;		
+	SET initial			= sizeEntVar - 1;
+	SET rigthDigits 	= SUBSTRING(cadena FROM initial FOR 2);
+	SET leftDigits		= SUBSTRING(cadena FROM 1 FOR integerDigits);
+	SET resultCharacter = leftDigits||point||rigthDigits;
+	SET decimalReturn 	= CAST(resultCharacter AS DECIMAL);
+	
+	RETURN decimalReturn;
+END;

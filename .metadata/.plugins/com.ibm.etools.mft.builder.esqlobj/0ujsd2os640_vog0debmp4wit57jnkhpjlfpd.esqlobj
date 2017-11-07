@@ -1,0 +1,89 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+		
+		CALL CopyMessageHeaders();
+        
+        --Referencia al Header y Body del envolvente
+        DECLARE refMsgIn         REFERENCE TO InputRoot.XMLNSC.*:esbXML;
+        DECLARE refHeaderIn      REFERENCE TO refMsgIn.Header;
+        DECLARE refBodyIn        REFERENCE TO refMsgIn.Body;
+            
+        --Referencia al OutputLocalEnvironment
+        DECLARE refLocEnv 		 REFERENCE TO OutputLocalEnvironment;
+                                                
+        --Referencia al Environment
+        CREATE FIELD Environment.Variables;
+        DECLARE refEnvVar        REFERENCE TO Environment.Variables;
+        
+        --Crear mensaje de salida
+        CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML;
+        DECLARE refMsgOut        REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML;
+        
+        --Crear campo y referencia Header de salida.
+        CREATE FIELD refMsgOut.Header;
+        DECLARE refHeaderOut     REFERENCE TO refMsgOut.Header;
+        
+        --Declaración de los tres parámetros de entrada para la función de manejo del ExceptionList
+        DECLARE nameSpaceResp	 CHARACTER FIELDVALUE(refEnvVar.NameSpace);
+        DECLARE messageText      CHARACTER VACIO;
+        DECLARE parentName       CHARACTER VACIO;
+        DECLARE catlgName        CHARACTER VACIO;
+        DECLARE messageNumber    INTEGER   ZERO_INT;        
+        
+        --Transportar el Header de la envoltura esbXML      
+        SET refHeaderOut = refHeaderIn;
+        
+        --Validacion MessageID
+        IF refHeaderIn.messageId IS NULL OR FIELDVALUE(refHeaderIn.messageId) = VACIO THEN 
+            SET refHeaderOut.messageId = InputRoot.MQMD.CorrelId; 
+        ELSE 
+            SET refHeaderOut.messageId = refHeaderIn.messageId; 
+        END IF;
+                
+        --Llamado a función que construye un SystemException en el esbXML:Header    
+        CALL BuildHeaderSystemException(refHeaderOut, InputExceptionList, 'PA.ADPRPG.ACSN.REQ');
+        
+        --Propagar mensaje al HandleError
+        PROPAGATE TO TERMINAL 'out1' MESSAGE OutputRoot DELETE NONE;
+                
+        CALL getLastExceptionDetail(InputExceptionList, messageNumber, messageText, parentName, catlgName);     
+        
+        --Crear campo y referencia Body de salida
+        CREATE FIELD refMsgOut.Body;
+        DECLARE refBodyOut           REFERENCE TO refMsgOut.Body;
+        
+        CREATE FIELD refBodyOut.V1_Autenticacion:mjsResCerrarSesion;
+        DECLARE refRespOut												REFERENCE TO refBodyOut.V1_Autenticacion:mjsResCerrarSesion;
+        
+        --Declarar prefijos de carga útil
+        SET refRespOut.(XMLNSC.NamespaceDecl)xmlns:v1 					= V1_Autenticacion;
+        SET refRespOut.(XMLNSC.NamespaceDecl)xmlns:v11 					= v11Res;
+        SET refRespOut.(XMLNSC.NamespaceDecl)xmlns:v12 					= v12Res;
+        SET refRespOut.(XMLNSC.NamespaceDecl)xmlns:v13 					= v13Res;    
+           
+        --Llamado a función que construye el mensaje de salida por Error Datos de Entrada (Error Tecnico)
+        CALL ProcessErrorTransformationSCNRegional(refBodyIn, refEnvVar, refRespOut, messageNumber);
+        
+        --CREATE FIELD refRespOut.V1_Autenticacion:seguridadTokenTipo;
+
+        --Setear la cola de salida
+        CALL SetDestinationListHd(refHeaderOut, refLocEnv);
+		
+		-- CALL CopyMessageHeaders();
+		-- CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;

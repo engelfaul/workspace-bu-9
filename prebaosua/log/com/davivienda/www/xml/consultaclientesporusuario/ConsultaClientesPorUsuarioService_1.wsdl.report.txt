@@ -1,0 +1,8 @@
+
+
+Se está importando el archivo: D:\davivienda\wsdl davivienda\ConsultaClientesPorUsuarioService_1.wsdl
+
+BIP0224W El conjunto de mensajes no tiene definida ninguna capa de formato físico (WF) XML. En el modelo sólo aparecerá la información lógica.
+Parsing wsdl binding {http://www.davivienda.com/xml/ConsultaClientesPorUsuario}ConsultaClientesPorUsuarioSOAP_HTTP_Binding.
+Parsing wsdl binding input ConsultaClientesPorUsuario.
+Parsing wsdl binding output ConsultaClientesPorUsuario.

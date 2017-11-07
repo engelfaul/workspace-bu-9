@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ComIbmCompute.msgnode="ComIbmCompute.msgnode" xmlns:ComIbmMQGet.msgnode="ComIbmMQGet.msgnode" xmlns:ComIbmMQInput.msgnode="ComIbmMQInput.msgnode" xmlns:ComIbmMQOutput.msgnode="ComIbmMQOutput.msgnode" xmlns:ComIbmRoute.msgnode="ComIbmRoute.msgnode" xmlns:ComIbmTryCatch.msgnode="ComIbmTryCatch.msgnode" xmlns:com_ibm_ams_framework_commons_ErrorFlow.subflow="com/ibm/ams/framework/commons/ErrorFlow.subflow" xmlns:com_ibm_ams_framework_commons_TraceAndAuditFlow.subflow="com/ibm/ams/framework/commons/TraceAndAuditFlow.subflow"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow" xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="com/davivienda/busregional/servicios/ActualizacionParametrosNotificaciones_Response.msgflow"
+    nsPrefix="com_davivienda_busregional_servicios_ActualizacionParametrosNotificaciones_Response.msgflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.DefaultCode" name="DefaultCode" defaultValueLiteral="3200">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.DefaultDescription" name="DefaultDescription" defaultValueLiteral="Ha ocurrido un error No Esperado en el ESB">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <translation xmi:type="utility:TranslatableString" key="ActualizacionParametrosNotificaciones_Response" bundleName="com/davivienda/busregional/servicios/ActualizacionParametrosNotificaciones_Response" pluginId="SVC_PA_ActualizacionParametrosNotificaciones"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/SVC_PA_ActualizacionParametrosNotificaciones/icons/full/obj16/ActualizacionParametrosNotificaciones_Response.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/SVC_PA_ActualizacionParametrosNotificaciones/icons/full/obj30/ActualizacionParametrosNotificaciones_Response.gif"/>
+    <composition>
+      <nodes xmi:type="ComIbmTryCatch.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_14" location="326,130">
+        <translation xmi:type="utility:ConstantString" string="HandleExceptions"/>
+      </nodes>
+      <nodes xmi:type="com_ibm_ams_framework_commons_TraceAndAuditFlow.subflow:FCMComposite_1" xmi:id="FCMComposite_1_15" location="384,302" traceabilityPoint="PA.SVC.CA001.APAN.RESP.IN" ERROR.IN="PA.ERROR.IN" LogQueueName="PA.LOG.IN" AuditQueueName="PA.AUDIT.IN">
+        <translation xmi:type="utility:ConstantString" string="TRACE.RESP.IN"/>
+      </nodes>
+      <nodes xmi:type="com_ibm_ams_framework_commons_ErrorFlow.subflow:FCMComposite_1" xmi:id="FCMComposite_1_16" location="651,50" ERROR.IN="PA.ERROR.IN">
+        <translation xmi:type="utility:ConstantString" string="HandlerError"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQGet.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_17" location="500,302" queueName="PA.SVC.CA001.APAN.STORE" messageDomainProperty="XMLNSC" transactionMode="no" generateMode="messageAndLocalEnvironment" copyMessage="copyEntireMessage" inputMQMDLocation="InputRoot.MQMD" getWithCorrelID="true" outputDataLocation="Environment" resultDataLocation="ResultRoot.XMLNSC">
+        <translation xmi:type="utility:ConstantString" string="GetStoreMessage"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_18" location="1073,300" queueName="PA.SVC.CA001.APAN.OUT" destinationMode="list" transactionMode="no" persistenceMode="no">
+        <translation xmi:type="utility:ConstantString" string="PA.SVC.CA001.CCPU.OUT"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_19" location="144,130" queueName="PA.SVC.CA001.APAN.RESP" messageDomainProperty="XMLNSC" messageSetProperty="DAV_esbXML" transactionMode="no">
+        <translation xmi:type="utility:ConstantString" string="PA.SVC.CA001.CCPU.RESP"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_20" location="734,208" computeExpression="esql://routine/com.davivienda.busregional.servicios#ApplyResponseTransformation_APAN.Main" computeMode="destinationAndMessage">
+        <translation xmi:type="utility:ConstantString" string="ApplyResponseTransformation"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_21" location="713,299" computeExpression="esql://routine/com.davivienda.busregional.servicios#ApplyMessageExceptionTransformation_APAN.Main" computeMode="destinationAndMessage">
+        <translation xmi:type="utility:ConstantString" string="ApplyMessageExceptionTransformation"/>
+      </nodes>
+      <nodes xmi:type="ComIbmRoute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_22" location="602,298" distributionMode="first">
+        <outTerminals terminalNodeID="Match" dynamic="true" label="Match"/>
+        <outTerminals terminalNodeID="SuccesfulResponse" dynamic="true" label="SuccesfulResponse"/>
+        <outTerminals terminalNodeID="Fault" dynamic="true" label="Fault"/>
+        <outTerminals terminalNodeID="errorResponse" dynamic="true" label="errorResponse"/>
+        <translation xmi:type="utility:ConstantString" string="RouteResp"/>
+        <filterTable filterPattern="$Root/XMLNSC/esbXML:esbXML/Body/TAPAN_RESP/Header/ACEPTABM= 'B'" routingOutputTerminal="SuccesfulResponse"/>
+        <filterTable filterPattern="$Root/XMLNSC/esbXML:esbXML/Body/TAPAN_RESP/Header/ACEPTABM!= 'B'" routingOutputTerminal="errorResponse"/>
+        <filterTable filterPattern="$Root/XMLNSC/esbXML:esbXML/Body/Fault/MessageException" routingOutputTerminal="Fault"/>
+        <filterTable filterPattern="$Root/XMLNSC/esbXML:esbXML/Body/MessageException" routingOutputTerminal="Fault"/>
+        <nsMappingTable nsPrefix="soapenv" namespace="http://schemas.xmlsoap.org/soap/envelope/"/>
+        <nsMappingTable nsPrefix="esbXML" namespace="http://davivienda.com/envelope/esbxml"/>
+      </nodes>
+      <nodes xmi:type="com_ibm_ams_framework_commons_ErrorFlow.subflow:FCMComposite_1" xmi:id="FCMComposite_1_23" location="951,385" ERROR.IN="PA.ERROR.IN">
+        <translation xmi:type="utility:ConstantString" string="HandlerError_Bus"/>
+      </nodes>
+      <nodes xmi:type="com_ibm_ams_framework_commons_TraceAndAuditFlow.subflow:FCMComposite_1" xmi:id="FCMComposite_1_24" location="804,127" traceabilityPoint="PA.SVC.CA001.APAN.RESP.ERR" ERROR.IN="PA.ERROR.IN" LogQueueName="PA.LOG.IN" AuditQueueName="PA.AUDIT.IN">
+        <translation xmi:type="utility:ConstantString" string="TRACE.RESP.ERR"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_25" location="727,384" computeExpression="esql://routine/com.davivienda.busregional.servicios#ApplyBusinessErrorTransformation_APAN.Main" computeMode="destinationAndMessage">
+        <translation xmi:type="utility:ConstantString" string="ApplyBusinessErrorTransformation"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_26" location="571,126" computeExpression="esql://routine/com.davivienda.busregional.servicios#ProcessErrorMessageResp.Main" computeMode="destinationAndMessage">
+        <translation xmi:type="utility:ConstantString" string="ProcessErrorMessageResp"/>
+      </nodes>
+      <nodes xmi:type="com_ibm_ams_framework_commons_TraceAndAuditFlow.subflow:FCMComposite_1" xmi:id="FCMComposite_1_27" location="953,300" traceabilityPoint="PA.SVC.CA001.CCPU.RESP.OUT" ERROR.IN="PA.ERROR.IN" LogQueueName="PA.LOG.IN" AuditQueueName="PA.AUDIT.IN">
+        <translation xmi:type="utility:ConstantString" string="TRACE.RESP.OUT"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="918,60" queueName="MIA.YO">
+        <translation xmi:type="utility:ConstantString" string="Salida MQ"/>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_16" targetNode="FCMComposite_1_27" sourceNode="FCMComposite_1_20" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_17" targetNode="FCMComposite_1_27" sourceNode="FCMComposite_1_25" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_18" targetNode="FCMComposite_1_25" sourceNode="FCMComposite_1_22" sourceTerminalName="errorResponse" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_19" targetNode="FCMComposite_1_27" sourceNode="FCMComposite_1_21" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_20" targetNode="FCMComposite_1_24" sourceNode="FCMComposite_1_26" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_21" targetNode="FCMComposite_1_16" sourceNode="FCMComposite_1_26" sourceTerminalName="OutTerminal.out1" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_22" targetNode="FCMComposite_1_18" sourceNode="FCMComposite_1_24" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.in">
+        <bendPoints>252,-10,-26,-183</bendPoints>
+      </connections>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_23" targetNode="FCMComposite_1_23" sourceNode="FCMComposite_1_25" sourceTerminalName="OutTerminal.out1" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_24" targetNode="FCMComposite_1_15" sourceNode="FCMComposite_1_14" sourceTerminalName="OutTerminal.try" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_25" targetNode="FCMComposite_1_14" sourceNode="FCMComposite_1_19" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_26" targetNode="FCMComposite_1_21" sourceNode="FCMComposite_1_22" sourceTerminalName="Fault" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_27" targetNode="FCMComposite_1_18" sourceNode="FCMComposite_1_27" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_28" targetNode="FCMComposite_1_22" sourceNode="FCMComposite_1_17" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_29" targetNode="FCMComposite_1_20" sourceNode="FCMComposite_1_22" sourceTerminalName="SuccesfulResponse" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_30" targetNode="FCMComposite_1_26" sourceNode="FCMComposite_1_14" sourceTerminalName="OutTerminal.catch" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_31" targetNode="FCMComposite_1_17" sourceNode="FCMComposite_1_15" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_1" sourceNode="FCMComposite_1_20" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_2" targetNode="FCMComposite_1_1" sourceNode="FCMComposite_1_21" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_3" targetNode="FCMComposite_1_1" sourceNode="FCMComposite_1_25" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_4" targetNode="FCMComposite_1_1" sourceNode="FCMComposite_1_19" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+    </composition>
+    <propertyOrganizer>
+      <propertyDescriptor groupName="Group.Básicas" configurable="true" userDefined="true" describedAttribute="Property.DefaultCode">
+        <propertyName xmi:type="utility:TranslatableString" key="Property.DefaultCode" bundleName="com/davivienda/busregional/servicios/ActualizacionParametrosNotificaciones_Response" pluginId="SVC_PA_ActualizacionParametrosNotificaciones"/>
+        <propertyDescriptor groupName="Group.Básicas" configurable="true" userDefined="true" describedAttribute="Property.DefaultDescription">
+          <propertyName xmi:type="utility:TranslatableString" key="Property.DefaultDescription" bundleName="com/davivienda/busregional/servicios/ActualizacionParametrosNotificaciones_Response" pluginId="SVC_PA_ActualizacionParametrosNotificaciones"/>
+        </propertyDescriptor>
+      </propertyDescriptor>
+    </propertyOrganizer>
+    <stickyBoard/>
+  </eClassifiers>
+</ecore:EPackage>

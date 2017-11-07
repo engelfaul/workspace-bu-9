@@ -1,0 +1,41 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+		-- mantener el correlid
+		CALL CopyMessageHeaders();
+		
+		-- construcción del mensaje de salida
+		DECLARE OutputMessage REFERENCE TO OutputRoot.XMLNSC;
+		
+		-- configurar la notificación para error de sistema
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML.Header;
+		DECLARE OutputHeader REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML.Header;
+		
+		SET OutputHeader = InputHeader; 
+		CALL BuildHeaderSystemException(OutputHeader,InputExceptionList,'PA.ADP.INT.RPG.REQ.' || faultactor);
+		
+		-- construcción del mensaje de excepción
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML.Body;
+		DECLARE OutputBody		REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML.Body;
+			
+		CALL BuildMessageException (OutputBody, DefaultCode, DefaultDescription);
+		
+		-- enrutar la respuesta al componente de servicio que invocó el adaptador
+		CREATE FIELD OutputLocalEnvironment.Destination.MQDestinationList;
+		DECLARE destination REFERENCE TO OutputLocalEnvironment.Destination.MQDestinationList;
+		
+		SET destination.DestinationData[1].queueName =  InputHeader.internalRoutingData.replyToQueue.queueName;
+		SET destination.DestinationData[1].queueManagerName =  InputHeader.internalRoutingData.replyToQueue.queueManagerName;
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+

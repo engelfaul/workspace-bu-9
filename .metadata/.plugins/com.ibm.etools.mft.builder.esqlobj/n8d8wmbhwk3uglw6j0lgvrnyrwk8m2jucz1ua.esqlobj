@@ -1,0 +1,22 @@
+CREATE FUNCTION  HomologationTypeDescr(IN VAL_IN CHARACTER,IN ID_DOMINIO CHARACTER,IN SIS_ORI CHARACTER, IN SIS_DES CHARACTER, IN HOMOLOGATION_TABLE REFERENCE)
+	RETURNS CHARACTER
+	BEGIN  	
+    DECLARE result ROW;
+    DECLARE nomTransaccion CHARACTER;
+    DECLARE homolog CHARACTER;	
+    SET result.datos  = THE(			   
+		   SELECT T.DESCRIPCION
+		   FROM HOMOLOGATION_TABLE.row[] AS T 
+		   WHERE T.ID_DOMINIO =ID_DOMINIO
+		   AND T.VAL_IN = VAL_IN
+		   AND T.SISTEMA_ORIGEN = SIS_ORI
+		   AND T.SISTEMA_DESTINO =SIS_DES
+		   );		   
+	SET nomTransaccion = result.datos.DESCRIPCION;
+    SET homolog = COALESCE(FIELDVALUE(result.datos.DESCRIPCION),'null');
+    IF 	homolog = 'null' THEN
+    	THROW USER EXCEPTION CATALOG '00000' MESSAGE 10012 VALUES ('Error en homologacion en componente en Dominio: '|| ID_DOMINIO);
+    ELSE 		
+    	RETURN homolog;
+    END IF;
+	END;

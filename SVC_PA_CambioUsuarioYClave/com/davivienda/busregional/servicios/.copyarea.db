@@ -1,0 +1,7 @@
+ClearCase CopyAreaDB|4
+vServDavi\ServBusRegional\SVC_PA_CambioUsuarioYClave\com\davivienda\busregional\servicios
+2
+3
+18:CambioUsuarioYClave.esql|1|15e7cf65da7|5ef7|ed6cdb8f|ad87ba647ea4480cbae3c174814742a7|0
+23:CambioUsuarioYClave_Request.msgflow|1|15e7cf65da7|3e4c|53921d18|a959288540d24e709cae187cfcbf3063|0
+24:CambioUsuarioYClave_Response.msgflow|1|15e7cf65d97|301d|4ebc8403|64615d7eca9a4e17a17dc91a24825bad|0

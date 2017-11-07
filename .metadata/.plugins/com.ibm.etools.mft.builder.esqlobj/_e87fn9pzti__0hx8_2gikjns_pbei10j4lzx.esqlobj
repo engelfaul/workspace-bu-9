@@ -1,0 +1,36 @@
+CREATE FUNCTION TechnicalErrorTransformationSCNBranchGUYC(IN refInMsg REFERENCE, IN refEnvVar REFERENCE, INOUT msgOut REFERENCE)
+BEGIN	
+	--Referencias a mensaje de entrada
+	DECLARE refMessageException REFERENCE TO refInMsg.MessageException;
+	
+	---Declaración de variables
+	DECLARE code			CHARACTER FIELDVALUE(refMessageException.Code); 
+	
+	CREATE FIELD msgOut.V1_GestionClaveCanalVirtual:contextoRespuesta;
+    DECLARE refContextoRespuesta 										REFERENCE TO msgOut.V1_GestionClaveCanalVirtual:contextoRespuesta;
+    
+    CREATE FIELD refContextoRespuesta.v11Res:resultadoTransaccion;
+    DECLARE refResultadoTrans											REFERENCE TO refContextoRespuesta.v11Res:resultadoTransaccion;
+    
+    CREATE FIELD refContextoRespuesta.v11Res:error;
+    DECLARE refError													REFERENCE TO refContextoRespuesta.v11Res:error;
+    
+    --Mapeos de los campos de salida
+    SET refResultadoTrans.v12Res:valCaracterAceptacion	= ACEPTA_MAL;
+	
+	CASE 
+	--Mapeos en caso de escenario error de conexión
+		WHEN code = CONNECTION_ERROR_CODE_ADP_INT THEN
+			SET refError.v13Res:codMsjRespuesta		= COD_CONNECTION_ERROR;
+    		SET refError.v13Res:valMsjRespuesta		= DESC_CONNECTION_ERROR;
+	--Mapeos en caso de escenario error de Timeout
+		WHEN code = TIMEOUT_ERROR_CODE_ADP_INT THEN
+			SET refError.v13Res:codMsjRespuesta		= COD_TIMEOUT_ERROR;
+    		SET refError.v13Res:valMsjRespuesta		= DESC_TIMEOUT_ERROR;			
+	--Mapeos en caso de un error no esperado
+		ELSE
+			SET refError.v13Res:codMsjRespuesta		= DefaultCode;
+    		SET refError.v13Res:valMsjRespuesta		= DefaultDescription;	
+	END CASE;
+		
+END;

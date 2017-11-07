@@ -1,0 +1,22 @@
+CREATE PROCEDURE getFileXorMsgValue(IN refInclude 	 REFERENCE,
+									IN refElemName 	 REFERENCE,
+									IN sourcePayload REFERENCE,
+									IN xPath 		 CHARACTER,
+									INOUT refTarget	 REFERENCE ) 
+	BEGIN
+		DECLARE result	CHARACTER;
+	--Si existe y está habilitado tomar ServiceId del archivo de configuración
+		IF LASTMOVE(refInclude) AND CAST(refInclude AS BOOLEAN) THEN
+			--Si está habilitado en el archivo de configuración tomarlo de allí.
+			SET result = refElemName;
+		ELSE
+			--De lo contrario obtenerlo del mensaje ingresado al ESB
+			CALL GetFieldXPathNS(sourcePayload, xPath)  INTO result;
+		END IF;
+		
+		IF result IS NULL THEN
+			SET refTarget VALUE	= NULL;
+		ELSE
+			SET refTarget = result;
+		END IF;
+	END;

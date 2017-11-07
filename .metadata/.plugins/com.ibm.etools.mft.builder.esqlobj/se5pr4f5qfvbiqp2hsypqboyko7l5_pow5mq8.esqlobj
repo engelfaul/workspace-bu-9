@@ -1,0 +1,12 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+
+		SET OutputRoot = InputRoot;
+		
+		SET Environment.Variables.ConfigXML = cache.Configuration;
+		SET Environment.Variables.Traceable = cache.Configuration.traceable;
+		SET Environment.Variables.Timeout = cache.Configuration.timeout;
+		
+		RETURN TRUE;
+
+	END;

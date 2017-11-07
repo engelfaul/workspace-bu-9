@@ -1,0 +1,35 @@
+CREATE FUNCTION TechnicalErrorTransformationDataHeaderBranch(IN refInMsg REFERENCE, IN refEnvVar REFERENCE, INOUT msgOut REFERENCE)
+BEGIN	
+	--Referencias a mensaje de entrada
+	DECLARE refMessageException REFERENCE TO refInMsg.MessageException;
+	
+	-- Creación y referencia al mensaje de Salida
+	CREATE FIELD msgOut.DataHeader;		
+	DECLARE refDataHeaderOut	REFERENCE TO msgOut.DataHeader;		
+	
+	--Declaración de variables
+	DECLARE code			CHARACTER FIELDVALUE(refMessageException.Code); 
+	
+	--Mapeo campos de salida
+	SET refDataHeaderOut.nombreOperacion	= refEnvVar.nombreOperacion;
+	SET refDataHeaderOut.total				= refEnvVar.total;
+	SET refDataHeaderOut.caracterAceptacion	= ACEPTA_MAL;
+	SET refDataHeaderOut.ultimoMensaje		= UNO;
+	SET refDataHeaderOut.idTransaccion		= refEnvVar.idTransaccion;
+					
+	CASE 
+	--Mapeos en caso de escenario error de conexión
+		WHEN code = CONNECTION_ERROR_CODE_ADP_INT THEN
+			SET refDataHeaderOut.codMsgRespuesta	= COD_CONNECTION_ERROR;
+			SET refDataHeaderOut.msgRespuesta		= DESC_CONNECTION_ERROR;		
+	--Mapeos en caso de escenario error de Timeout
+		WHEN code = TIMEOUT_ERROR_CODE_ADP_INT THEN
+			SET refDataHeaderOut.codMsgRespuesta	= COD_TIMEOUT_ERROR;
+			SET refDataHeaderOut.msgRespuesta		= DESC_TIMEOUT_ERROR;					
+	--Mapeos en caso de un error no esperado
+		ELSE
+			SET refDataHeaderOut.codMsgRespuesta	= DefaultCode;
+			SET refDataHeaderOut.msgRespuesta		= DefaultDescription;		
+	END CASE;
+		
+END;

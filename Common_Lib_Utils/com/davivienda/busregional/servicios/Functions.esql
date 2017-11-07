@@ -1,0 +1,948 @@
+BROKER SCHEMA com.davivienda.busregional.servicios
+PATH com.davivienda.utils;
+
+/*
+ *
+ * File name: Functions.esql
+ *
+ * Purpose:   Esquema ESQL que define los modulos utilizados para las funciones
+ *				generales utilizadas en el ESB.
+ *
+ * Authors:  IBM AMS TAC Colombia
+ *                 
+ * Date      28 de Enero de 2014
+ * Version:  1.0
+ * 
+ *
+ */ 
+
+CREATE COMPUTE MODULE ResetCache
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN		
+		SET HOMOLOGATION_TABLE	   = NULL;	
+		SET VISTA_HOMOLOG          = NULL;
+		SET VISTA_HOMOLOG_TP       = NULL;	
+		RETURN FALSE;
+	END;		
+END MODULE;
+
+
+CREATE FUNCTION checkIdHomologChannel( IN idCanal			CHARACTER,
+										IN idHomologacion	CHARACTER,
+										IN refHomologView	REFERENCE )	RETURNS CHARACTER	
+BEGIN	
+    DECLARE result				ROW NULL;
+   	DECLARE resultCheck		CHARACTER '';
+
+    SET result.datos  = THE(   SELECT *
+							   FROM refHomologView.row[] AS T 
+							   WHERE T.ID_CANAL			= idCanal
+							   AND T.ID_HOMOLOGACION	= idHomologacion
+							   );
+	
+	--Se asigna a la variable resultCheck el valor 0- cuando no hay filas en el vista que cumplan con la condición  o 1 cuando ya existen filas que cumplen con la condición.
+	
+	IF CARDINALITY(result.datos[]) = 0 THEN
+		SET resultCheck= '0';
+	ELSE
+		SET resultCheck= '1';
+	END IF;	
+	
+    RETURN resultCheck	;
+END;
+
+/*
+ 	* Function: Transforma un mensaje de error técnico del Adaptador de Integración TCP
+ 	*			en un mensaje de error estandar para el canal consumidor (WS)
+ 	*           que maneje el contenedor DataHeader.
+ 	*	
+ 	* Parameters:
+ 	* IN:  REFERENCE refInMsg 		 - Referencia al arbol de entrada de error técnico.
+ 	* IN:  REFERENCE refEnvVar 		 - Referencia al arbol de Environment.Variables.
+ 	* INOUT: REFERENCE msgOut 		 - Referencia al arbol del mensaje de salida.
+ 	*
+ */
+ 
+CREATE FUNCTION TechnicalErrorTransformationDataHeader(IN refInMsg REFERENCE, IN refEnvVar REFERENCE, INOUT msgOut REFERENCE)
+BEGIN	
+	--Referencias a mensaje de entrada
+	DECLARE refMessageException REFERENCE TO refInMsg.MessageException;
+	
+	-- Creación y referencia al mensaje de Salida
+	CREATE FIELD msgOut.DataHeader;		
+	DECLARE refDataHeaderOut	REFERENCE TO msgOut.DataHeader;		
+	
+	--Declaración de variables
+	DECLARE code			CHARACTER FIELDVALUE(refMessageException.Code); 
+	
+	--Mapeo campos de salida
+	SET refDataHeaderOut.nombreOperacion	= refEnvVar.nombreOperacion;
+	SET refDataHeaderOut.total				= refEnvVar.total;
+	SET refDataHeaderOut.caracterAceptacion	= ACEPTA_MAL;
+	SET refDataHeaderOut.ultimoMensaje		= UNO;
+	SET refDataHeaderOut.idTransaccion		= refEnvVar.idTransaccion;
+					
+	CASE 
+	--Mapeos en caso de escenario error de conexión
+		WHEN code = CONNECTION_ERROR_CODE_ADP_INT THEN
+			SET refDataHeaderOut.codMsgRespuesta	= COD_CONNECTION_ERROR;
+			SET refDataHeaderOut.msgRespuesta		= DESC_CONNECTION_ERROR;		
+	--Mapeos en caso de escenario error de Timeout
+		WHEN code = TIMEOUT_ERROR_CODE_ADP_INT THEN
+			SET refDataHeaderOut.codMsgRespuesta	= COD_TIMEOUT_ERROR;
+			SET refDataHeaderOut.msgRespuesta		= DESC_TIMEOUT_ERROR;					
+	--Mapeos en caso de un error no esperado
+		ELSE
+			SET refDataHeaderOut.codMsgRespuesta	= DefaultCode;
+			SET refDataHeaderOut.msgRespuesta		= DefaultDescription;		
+	END CASE;
+		
+END;
+/*
+ 	* Function: Creación de mensaje de error técnico del componente de servicio
+ 	*           de Establecimientos flujo de entrada.
+ 	*	
+ 	* Parameters:
+ 	* IN:  REFERENCE refInMsg 		  - Referencia al árbol de entrada de error técnico.
+ 	* IN:  REFERENCE refEnvVar		  - Referencia al árbol de Environment.
+ 	* INOUT: REFERENCE msgOut 		  - Referencia al árbol del mensaje de salida.
+ 	* IN:  REFERENCE messageNumber	  - Referencia al código de error del árbol de Excepción.
+ */
+
+CREATE FUNCTION ProcessErrorTransformationDataHeader(IN refInMsg REFERENCE, IN refEnvVar  REFERENCE, INOUT msgOut REFERENCE, IN messageNumber INTEGER)
+BEGIN
+	
+	DECLARE TAG_NAME_DATAHEADER CONSTANT CHARACTER 'DataHeader';
+	
+	--Mover referencia en el árbol de entrada hasta el contenedor DataHeader
+	DECLARE refDataHeaderIn	REFERENCE TO refInMsg;
+	MOVE refDataHeaderIn LASTCHILD;
+	MOVE refDataHeaderIn LASTCHILD;
+
+	--Validar si referencia ya apunta al DataHeader en caso de flujo response.
+	IF FIELDNAME(refDataHeaderIn) <> TAG_NAME_DATAHEADER THEN
+	--Si el mensaje proviene del flujo de request, mueva la referencia un ítem más adentro del árbol
+		MOVE refDataHeaderIn FIRSTCHILD NAMESPACE * NAME TAG_NAME_DATAHEADER;	
+	END IF;	
+	
+	
+	--Creación y referencia al mensaje de Salida
+	CREATE FIELD msgOut.DataHeader;		
+	DECLARE refDataHeaderOut	REFERENCE TO msgOut.DataHeader;
+		
+	--Declaración de variables
+	DECLARE nombreOperacion					CHARACTER COALESCE( FIELDVALUE(refDataHeaderIn.nombreOperacion),
+																FIELDVALUE(refEnvVar.nombreOperacion) );
+																
+	DECLARE total							CHARACTER COALESCE( FIELDVALUE(refDataHeaderIn.total),
+																FIELDVALUE(refEnvVar.total) );
+	
+	DECLARE idTransaccion					CHARACTER COALESCE( FIELDVALUE(refDataHeaderIn.idTransaccion),
+																FIELDVALUE(refEnvVar.idTransaccion) );	
+	
+	--Mapeo campos de salida
+	SET refDataHeaderOut.nombreOperacion	= COALESCE(nombreOperacion,VACIO);
+	SET refDataHeaderOut.total				= COALESCE(total,ZERO);
+	SET refDataHeaderOut.caracterAceptacion	= ACEPTA_MAL;
+	SET refDataHeaderOut.ultimoMensaje		= UNO;	
+	SET refDataHeaderOut.idTransaccion		= COALESCE(idTransaccion,VACIO);
+	
+	IF CONTAINS(CODIGOS_ERROR_VALIDACION, CAST (messageNumber AS CHARACTER)) THEN
+		--Mapeo en caso de error de validación mensaje de entrada
+		SET refDataHeaderOut.codMsgRespuesta	= COD_DATA_IN_ERROR;
+		SET refDataHeaderOut.msgRespuesta		= DESC_DATA_IN_ERROR;
+	ELSEIF(messageNumber = 2951)THEN
+		--Mapeo en caso de error de homologación
+		SET refDataHeaderOut.codMsgRespuesta	= COD_HOMOLOG_ERROR;
+		SET refDataHeaderOut.msgRespuesta		= DESC_HOMOLOG_ERROR; 
+	ELSE
+		--Mapeo en caso de error de ejecución del ESB
+		SET refDataHeaderOut.codMsgRespuesta	= DefaultCode;
+		SET refDataHeaderOut.msgRespuesta		= DefaultDescription;
+	END IF;		
+			
+END;
+
+/*
+ 	* Function: Creación de mensaje de error técnico del componente de servicio
+ 	*           de Establecimientos flujo de entrada.
+ 	*	
+ 	* Parameters:
+ 	* IN:  REFERENCE refInMsg 		  - Referencia al árbol de entrada de error técnico.
+ 	* IN:  REFERENCE refEnvVar		  - Referencia al árbol de Environment.
+ 	* INOUT: REFERENCE msgOut 		  - Referencia al árbol del mensaje de salida.
+ 	* IN:  REFERENCE messageNumber	  - Referencia al código de error del árbol de Excepción.
+ */
+
+CREATE FUNCTION ProcessErrorTransformationDataHeaderNitOrigenBEL(IN refInMsg REFERENCE, IN refEnvVar  REFERENCE, INOUT msgOut REFERENCE, IN messageNumber INTEGER)
+BEGIN
+	
+	DECLARE TAG_NAME_DATAHEADER CONSTANT CHARACTER 'DataHeader';
+	
+	--Mover referencia en el árbol de entrada hasta el contenedor DataHeader
+	DECLARE refDataHeaderIn	REFERENCE TO refInMsg;
+	MOVE refDataHeaderIn LASTCHILD;
+	MOVE refDataHeaderIn LASTCHILD;
+
+	--Validar si referencia ya apunta al DataHeader en caso de flujo response.
+	IF FIELDNAME(refDataHeaderIn) <> TAG_NAME_DATAHEADER THEN
+	--Si el mensaje proviene del flujo de request, mueva la referencia un ítem más adentro del árbol
+		MOVE refDataHeaderIn FIRSTCHILD NAMESPACE * NAME TAG_NAME_DATAHEADER;	
+	END IF;	
+	
+	
+	--Creación y referencia al mensaje de Salida
+	CREATE FIELD msgOut.DataHeader;		
+	DECLARE refDataHeaderOut	REFERENCE TO msgOut.DataHeader;
+		
+	--Declaración de variables
+	DECLARE nombreOperacion					CHARACTER COALESCE( FIELDVALUE(refDataHeaderIn.nombreOperacion),
+																FIELDVALUE(refEnvVar.nombreOperacion) );
+																
+	DECLARE total							CHARACTER COALESCE( FIELDVALUE(refDataHeaderIn.total),
+																FIELDVALUE(refEnvVar.total) );
+	
+	--Mapeo campos de salida
+	SET refDataHeaderOut.nombreOperacion	= nombreOperacion;
+	SET refDataHeaderOut.total				= total;
+	SET refDataHeaderOut.caracterAceptacion	= ACEPTA_MAL;
+	SET refDataHeaderOut.ultimoMensaje		= UNO;
+	
+	IF CONTAINS(CODIGOS_ERROR_VALIDACION, CAST (messageNumber AS CHARACTER)) THEN
+		--Mapeo en caso de error de validación mensaje de entrada
+		SET refDataHeaderOut.codMsgRespuesta	= COD_DATA_IN_ERROR;
+		SET refDataHeaderOut.msgRespuesta		= DESC_DATA_IN_ERROR;
+	ELSEIF(messageNumber = 2951)THEN
+		--Mapeo en caso de error de homologación
+		SET refDataHeaderOut.codMsgRespuesta	= COD_HOMOLOG_ERROR;
+		SET refDataHeaderOut.msgRespuesta		= DESC_HOMOLOG_ERROR; 
+	ELSE
+		--Mapeo en caso de error de ejecución del ESB
+		SET refDataHeaderOut.codMsgRespuesta	= DefaultCode;
+		SET refDataHeaderOut.msgRespuesta		= DefaultDescription;
+	END IF;		
+			
+END;
+
+/*
+ 	* Function: Creación de mensaje de error técnico del componente de servicio
+ 	*           de Establecimientos flujo de entrada cuando el canal es REST.
+ 	*	
+ 	* Parameters:
+ 	* IN:  REFERENCE refInMsg 		  - Referencia al árbol de entrada de error técnico.
+ 	* IN:  REFERENCE refEnvVar		  - Referencia al árbol de Environment.
+ 	* INOUT: REFERENCE msgOut 		  - Referencia al árbol del mensaje de salida.
+ 	* IN:  REFERENCE messageNumber	  - Referencia al código de error del árbol de Excepción.
+ */           
+
+/*
+ 	* Function: Creación de mensaje de error técnico del componente de servicio
+ 	*           de Establecimientos flujo de entrada cuando el canal es REST.
+ 	*	
+ 	* Parameters:
+ 	* IN:  REFERENCE refInMsg 		  - Referencia al árbol de entrada de error técnico.
+ 	* IN:  REFERENCE refEnvVar		  - Referencia al árbol de Environment.
+ 	* INOUT: REFERENCE msgOut 		  - Referencia al árbol del mensaje de salida.
+ 	* IN:  REFERENCE messageNumber	  - Referencia al código de error del árbol de Excepción.
+ */           
+
+CREATE FUNCTION LoadHomologationDomain (IN SIS_BACK CHARACTER ,INOUT HOMOLOGATION_TABLE REFERENCE)
+BEGIN	
+SET HOMOLOGATION_TABLE.row[] = SELECT TBL_APL_DOM.ID_DOMINIO, 
+								      TBL_APL_DOM.SISTEMA_ORIGEN,
+								      TBL_APL_DOM.SISTEMA_DESTINO, 
+								      TBL_HOMOLOGACION.VAL_IN, 
+								      TBL_HOMOLOGACION.VAL_OUT 
+							FROM Database.IIBSCHM.TBL_APL_DOM, 
+								 Database.IIBSCHM.TBL_HOMOLOGACION 
+							WHERE TBL_HOMOLOGACION.ID_APL_DOM = TBL_APL_DOM.ID_APL_DOM
+							AND  TBL_APL_DOM.SISTEMA_DESTINO = SIS_BACK;
+							
+END;
+
+
+
+/****************************************************************
+ * 	FUNCTION loadServicesTable
+ *	carga en memoria la tabla de homologación de servicios
+ *  INOUT servicesTableRow : Variable ROW en donde se cargará la tabla
+****************************************************************/
+CREATE FUNCTION loadServicesTable (INOUT servicesTableRow REFERENCE)
+
+BEGIN
+	
+	SET servicesTableRow.row[]  = SELECT T.COD_SERVICIO, T.CONSECUTIVO_TX, T.TX_SERVICIO, T.NOMBRE_SERVICIO   
+           							FROM Database.TABLA_HOMOLOGACION_SERVICIOS AS T;
+
+END;
+
+  /*
+* Function: Devuelve el codigo del servicio homologado para un nombre de servicio. 
+*	
+* Parameters:
+* IN: CHARACTER serviceName - Nombre del servicio.
+* IN: INTEGER consecutive - Consecutivo del servicio asociado
+* IN: REFERENCE serviceTable - Consecutivo del servicio asociado
+* RETURNS: CHARACTER Devuelve el codigo de servicio homologado.
+*
+*/
+CREATE FUNCTION  HomoloServiceCod(IN serviceName CHARACTER, IN consecutive INTEGER, IN serviceTable REFERENCE)
+	RETURNS CHARACTER
+	BEGIN
+  	
+    DECLARE result ROW;
+    DECLARE nomTransaccion CHARACTER;
+    DECLARE homolog CHARACTER;
+	
+    SET result.datos  = THE(			   
+		   SELECT T.COD_SERVICIO
+		   FROM serviceTable.row[] AS T 
+		   WHERE T.NOMBRE_SERVICIO=serviceName
+		   AND T.CONSECUTIVO_TX=consecutive
+		   );
+		   
+	SET nomTransaccion = result.datos.COD_SERVICIO;
+    SET homolog = COALESCE(FIELDVALUE(result.datos.COD_SERVICIO),'0');
+	
+    RETURN homolog;
+END; 	
+
+/*
+ 	* Function: Transforma un mensaje de error técnico del Adaptador de Integración TCP
+ 	*			en un mensaje de error estandar para el canal consumidor (WS)
+ 	*           que maneje el contenedor DataHeader esta funcion no contiene el campo idTransaccion.
+ 	*	
+ 	* Parameters:
+ 	* IN:  REFERENCE refInMsg 		 - Referencia al arbol de entrada de error técnico.
+ 	* IN:  REFERENCE refEnvVar 		 - Referencia al arbol de Environment.Variables.
+ 	* INOUT: REFERENCE msgOut 		 - Referencia al arbol del mensaje de salida.
+ 	*
+ */
+ 
+CREATE FUNCTION TechnicalErrorTransformationDataHeaderSinIdTransaccion(IN refInMsg REFERENCE, IN refEnvVar REFERENCE, INOUT msgOut REFERENCE)
+BEGIN	
+	--Referencias a mensaje de entrada
+	DECLARE refMessageException REFERENCE TO refInMsg.MessageException;
+	
+	-- Creación y referencia al mensaje de Salida
+	CREATE FIELD msgOut.DataHeader;		
+	DECLARE refDataHeaderOut	REFERENCE TO msgOut.DataHeader;		
+	
+	--Declaración de variables
+	DECLARE code			CHARACTER FIELDVALUE(refMessageException.Code); 
+	
+	--Mapeo campos de salida
+	SET refDataHeaderOut.nombreOperacion	= refEnvVar.nombreOperacion;
+	SET refDataHeaderOut.total				= refEnvVar.total;
+	SET refDataHeaderOut.caracterAceptacion	= ACEPTA_MAL;
+	SET refDataHeaderOut.ultimoMensaje		= UNO;
+	
+					
+	CASE 
+	--Mapeos en caso de escenario error de conexión
+		WHEN code = CONNECTION_ERROR_CODE_ADP_INT THEN
+			SET refDataHeaderOut.codMsgRespuesta	= COD_CONNECTION_ERROR;
+			SET refDataHeaderOut.msgRespuesta		= DESC_CONNECTION_ERROR;		
+	--Mapeos en caso de escenario error de Timeout
+		WHEN code = TIMEOUT_ERROR_CODE_ADP_INT THEN
+			SET refDataHeaderOut.codMsgRespuesta	= COD_TIMEOUT_ERROR;
+			SET refDataHeaderOut.msgRespuesta		= DESC_TIMEOUT_ERROR;					
+	--Mapeos en caso de un error no esperado
+		ELSE
+			SET refDataHeaderOut.codMsgRespuesta	= DefaultCode;
+			SET refDataHeaderOut.msgRespuesta		= DefaultDescription;		
+	END CASE;
+		
+END;
+
+/****************************************************************************************************
+ 	* Function: Homologación del nombre de operación para los servicios de Bus Regional que van
+ 				hacia Honduras
+ 	*	
+ 	* Parameters:
+ 	* IN:  		CHARACTER nombreOp 	- Nombre de la operación.
+ 	* RETURN:	CHARACTER			- ID de servicio obtenido de VISTA_HOMOLOG.
+ ****************************************************************************************************/
+CREATE FUNCTION getBusReg_HomologServHN (IN nombreOp CHARACTER) RETURNS CHARACTER
+BEGIN
+	DECLARE vistaHomologReference 	REFERENCE TO VISTA_HOMOLOG;
+	DECLARE txOperacion				CHARACTER;
+	DECLARE msgRespuesta			CHARACTER;
+	--Obtener la tabla de homologación
+	IF CARDINALITY(VISTA_HOMOLOG.row[]) = 0 THEN
+		CALL loadHomologView(BUSREG_HN, vistaHomologReference);
+	END IF;
+	-- Obtener la homologación del nombre de la operación
+	SET msgRespuesta = setHomologatedDescription(CANAL_HN, BUSREG_HN, nombreOp, VACIO, vistaHomologReference);
+	RETURN msgRespuesta;
+END;
+
+/*
+ 	* Function: Transforma un mensaje de error del Adaptador de Integración SP (Branch)
+ 	*			en un mensaje de error estandar para el canal consumidor (HTTP)
+ 	*           que maneje el contenedor DataHeader.
+ 	*	
+ 	* Parameters:
+ 	* IN:  REFERENCE refInMsg 		  - Referencia al árbol de entrada de error técnico.
+ 	* IN:  REFERENCE refEnvVar		  - Referencia al árbol de Environment.
+ 	* INOUT: REFERENCE msgOut 		  - Referencia al árbol del mensaje de salida.
+ 	* IN:  REFERENCE messageNumber	  - Referencia al código de error del árbol de Excepción.
+ */
+ 
+CREATE FUNCTION ProcessErrorTransformationDataHeaderBranch(IN refInMsg REFERENCE, IN refEnvVar  REFERENCE, INOUT msgOut REFERENCE, IN messageNumber INTEGER)
+BEGIN
+	
+	DECLARE TAG_NAME_DATAHEADER CONSTANT CHARACTER 'DataHeader';
+	
+	--Mover referencia en el árbol de entrada hasta el contenedor DataHeader
+	DECLARE refDataHeaderIn	REFERENCE TO refInMsg;
+	MOVE refDataHeaderIn LASTCHILD;
+	MOVE refDataHeaderIn LASTCHILD;
+
+	--Validar si referencia ya apunta al DataHeader en caso de flujo response.
+	IF FIELDNAME(refDataHeaderIn) <> TAG_NAME_DATAHEADER THEN
+	--Si el mensaje proviene del flujo de request, mueva la referencia un ítem más adentro del árbol
+		MOVE refDataHeaderIn FIRSTCHILD NAMESPACE * NAME TAG_NAME_DATAHEADER;	
+	END IF;	
+	
+	
+	--Creación y referencia al mensaje de Salida
+	CREATE FIELD msgOut.DataHeader;		
+	DECLARE refDataHeaderOut	REFERENCE TO msgOut.DataHeader;
+		
+	--Declaración de variables
+	DECLARE nombreOperacion					CHARACTER COALESCE( FIELDVALUE(refDataHeaderIn.nombreOperacion),
+																FIELDVALUE(refEnvVar.nombreOperacion) );
+																
+	DECLARE total							CHARACTER COALESCE( FIELDVALUE(refDataHeaderIn.total),
+																FIELDVALUE(refEnvVar.total) );
+	
+	DECLARE idTransaccion					CHARACTER COALESCE( FIELDVALUE(refDataHeaderIn.idTransaccion),
+																FIELDVALUE(refEnvVar.idTransaccion) );	
+	
+	--Mapeo campos de salida
+	SET refDataHeaderOut.nombreOperacion	= nombreOperacion;
+	SET refDataHeaderOut.total				= total;
+	SET refDataHeaderOut.caracterAceptacion	= ACEPTA_MAL;
+	SET refDataHeaderOut.ultimoMensaje		= UNO;	
+	SET refDataHeaderOut.idTransaccion		= idTransaccion;
+	
+	IF CONTAINS(CODIGOS_ERROR_VALIDACION, CAST (messageNumber AS CHARACTER)) THEN
+		--Mapeo en caso de error de validación mensaje de entrada
+		SET refDataHeaderOut.codMsgRespuesta	= COD_DATA_IN_ERROR;
+		SET refDataHeaderOut.msgRespuesta		= DESC_DATA_IN_ERROR;
+	ELSEIF(messageNumber = 2951)THEN
+		--Mapeo en caso de error de homologación
+		SET refDataHeaderOut.codMsgRespuesta	= COD_HOMOLOG_ERROR;
+		SET refDataHeaderOut.msgRespuesta		= DESC_HOMOLOG_ERROR; 
+	ELSE
+		--Mapeo en caso de error de ejecución del ESB
+		SET refDataHeaderOut.codMsgRespuesta	= DefaultCode;
+		SET refDataHeaderOut.msgRespuesta		= DefaultDescription;
+	END IF;		
+			
+END;
+
+/*
+ 	* Function: Transforma un mensaje de error técnico del Adaptador de Integración SP (Brach)
+ 	*			en un mensaje de error estandar para el canal consumidor (HTTP)
+ 	*           que maneje el contenedor DataHeader.
+ 	*	
+ 	* Parameters:
+ 	* IN:  REFERENCE refInMsg 		 - Referencia al arbol de entrada de error técnico.
+ 	* IN:  REFERENCE refEnvVar 		 - Referencia al arbol de Environment.Variables.
+ 	* INOUT: REFERENCE msgOut 		 - Referencia al arbol del mensaje de salida.
+ 	*
+ */
+ 
+CREATE FUNCTION TechnicalErrorTransformationDataHeaderBranch(IN refInMsg REFERENCE, IN refEnvVar REFERENCE, INOUT msgOut REFERENCE)
+BEGIN	
+	--Referencias a mensaje de entrada
+	DECLARE refMessageException REFERENCE TO refInMsg.MessageException;
+	
+	-- Creación y referencia al mensaje de Salida
+	CREATE FIELD msgOut.DataHeader;		
+	DECLARE refDataHeaderOut	REFERENCE TO msgOut.DataHeader;		
+	
+	--Declaración de variables
+	DECLARE code			CHARACTER FIELDVALUE(refMessageException.Code); 
+	
+	--Mapeo campos de salida
+	SET refDataHeaderOut.nombreOperacion	= refEnvVar.nombreOperacion;
+	SET refDataHeaderOut.total				= refEnvVar.total;
+	SET refDataHeaderOut.caracterAceptacion	= ACEPTA_MAL;
+	SET refDataHeaderOut.ultimoMensaje		= UNO;
+	SET refDataHeaderOut.idTransaccion		= refEnvVar.idTransaccion;
+					
+	CASE 
+	--Mapeos en caso de escenario error de conexión
+		WHEN code = CONNECTION_ERROR_CODE_ADP_INT THEN
+			SET refDataHeaderOut.codMsgRespuesta	= COD_CONNECTION_ERROR;
+			SET refDataHeaderOut.msgRespuesta		= DESC_CONNECTION_ERROR;		
+	--Mapeos en caso de escenario error de Timeout
+		WHEN code = TIMEOUT_ERROR_CODE_ADP_INT THEN
+			SET refDataHeaderOut.codMsgRespuesta	= COD_TIMEOUT_ERROR;
+			SET refDataHeaderOut.msgRespuesta		= DESC_TIMEOUT_ERROR;					
+	--Mapeos en caso de un error no esperado
+		ELSE
+			SET refDataHeaderOut.codMsgRespuesta	= DefaultCode;
+			SET refDataHeaderOut.msgRespuesta		= DefaultDescription;		
+	END CASE;
+		
+END;
+
+/*
+ 	* Function: Transforma un mensaje de error técnico del Adaptador de Integración SP
+ 	*			en un mensaje de error estandar para el canal consumidor (WS)
+ 	*           que maneje el modelo canónico de SCN.
+ 	*	
+ 	* Parameters:
+ 	* IN:  REFERENCE refInMsg 		 - Referencia al arbol de entrada de error técnico.
+ 	* IN:  REFERENCE refEnvVar 		 - Referencia al arbol de Environment.Variables.
+ 	* INOUT: REFERENCE msgOut 		 - Referencia al arbol del mensaje de salida.
+ 	*
+ */
+ 
+CREATE FUNCTION TechnicalErrorTransformationSCNBranch(IN refInMsg REFERENCE, IN refEnvVar REFERENCE, INOUT msgOut REFERENCE)
+BEGIN	
+	--Referencias a mensaje de entrada
+	DECLARE refMessageException REFERENCE TO refInMsg.MessageException;
+	
+	---Declaración de variables
+	DECLARE code			CHARACTER FIELDVALUE(refMessageException.Code); 
+	
+	CREATE FIELD msgOut.V1_Autenticacion:contextoRespuesta;
+    DECLARE refContextoRespuesta 										REFERENCE TO msgOut.V1_Autenticacion:contextoRespuesta;
+    
+    CREATE FIELD refContextoRespuesta.v11Res:resultadoTransaccion;
+    DECLARE refResultadoTrans											REFERENCE TO refContextoRespuesta.v11Res:resultadoTransaccion;
+    
+    CREATE FIELD refContextoRespuesta.v11Res:error;
+    DECLARE refError													REFERENCE TO refContextoRespuesta.v11Res:error;
+    
+    --Mapeos de los campos de salida
+    SET refResultadoTrans.v12Res:valCaracterAceptacion	= ACEPTA_MAL;
+	
+	CASE 
+	--Mapeos en caso de escenario error de conexión
+		WHEN code = CONNECTION_ERROR_CODE_ADP_INT THEN
+			SET refError.v13Res:codMsjRespuesta		= COD_CONNECTION_ERROR;
+    		SET refError.v13Res:valMsjRespuesta		= DESC_CONNECTION_ERROR;
+	--Mapeos en caso de escenario error de Timeout
+		WHEN code = TIMEOUT_ERROR_CODE_ADP_INT THEN
+			SET refError.v13Res:codMsjRespuesta		= COD_TIMEOUT_ERROR;
+    		SET refError.v13Res:valMsjRespuesta		= DESC_TIMEOUT_ERROR;			
+	--Mapeos en caso de un error no esperado
+		ELSE
+			SET refError.v13Res:codMsjRespuesta		= DefaultCode;
+    		SET refError.v13Res:valMsjRespuesta		= DefaultDescription;	
+	END CASE;
+		
+END;
+
+CREATE FUNCTION TechnicalErrorTransformationSCNBranchGUYC(IN refInMsg REFERENCE, IN refEnvVar REFERENCE, INOUT msgOut REFERENCE)
+BEGIN	
+	--Referencias a mensaje de entrada
+	DECLARE refMessageException REFERENCE TO refInMsg.MessageException;
+	
+	---Declaración de variables
+	DECLARE code			CHARACTER FIELDVALUE(refMessageException.Code); 
+	
+	CREATE FIELD msgOut.V1_GestionClaveCanalVirtual:contextoRespuesta;
+    DECLARE refContextoRespuesta 										REFERENCE TO msgOut.V1_GestionClaveCanalVirtual:contextoRespuesta;
+    
+    CREATE FIELD refContextoRespuesta.v11Res:resultadoTransaccion;
+    DECLARE refResultadoTrans											REFERENCE TO refContextoRespuesta.v11Res:resultadoTransaccion;
+    
+    CREATE FIELD refContextoRespuesta.v11Res:error;
+    DECLARE refError													REFERENCE TO refContextoRespuesta.v11Res:error;
+    
+    --Mapeos de los campos de salida
+    SET refResultadoTrans.v12Res:valCaracterAceptacion	= ACEPTA_MAL;
+	
+	CASE 
+	--Mapeos en caso de escenario error de conexión
+		WHEN code = CONNECTION_ERROR_CODE_ADP_INT THEN
+			SET refError.v13Res:codMsjRespuesta		= COD_CONNECTION_ERROR;
+    		SET refError.v13Res:valMsjRespuesta		= DESC_CONNECTION_ERROR;
+	--Mapeos en caso de escenario error de Timeout
+		WHEN code = TIMEOUT_ERROR_CODE_ADP_INT THEN
+			SET refError.v13Res:codMsjRespuesta		= COD_TIMEOUT_ERROR;
+    		SET refError.v13Res:valMsjRespuesta		= DESC_TIMEOUT_ERROR;			
+	--Mapeos en caso de un error no esperado
+		ELSE
+			SET refError.v13Res:codMsjRespuesta		= DefaultCode;
+    		SET refError.v13Res:valMsjRespuesta		= DefaultDescription;	
+	END CASE;
+		
+END;
+
+/*
+ 	* Function: Creación de mensaje con modelo canóonico de error técnico del componente de servicio
+ 	*           de Bus regional flujo de entrada.
+ 	*	
+ 	* Parameters:
+ 	* IN:  REFERENCE refInMsg 		  - Referencia al árbol de entrada de error técnico.
+ 	* IN:  REFERENCE refEnvVar		  - Referencia al árbol de Environment.
+ 	* INOUT: REFERENCE msgOut 		  - Referencia al árbol del mensaje de salida.
+ 	* IN:  REFERENCE messageNumber	  - Referencia al código de error del árbol de Excepción.
+ */
+
+CREATE FUNCTION ProcessErrorTransformationSCNRegional(IN refInMsg REFERENCE, IN refEnvVar  REFERENCE, INOUT msgOut REFERENCE, IN messageNumber INTEGER)
+BEGIN
+	
+	CREATE FIELD msgOut.V1_Autenticacion:contextoRespuesta;
+    DECLARE refContextoRespuesta 										REFERENCE TO msgOut.V1_Autenticacion:contextoRespuesta;
+    
+    CREATE FIELD refContextoRespuesta.v11Res:resultadoTransaccion;
+    DECLARE refResultadoTrans											REFERENCE TO refContextoRespuesta.v11Res:resultadoTransaccion;
+    
+    CREATE FIELD refContextoRespuesta.v11Res:error;
+    DECLARE refError													REFERENCE TO refContextoRespuesta.v11Res:error;
+    
+    --Mapeos de los campos de salida
+    SET refResultadoTrans.v12Res:valCaracterAceptacion	= ACEPTA_MAL;
+	
+	IF CONTAINS(CODIGOS_ERROR_VALIDACION, CAST (messageNumber AS CHARACTER)) THEN
+		--Mapeo en caso de error de validación mensaje de entrada
+		SET refError.v13Res:codMsjRespuesta		= COD_DATA_IN_ERROR;
+    	SET refError.v13Res:valMsjRespuesta		= DESC_DATA_IN_ERROR;
+	ELSEIF(messageNumber = 2951)THEN
+		--Mapeo en caso de error de homologación
+		SET refError.v13Res:codMsjRespuesta		= COD_HOMOLOG_ERROR;
+    	SET refError.v13Res:valMsjRespuesta		= DESC_HOMOLOG_ERROR;
+	ELSE
+		--Mapeo en caso de error de ejecución del ESB
+		SET refError.v13Res:codMsjRespuesta		= DefaultCode;
+    	SET refError.v13Res:valMsjRespuesta		= DefaultDescription;
+	END IF;		
+			
+END;
+
+CREATE FUNCTION ProcessErrorTransformationSCNRegionalGUYC(IN refInMsg REFERENCE, IN refEnvVar  REFERENCE, INOUT msgOut REFERENCE, IN messageNumber INTEGER)
+BEGIN
+	
+	CREATE FIELD msgOut.V1_GestionClaveCanalVirtual:contextoRespuesta;
+    DECLARE refContextoRespuesta 										REFERENCE TO msgOut.V1_GestionClaveCanalVirtual:contextoRespuesta;
+    
+    CREATE FIELD refContextoRespuesta.v11Res:resultadoTransaccion;
+    DECLARE refResultadoTrans											REFERENCE TO refContextoRespuesta.v11Res:resultadoTransaccion;
+    
+    CREATE FIELD refContextoRespuesta.v11Res:error;
+    DECLARE refError													REFERENCE TO refContextoRespuesta.v11Res:error;
+    
+    --Mapeos de los campos de salida
+    SET refResultadoTrans.v12Res:valCaracterAceptacion	= ACEPTA_MAL;
+	
+	IF CONTAINS(CODIGOS_ERROR_VALIDACION, CAST (messageNumber AS CHARACTER)) THEN
+		--Mapeo en caso de error de validación mensaje de entrada
+		SET refError.v13Res:codMsjRespuesta		= COD_DATA_IN_ERROR;
+    	SET refError.v13Res:valMsjRespuesta		= DESC_DATA_IN_ERROR;
+	ELSEIF(messageNumber = 2951)THEN
+		--Mapeo en caso de error de homologación
+		SET refError.v13Res:codMsjRespuesta		= COD_HOMOLOG_ERROR;
+    	SET refError.v13Res:valMsjRespuesta		= DESC_HOMOLOG_ERROR;
+	ELSE
+		--Mapeo en caso de error de ejecución del ESB
+		SET refError.v13Res:codMsjRespuesta		= DefaultCode;
+    	SET refError.v13Res:valMsjRespuesta		= DefaultDescription;
+	END IF;		
+			
+END;
+
+/****************************************************************************************************
+ 	* Function: Homologación del nombre de operación para los servicios de Bus Regional que van
+ 				hacia Costa Rica
+ 	*	
+ 	* Parameters:
+ 	* IN:  		CHARACTER nombreOp 	- Nombre de la operación.
+ 	* RETURN:	CHARACTER			- ID de servicio obtenido de VISTA_HOMOLOG.
+ ****************************************************************************************************/
+CREATE FUNCTION getBusReg_HomologServCR (IN nombreOp CHARACTER) RETURNS CHARACTER
+BEGIN
+	DECLARE vistaHomologReference 	REFERENCE TO VISTA_HOMOLOG;
+	DECLARE txOperacion				CHARACTER;
+	DECLARE msgRespuesta			CHARACTER;
+	--Obtener la tabla de homologación
+	IF CARDINALITY(VISTA_HOMOLOG.row[]) = 0 THEN
+		CALL loadHomologView(BUSREG_CR, vistaHomologReference);
+	END IF;
+	-- Obtener la homologación del nombre de la operación
+	SET msgRespuesta = setHomologatedDescription(CANAL_CR, BUSREG_CR, nombreOp, VACIO, vistaHomologReference);
+	RETURN msgRespuesta;
+END;
+
+/****************************************************************************************************
+ 	* Function: Homologación del tipo transferencias para los servicios de Bus Regional que van
+ 				hacia Costa Rica
+ 	*	
+ 	* Parameters:
+ 	* IN:  		CHARACTER tipoTrans 	- Tipo tranferencia
+ 	* RETURN:	CHARACTER				- Valor homologado
+ ****************************************************************************************************/
+CREATE FUNCTION getBusReg_HomologTipoTransCR (IN tipoTrans CHARACTER) RETURNS CHARACTER
+BEGIN
+	DECLARE vistaHomologReference 	REFERENCE TO CACHE_TIPO_TRANSFERENCIA;
+	DECLARE msgRespuesta			CHARACTER;
+	--Obtener la tabla de homologación
+	IF CARDINALITY(CACHE_TIPO_TRANSFERENCIA.row[]) = 0 THEN
+		CALL loadHomologView(CODTTRANS, vistaHomologReference);
+	END IF;
+	-- Obtener la homologación del nombre de la operación
+	SET msgRespuesta = setHomologatedDescription(CANAL_CR, CODTTRANS, tipoTrans, VACIO, vistaHomologReference);
+	RETURN msgRespuesta;
+END;
+
+/****************************************************************************************************
+ 	* Function: Homologación del campo estadoProducto para el servicio ConsultaSaldoscliente de
+ 				bus regional que va a Costa Rica. 
+ 	*	
+ 	* Parameters:
+ 	* IN:  		CHARACTER valorCampo 	- valor del campo a homologar.
+ 	* RETURN:	CHARACTER msgRespuesta  - mensaje de homologación a mostrar.
+ ****************************************************************************************************/
+
+CREATE FUNCTION getBusReg_HomologEstProd (IN valorCampo CHARACTER) RETURNS CHARACTER
+BEGIN
+	DECLARE vistaHomologReference 	REFERENCE TO VISTA_HOMOLOG_EP;
+	DECLARE txOperacion				CHARACTER;
+	DECLARE msgRespuesta			CHARACTER;
+	--Obtener la tabla de homologación
+	IF CARDINALITY(VISTA_HOMOLOG_EP.row[]) = 0 THEN
+		CALL loadHomologView(COD_ESTADO_PRODUCTO, vistaHomologReference);
+	END IF;
+	-- Obtener la homologación del nombre de la operación
+	SET msgRespuesta = setHomologatedDescription(CANAL_CR, COD_ESTADO_PRODUCTO, valorCampo, VACIO, vistaHomologReference);
+	RETURN msgRespuesta;
+END;
+
+/****************************************************************************************************
+ 	* Function: Homologación del Tipo producto de operación para los servicios de Bus Regional que van
+ 				hacia Colombia-Costa Rica (BR_CR_TP) y Costa Rica-Colombia (BR_CR_TPI),el sentido de 
+ 				la homologacion depende	del parametro "codHomolog". 
+ 	*	
+ 	* Parameters:
+ 	* IN:  		CHARACTER nombreOp 	    - Nombre de la operación.
+ 	* IN:  		CHARACTER codHomolog	- Define el sentido de la operación.
+ 	* RETURN:	CHARACTER msgRespuesta  - codigo homologado del tipo de producto segun el sentido.
+ ****************************************************************************************************/
+
+
+CREATE FUNCTION getBusReg_HomologTP(IN codTP CHARACTER,IN codHomolog CHARACTER) RETURNS CHARACTER
+BEGIN
+	DECLARE vistaHomologReference 	REFERENCE TO VISTA_HOMOLOG_TP;
+	DECLARE msgRespuesta			CHARACTER;
+	DECLARE CONV_COD_TP             CHARACTER VACIO;
+	SET CONV_COD_TP = CAST(codTP AS DECIMAL);
+	
+	--Obtener la tabla de homologación
+	IF CARDINALITY(VISTA_HOMOLOG_TP.row[]) = 0 THEN
+		CALL loadHomologView(codHomolog, vistaHomologReference);
+	END IF;
+	-- Obtener la homologación del nombre de la operación
+	SET msgRespuesta = setHomologatedDescription(CANAL_CR,codHomolog,CONV_COD_TP, VACIO, vistaHomologReference);
+	RETURN msgRespuesta;
+END;
+
+
+/****************************************************************************************************
+ 	* Function: Homologación del Tipo producto de operación para los servicios de Bus Regional que van
+ 				hacia Colombia-HONDURAS (BR_HN_TP) y Honduras-Colombia (BR_HN_TPI),el sentido de 
+ 				la homologacion depende	del parametro "codHomolog". 
+ 	*	
+ 	* Parameters:
+ 	* IN:  		codTP nombreOp 	    	- Codigo del tipo del producto.
+ 	* IN:  		codHomolog codHomolog	- Define el sentido de la operación.
+ 	* RETURN:	CHARACTER msgRespuesta  - codigo homologado del tipo de producto segun el sentido.
+ ****************************************************************************************************/
+
+
+CREATE FUNCTION getBusReg_HomologTipoProdHN(IN codTP CHARACTER,IN codHomolog CHARACTER) RETURNS CHARACTER
+BEGIN
+	DECLARE vistaHomologReference 	REFERENCE TO VISTA_HOMOLOG_TP;
+	DECLARE msgRespuesta			CHARACTER;
+	DECLARE CONV_COD_TP             CHARACTER VACIO;
+	SET CONV_COD_TP = CAST(codTP AS DECIMAL);
+	
+	--Obtener la tabla de homologación
+	IF CARDINALITY(VISTA_HOMOLOG_TP.row[]) = 0 THEN
+		CALL loadHomologView(codHomolog, vistaHomologReference);
+	END IF;
+	-- Obtener la homologación del nombre de la operación
+	SET msgRespuesta = setHomologatedDescription(CANAL_HN,codHomolog,CONV_COD_TP, VACIO, vistaHomologReference);
+	RETURN msgRespuesta;
+END;
+
+CREATE FUNCTION ProcessErrorTransformationSCNRegionalToken(IN refInMsg REFERENCE, IN refEnvVar REFERENCE, INOUT msgOut REFERENCE, IN messageNumber INTEGER)
+BEGIN	
+	--Referencias a mensaje de entrada
+	DECLARE refMessageException REFERENCE TO refInMsg.MessageException;
+	
+	---Declaración de variables
+	DECLARE code			CHARACTER FIELDVALUE(refMessageException.Code); 
+	
+	CREATE FIELD msgOut.V1_SrvScnToken:contextoRespuesta;
+    DECLARE refContextoRespuesta 										REFERENCE TO msgOut.V1_SrvScnToken:contextoRespuesta;
+    
+    CREATE FIELD refContextoRespuesta.v11Res:resultadoTransaccion;
+    DECLARE refResultadoTrans											REFERENCE TO refContextoRespuesta.v11Res:resultadoTransaccion;
+    
+    CREATE FIELD refContextoRespuesta.v11Res:error;
+    DECLARE refError													REFERENCE TO refContextoRespuesta.v11Res:error;
+    
+    --Mapeos de los campos de salida
+    
+    SET refResultadoTrans.v12Res:codEstadoTransaccion	= '';
+	SET refResultadoTrans.v12Res:valCaracterAceptacion	= ACEPTA_MAL;
+	SET refResultadoTrans.v12Res:idTransaccion			= refEnvVar.idTransaccion;
+	SET refResultadoTrans.v12Res:fecOperacion			= refEnvVar.fecOperacion;
+	
+	IF CONTAINS(CODIGOS_ERROR_VALIDACION, CAST (messageNumber AS CHARACTER)) THEN
+		--Mapeo en caso de error de validación mensaje de entrada
+		SET refError.v13Res:codMsjRespuesta		= COD_DATA_IN_ERROR;
+    	SET refError.v13Res:valMsjRespuesta		= DESC_DATA_IN_ERROR;
+	ELSEIF(messageNumber = 2951)THEN
+		--Mapeo en caso de error de homologación
+		SET refError.v13Res:codMsjRespuesta		= COD_HOMOLOG_ERROR;
+    	SET refError.v13Res:valMsjRespuesta		= DESC_HOMOLOG_ERROR;
+	ELSE
+		--Mapeo en caso de error de ejecución del ESB
+		SET refError.v13Res:codMsjRespuesta		= DefaultCode;
+    	SET refError.v13Res:valMsjRespuesta		= DefaultDescription;
+	END IF;
+		
+END;
+
+/*
+ 	* Function: Transforma un mensaje de error técnico del Adaptador de Integración SP
+ 	*			en un mensaje de error estandar para el canal consumidor (WS)
+ 	*           que maneje el modelo canónico de SCN.
+ 	*	
+ 	* Parameters:
+ 	* IN:  REFERENCE refInMsg 		 - Referencia al arbol de entrada de error técnico.
+ 	* IN:  REFERENCE refEnvVar 		 - Referencia al arbol de Environment.Variables.
+ 	* INOUT: REFERENCE msgOut 		 - Referencia al arbol del mensaje de salida.
+ 	*
+ */
+ 
+CREATE FUNCTION TechnicalErrorTransformationSCNBranchToken(IN refInMsg REFERENCE, IN refEnvVar REFERENCE, INOUT msgOut REFERENCE)
+BEGIN	
+	--Referencias a mensaje de entrada
+	DECLARE refMessageException REFERENCE TO refInMsg.MessageException;
+	
+	---Declaración de variables
+	DECLARE code			CHARACTER FIELDVALUE(refMessageException.Code); 
+	
+	CREATE FIELD msgOut.V1_SrvScnToken:contextoRespuesta;
+    DECLARE refContextoRespuesta 										REFERENCE TO msgOut.V1_SrvScnToken:contextoRespuesta;
+    
+    CREATE FIELD refContextoRespuesta.v11Res:resultadoTransaccion;
+    DECLARE refResultadoTrans											REFERENCE TO refContextoRespuesta.v11Res:resultadoTransaccion;
+    
+    CREATE FIELD refContextoRespuesta.v11Res:error;
+    DECLARE refError													REFERENCE TO refContextoRespuesta.v11Res:error;
+    
+    --Mapeos de los campos de salida
+    SET refResultadoTrans.v12Res:codEstadoTransaccion   = '';
+    SET refResultadoTrans.v12Res:valCaracterAceptacion	= ACEPTA_MAL;
+    SET refResultadoTrans.v12Res:idTransaccion			= refEnvVar.idTransaccion;
+    SET refResultadoTrans.v12Res:fecOperacion			= refEnvVar.fecOperacion;
+	
+	CASE 
+	--Mapeos en caso de escenario error de conexión
+		WHEN code = CONNECTION_ERROR_CODE_ADP_INT THEN
+			SET refError.v13Res:codMsjRespuesta		= COD_CONNECTION_ERROR;
+    		SET refError.v13Res:valMsjRespuesta		= DESC_CONNECTION_ERROR;
+	--Mapeos en caso de escenario error de Timeout
+		WHEN code = TIMEOUT_ERROR_CODE_ADP_INT THEN
+			SET refError.v13Res:codMsjRespuesta		= COD_TIMEOUT_ERROR;
+    		SET refError.v13Res:valMsjRespuesta		= DESC_TIMEOUT_ERROR;			
+	--Mapeos en caso de un error no esperado
+		ELSE
+			SET refError.v13Res:codMsjRespuesta		= DefaultCode;
+    		SET refError.v13Res:valMsjRespuesta		= DefaultDescription;	
+	END CASE;
+		
+END;
+
+
+
+
+/****************************************************************************************************
+ 	* Function: Homologación del nombre de operación para los servicios de Bus Regional que van
+ 				hacia Panama
+ 	*	
+ 	* Parameters:
+ 	* IN:  		CHARACTER nombreOp 	- Nombre de la operación.
+ 	* RETURN:	CHARACTER			- ID de servicio obtenido de VISTA_HOMOLOG.
+ ****************************************************************************************************/
+CREATE FUNCTION getBusReg_HomologServPA (IN nombreOp CHARACTER) RETURNS CHARACTER
+BEGIN
+	DECLARE vistaHomologReference 	REFERENCE TO VISTA_HOMOLOG;
+	DECLARE txOperacion				CHARACTER;
+	DECLARE msgRespuesta			CHARACTER;
+	--Obtener la tabla de homologación
+	IF CARDINALITY(VISTA_HOMOLOG.row[]) = 0 THEN
+		CALL loadHomologView(BUSREG_PA, vistaHomologReference);
+	END IF;
+	-- Obtener la homologación del nombre de la operación
+	SET msgRespuesta = setHomologatedDescription(CANAL_PA, BUSREG_PA, nombreOp, VACIO, vistaHomologReference);
+	RETURN msgRespuesta;
+END;
+
+
+/****************************************************************************************************
+ 	* Function: Homologación del Tipo producto de operación para los servicios de Bus Regional que van
+ 				hacia Colombia-Panama (BR_PA_TP) y Panama-Colombia (BR_PA_TPI),el sentido de 
+ 				la homologacion depende	del parametro "codHomolog". 
+ 	*	
+ 	* Parameters:
+ 	* IN:  		codTP nombreOp 	    	- Codigo del tipo del producto.
+ 	* IN:  		codHomolog codHomolog	- Define el sentido de la operación.
+ 	* RETURN:	CHARACTER msgRespuesta  - codigo homologado del tipo de producto segun el sentido.
+ ****************************************************************************************************/
+
+
+CREATE FUNCTION getBusReg_HomologTipoProdPA(IN codTP CHARACTER,IN codHomolog CHARACTER) RETURNS CHARACTER
+BEGIN
+	DECLARE vistaHomologReference 	REFERENCE TO VISTA_HOMOLOG_TP;
+	DECLARE msgRespuesta			CHARACTER;
+	DECLARE CONV_COD_TP             CHARACTER VACIO;
+	SET CONV_COD_TP = CAST(codTP AS DECIMAL);
+	
+	--Obtener la tabla de homologación
+	IF CARDINALITY(VISTA_HOMOLOG_TP.row[]) = 0 THEN
+		CALL loadHomologView(codHomolog, vistaHomologReference);
+	END IF;
+	-- Obtener la homologación del nombre de la operación
+	SET msgRespuesta = setHomologatedDescription(CANAL_PA,codHomolog,CONV_COD_TP, VACIO, vistaHomologReference);
+	RETURN msgRespuesta;
+END;
+
+/****************************************************************************************************
+ 	* Function: Homologación del Tipo producto de operación para los servicios de Bus Regional que van
+ 				hacia Colombia-Panama (BR_PA_TP) y Panama-Colombia (BR_PA_TPI),el sentido de 
+ 				la homologacion depende	del parametro "codHomolog". 
+ 	*	
+ 	* Parameters:
+ 	* IN:  		codTP nombreOp 	    	- Codigo del tipo del producto ya sea numero o letra
+ 	* IN:  		codHomolog codHomolog	- Define el sentido de la operación.
+ 	* RETURN:	CHARACTER msgRespuesta  - codigo homologado del tipo de producto segun el sentido.
+ ****************************************************************************************************/
+
+
+CREATE FUNCTION getBusReg_HomologTipoProdCharacterPA(IN codTP CHARACTER,IN codHomolog CHARACTER) RETURNS CHARACTER
+BEGIN
+	DECLARE vistaHomologReference 	REFERENCE TO VISTA_HOMOLOG_TP;
+	DECLARE msgRespuesta			CHARACTER;
+	DECLARE CONV_COD_TP             CHARACTER VACIO;
+	SET CONV_COD_TP = CAST(codTP AS CHARACTER);
+	
+	--Obtener la tabla de homologación
+	IF CARDINALITY(VISTA_HOMOLOG_TP.row[]) = 0 THEN
+		CALL loadHomologView(codHomolog, vistaHomologReference);
+	END IF;
+	-- Obtener la homologación del nombre de la operación
+	SET msgRespuesta = setHomologatedDescription(CANAL_PA,codHomolog,CONV_COD_TP, VACIO, vistaHomologReference);
+	RETURN msgRespuesta;
+END;

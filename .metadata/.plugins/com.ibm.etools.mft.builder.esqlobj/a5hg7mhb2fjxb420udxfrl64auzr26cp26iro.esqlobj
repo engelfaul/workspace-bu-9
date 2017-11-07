@@ -1,0 +1,23 @@
+CREATE FUNCTION doDecimalLPadChar(IN val DECIMAL, IN size_integer_part INTEGER, size_decimal_part INTEGER) RETURNS CHARACTER
+BEGIN
+	DECLARE result CHARACTER;
+	DECLARE cadena_valor CHARACTER '';
+	DECLARE dotPos integer;
+	DECLARE cadena_decimal CHARACTER '';
+	
+	SET cadena_valor = CAST(val AS CHARACTER);
+	SET cadena_valor = REPLACE(cadena_valor, ',', '.');
+	SET dotPos = POSITION ('.' IN cadena_valor);	
+
+	IF dotPos = 0 THEN
+		SET result = doLPadChar(cadena_valor, size_integer_part, ZERO) || doLPadChar(cadena_decimal, size_decimal_part, ZERO);
+	ELSE	
+		SET cadena_decimal = SUBSTRING(cadena_valor FROM dotPos+1 FOR LENGTH(cadena_valor));
+		SET cadena_decimal = doRPadChar(cadena_decimal, size_decimal_part, ZERO);
+		SET cadena_valor = SUBSTRING(cadena_valor FROM 1 FOR dotPos-1);
+		
+		SET result = doLPadChar(cadena_valor, size_integer_part, ZERO) || cadena_decimal;
+	END IF;	
+	
+	RETURN result;
+END;

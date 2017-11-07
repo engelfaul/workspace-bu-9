@@ -1,0 +1,80 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+		
+		-- Se calcula el tiempo de Traza y auditoria
+		DECLARE valTimeStamp TIMESTAMP CURRENT_TIMESTAMP;
+		
+		-- referencias al mensaje de entrada
+		DECLARE msgin 		REFERENCE TO InputRoot.XMLNSC.*:esbXML;
+		DECLARE headerin	REFERENCE TO msgin.Header;
+		DECLARE bodyin		REFERENCE TO msgin.Body;
+		
+		-- Verificacion de propiedad traceable y auditable, si no viene en el header, se toma la variable UDP		
+		DECLARE traceable BOOLEAN;
+		DECLARE auditable BOOLEAN;
+		
+		SET traceable = COALESCE(headerin.requestData.endpointReference.configuration.traceable, traceableDefault);
+		SET auditable = COALESCE(headerin.requestData.endpointReference.configuration.auditable, auditableDefault);
+					
+		-- verificar flag de log
+		IF CAST(traceable AS BOOLEAN) THEN
+		
+			-- Copiar cabeceras
+			CALL CopyMessageHeaders();
+				
+			-- construcción de mensaje de log
+			CREATE FIELD OutputRoot.XMLNSC.LogHandlerMsgSet;
+			
+			SET OutputRoot.XMLNSC.LogHandlerMsgSet.systemId		= InputRoot.XMLNSC.*:esbXML.Header.systemId;
+			SET OutputRoot.XMLNSC.LogHandlerMsgSet.messageId	= InputRoot.XMLNSC.*:esbXML.Header.messageId;
+			SET OutputRoot.XMLNSC.LogHandlerMsgSet.componentId 	= traceabilityPoint;
+			SET OutputRoot.XMLNSC.LogHandlerMsgSet.timeStamp	= valTimeStamp;
+			SET OutputRoot.XMLNSC.LogHandlerMsgSet.serviceId	= InputRoot.XMLNSC.*:esbXML.Header.requestData.endpointReference.serviceId;
+			
+			-- Configuracion del destination list
+			CREATE FIELD OutputLocalEnvironment.Destination.MQDestinationList;
+			DECLARE destination REFERENCE TO OutputLocalEnvironment.Destination.MQDestinationList;
+			SET destination.DestinationData[1].queueName = LogQueueName ;
+			
+			-- propagar metadata del mensaje a la interface correspondiente
+			PROPAGATE TO TERMINAL 'out' MESSAGE OutputRoot DELETE NONE;
+			SET OutputRoot.XMLNSC = NULL;
+			
+		END IF;	
+		
+		-- verificar flag de audit
+		IF 	CAST(auditable AS BOOLEAN) THEN
+			
+			-- Copiar cabeceras
+			CALL CopyMessageHeaders();
+			SET OutputRoot.XMLNSC.esbXML:esbXML.Header                         = msgin.Header;
+			
+			-- Copiar traceabilityPoint y mensaje completo, la transformacion se hace en el Audit_MsgFlow
+			SET OutputRoot.XMLNSC.esbXML:esbXML.Header.tracingData.componentId = traceabilityPoint;
+			SET OutputRoot.XMLNSC.esbXML:esbXML.Header.tracingData.timeStamp   = valTimeStamp;
+			SET OutputRoot.XMLNSC.esbXML:esbXML.Body 						   = msgin.Body;
+			
+			-- Configuracion del destination list			
+			CREATE FIELD OutputLocalEnvironment.Destination.MQDestinationList;
+			DECLARE destination	REFERENCE TO OutputLocalEnvironment.Destination.MQDestinationList;					
+			
+			-- propagar metadata del mensaje a la interface correspondiente
+			SET destination.DestinationData[1].queueName = AuditQueueName ;
+			PROPAGATE TO TERMINAL 'out' MESSAGE OutputRoot DELETE DEFAULT;
+			
+		END IF;
+		
+		RETURN FALSE;
+
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+	

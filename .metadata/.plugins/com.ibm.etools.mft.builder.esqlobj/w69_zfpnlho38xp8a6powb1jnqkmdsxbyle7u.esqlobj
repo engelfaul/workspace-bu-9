@@ -1,0 +1,12 @@
+CREATE PROCEDURE SetDestinationListHdRes (IN header REFERENCE, INOUT lcEnv REFERENCE)
+BEGIN
+	-- referencia al endpoint del requestData
+	DECLARE endpoint REFERENCE TO header.requestData.endpointReference;
+	-- referencia al arbol de destino de MQ
+	CREATE FIELD lcEnv.Destination.MQ.DestinationData;
+	DECLARE lcEnvMq REFERENCE TO lcEnv.Destination.MQ.DestinationData[1];
+	
+	-- pasar la lista de destino
+	SET lcEnvMq.queueName = endpoint.principalsrv.routingData.outputQueueEndpoint.outputQueue;		
+	DECLARE lcEnvMq1 CHARACTER '';
+END;

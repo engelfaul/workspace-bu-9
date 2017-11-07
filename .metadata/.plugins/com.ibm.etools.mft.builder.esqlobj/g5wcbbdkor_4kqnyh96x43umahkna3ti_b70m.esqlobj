@@ -1,0 +1,30 @@
+CREATE FUNCTION  routeServices( INOUT refMsgOut REFERENCE, IN servicesId CHARACTER, INOUT lcEnv REFERENCE, IN UDPRequestQueue CHARACTER)
+	BEGIN
+		
+    CREATE FIELD lcEnv.Destination.MQ.DestinationData;
+    DECLARE serviceAssociateTemp CHARACTER '';
+    
+    FOR refenpoint AS refMsgOut.Header.requestData.endpointReference[] DO
+    	IF refenpoint.serviceId = servicesId THEN
+    		IF EXISTS(refenpoint.associatedService[]) THEN
+    			FOR refAssociServices AS refenpoint.associatedService[] DO
+    				IF refAssociServices.invocationOrder = 1 THEN
+    					SET serviceAssociateTemp = FIELDVALUE(refAssociServices.associatedServiceId); 
+    				END IF;
+    			END FOR;
+    			FOR refenpoint2 AS refMsgOut.Header.requestData.endpointReference[] DO
+    				IF refenpoint2.serviceId = serviceAssociateTemp THEN
+    					SET lcEnv.Destination.MQ.DestinationData.queueName = FIELDVALUE(refenpoint2.routingData.requestQueueEndpoint.requestQueue); 
+    				END IF;
+    			END FOR;
+    			SET refMsgOut.Header.internalRoutingData.replyToQueue.queueName = refenpoint.routingData.responseQueueEndpoint.responseQueue;
+    		ELSE IF lcEnv.Destination.MQ.DestinationData IS NULL OR lcEnv.Destination.MQ.DestinationData = '' THEN
+    			SET lcEnv.Destination.MQ.DestinationData.queueName = UDPRequestQueue;
+    			SET refMsgOut.Header.internalRoutingData.replyToQueue.queueName = refenpoint.routingData.responseQueueEndpoint.responseQueue;
+    		END IF;
+    		END IF;
+    	ELSE 
+    		
+    	END IF;
+    END FOR;
+	END;

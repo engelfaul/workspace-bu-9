@@ -1,0 +1,14 @@
+CREATE PROCEDURE pushRTQ (IN header REFERENCE, IN queue CHARACTER, IN correlId BLOB, IN messageId BLOB)
+BEGIN
+	IF queue IS NOT null THEN
+		IF header.internalRoutingData.routingStack IS null THEN
+			CREATE FIELD header.internalRoutingData.routingStack;
+		END IF;
+		DECLARE cursor REFERENCE TO header.internalRoutingData.routingStack;
+
+		SET cursor.replyToLocation = queue;
+		--SET cursor.replyToAddress = queue;
+		SET cursor.correlationId = correlId;
+		SET cursor.messageId = messageId;
+	END IF;
+END;

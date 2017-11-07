@@ -1,0 +1,15 @@
+CREATE FUNCTION ReplaceNamespace(IN refInputField REFERENCE, In oldNamespace CHARACTER, In newNamespace CHARACTER)
+BEGIN
+	SET refInputField.(XMLNSC.NamespaceDecl)* = NULL;
+	-- Se verifica si el campo tiene el namespace de entrada y
+	-- se reemplaza por el que se le indique
+	IF ( FIELDTYPE(refInputField) IS NOT NULL ) THEN
+		
+		IF FIELDNAMESPACE(refInputField) IN (oldNamespace) THEN 
+			SET refInputField NAMESPACE = newNamespace;
+			SET refInputField.(XMLNSC.NamespaceDecl)* = NULL;			
+		END IF;
+		
+    END IF;
+    
+END;

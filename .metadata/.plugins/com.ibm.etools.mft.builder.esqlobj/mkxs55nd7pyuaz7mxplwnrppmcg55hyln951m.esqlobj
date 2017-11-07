@@ -1,0 +1,107 @@
+CREATE COMPUTE MODULE ProcessResponseData
+		
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		-- mantener el CorrelId
+		CALL CopyMessageHeaders();
+		
+		-- referencia al mensaje de entrada
+		DECLARE InputMessage REFERENCE TO InputRoot.XMLNSC;
+		
+		-- construcción del mensaje de salida
+		DECLARE OutputMessage REFERENCE TO OutputRoot.XMLNSC;
+		
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML.Header;
+		DECLARE OutputHeader REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML.Header;
+		
+		SET OutputHeader = Environment.Variables.MsgRequest.Header;
+		
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML.Body;
+		DECLARE OutputBody		REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML.Body;
+
+		-- modificar nombre de padre para el mensaje de respuesta
+		DECLARE transactionName CHARACTER Environment.Variables.MsgRequest.Transaction;
+		SET transactionName = REPLACE(transactionName,'REQ','RESP');
+		
+		-- crear el tag que tiene el nombre de la transaccion y su namespace
+		CREATE FIRSTCHILD OF OutputBody NAME transactionName;
+		MOVE OutputBody FIRSTCHILD;
+	
+		-- reportar success en el esbXML:Header
+		SET OutputHeader.responseData.status.statusCode = 'Success';
+			
+		-- Crear Header de la respuesta del backend
+		CREATE FIELD OutputBody.Header;
+		DECLARE dataheaderref REFERENCE TO OutputBody.Header;
+		
+		-- iteración sobre el árbol de la respuesta estandar
+		DECLARE standHeaderRef REFERENCE TO InputMessage.TransactionResponse.Standard.Header;
+		MOVE standHeaderRef FIRSTCHILD;
+		
+		WHILE LASTMOVE(standHeaderRef) DO
+			CREATE LASTCHILD OF dataheaderref NAME FIELDNAME(standHeaderRef) VALUE FIELDVALUE(standHeaderRef);
+		
+			MOVE standHeaderRef NEXTSIBLING;
+		END WHILE;
+		
+		-- Crear Header de la respuesta del backend
+		CREATE FIELD OutputBody.Body;
+		DECLARE dataBodyRef REFERENCE TO OutputBody.Body;
+		
+		-- iteración sobre el árbol de la respuesta estandar
+		DECLARE standBodyRef REFERENCE TO InputMessage.TransactionResponse.Standard.Body;
+		MOVE standBodyRef FIRSTCHILD;
+		
+		WHILE LASTMOVE(standBodyRef) DO
+			CREATE LASTCHILD OF dataBodyRef NAME FIELDNAME(standBodyRef) VALUE FIELDVALUE(standBodyRef);
+		
+			MOVE standBodyRef NEXTSIBLING;
+		END WHILE;		
+		DELETE FIELD dataBodyRef.Registers;
+		
+		-- Validamos si existen campos repetitivos para responder.
+		IF EXISTS(InputMessage.TransactionResponse.Standard.Body.Registers.Register[]) THEN
+			-- iteración sobre el árbol de registros (respuesta)
+			CREATE FIELD dataBodyRef.Registros;
+			DECLARE registrosref REFERENCE TO dataBodyRef.Registros;
+			
+			DECLARE registersref REFERENCE TO InputMessage.TransactionResponse.Standard.Body.Registers;
+			MOVE registersref FIRSTCHILD;
+			
+			WHILE LASTMOVE(registersref) DO
+				CREATE LASTCHILD OF registrosref NAME 'Registro';
+				
+				DECLARE registroref_ REFERENCE TO registrosref;
+				MOVE registroref_ LASTCHILD;
+				
+				SET registroref_ = registersref;
+				
+				MOVE registersref NEXTSIBLING;
+			END WHILE;		
+		END IF;			
+		
+		--- enrutar la respuesta al componente de servicio que invocó al adaptador
+		CREATE FIELD OutputLocalEnvironment.Destination.MQDestinationList;
+		DECLARE destination REFERENCE TO OutputLocalEnvironment.Destination.MQDestinationList;
+		
+		SET destination.DestinationData[1].queueName =  OutputRoot.XMLNSC.esbXML:esbXML.Header.internalRoutingData.replyToQueue.queueName;
+		SET destination.DestinationData[1].queueManagerName =  OutputRoot.XMLNSC.esbXML:esbXML.Header.internalRoutingData.replyToQueue.queueManagerName;
+		
+		PROPAGATE TO TERMINAL 'out' MESSAGE OutputRoot DELETE NONE;
+				
+		RETURN FALSE;
+		
+END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+END MODULE;

@@ -1,0 +1,8 @@
+CREATE FUNCTION loadHomologView (IN idHomologacion CHARACTER , INOUT HomologTableRow REFERENCE)
+
+BEGIN
+	
+	SET HomologTableRow.row[]  = SELECT *
+									FROM Database.VISTA_HOMOLOG AS T
+									WHERE T.ID_HOMOLOGACION = idHomologacion;
+END;

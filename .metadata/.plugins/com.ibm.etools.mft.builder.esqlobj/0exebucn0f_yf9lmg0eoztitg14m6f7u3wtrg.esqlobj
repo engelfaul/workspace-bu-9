@@ -1,0 +1,21 @@
+CREATE FUNCTION getConsecutive (IN refHeaderIn REFERENCE ) RETURNS INTEGER
+ BEGIN
+ 	
+ 	 DECLARE consecutivo		INTEGER -1;		
+		-- Traer el consecutivo generado
+	 DECLARE refProp REFERENCE TO refHeaderIn.messageContext;
+		
+	   DECLARE prop ROW
+		THE (SELECT prop
+				FROM refProp.property[] AS prop
+					WHERE prop.key = 'Consecutivo_gen');	
+		
+	SET consecutivo		= prop.value;
+	
+	IF consecutivo = -1  THEN
+			Throw Exception CATALOG 'ESB' MESSAGE 3112 VALUES ('Error en Consecutivo');
+	END IF;
+ 	
+ 	RETURN consecutivo;
+ 	
+ END;

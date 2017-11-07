@@ -1,0 +1,47 @@
+CREATE COMPUTE MODULE SetTimeout
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		-- Declaracion IDENTIFIER
+		DECLARE identifier CHARACTER UUIDASCHAR;
+		
+		-- Se castea la variable UDP para que la tome como el numero de segundos
+		DECLARE inter INTERVAL CAST ( TRIM(Environment.Variables.Timeout) AS INTERVAL SECOND);		
+		
+		--se declara la variable donde se indica el tiempo de timeout
+		DECLARE time_in TIME CAST(CURRENT_TIMESTAMP + inter AS TIME FORMAT 'hh:mm:ss');
+		
+		DECLARE time_in_cast CHARACTER CAST(time_in AS CHARACTER FORMAT 'HH:mm:ss.SSSSSS');
+		
+		DECLARE count_in_char CHARACTER '1';
+		DECLARE interval_in_char CHARACTER '0';
+		DECLARE ignoreMissed_in_char CHARACTER 'FALSE';
+		
+		--se deja pasar el mensaje tal como viene
+		SET OutputRoot = InputRoot;
+		
+		-- configurar el timeout de la instancia
+		SET OutputLocalEnvironment = InputLocalEnvironment;
+		SET OutputLocalEnvironment.TimeoutRequest.Action 		= 'SET';    
+		SET OutputLocalEnvironment.TimeoutRequest.Identifier 	= identifier;   
+		SET OutputLocalEnvironment.TimeoutRequest.Count			= count_in_char;
+		SET OutputLocalEnvironment.TimeoutRequest.Interval			= interval_in_char;
+		SET OutputLocalEnvironment.TimeoutRequest.StartTime 		= time_in_cast;
+		SET OutputLocalEnvironment.TimeoutRequest.IgnoreMissed 	    = ignoreMissed_in_char;
+		
+		--Se valida si la hora que se debe activar el timeout sea del dia siguiente
+		DECLARE CurrentTime TIME CAST(CURRENT_TIMESTAMP AS TIME FORMAT 'hh:mm:ss');
+		IF (time_in < CurrentTime) THEN
+			--Si es asi se configura que la fecha de inicio es el dia siguiente al actual.
+			DECLARE CurrentDay DATE  CAST(CURRENT_TIMESTAMP AS DATE FORMAT 'YYYY-mm-dd');
+			DECLARE Tomorrow DATE CurrentDay + CAST('1' AS INTERVAL DAY);
+			SET OutputLocalEnvironment.TimeoutRequest.StartDate		= Tomorrow;
+		END IF;
+		
+		-- configurar el mensaje de cancelación de timeout
+		SET Environment.Variables.TimeoutCancel.Action			= 'CANCEL';
+		SET Environment.Variables.TimeoutCancel.Identifier		= identifier;
+						
+		RETURN TRUE;
+	END;
+END MODULE;

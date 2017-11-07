@@ -1,0 +1,83 @@
+CREATE FUNCTION ProcessErrorTransformationDataHeaderJSON2(IN refInMsg REFERENCE, IN refEnvVar  REFERENCE, INOUT msgOut REFERENCE, IN messageNumber INTEGER, IN messageText CHARACTER)
+BEGIN
+	--Crear cuerpo salida
+		CREATE FIELD refEnvVar.xmlTemp.Data;
+		DECLARE refBodyOut1			REFERENCE TO  refEnvVar.xmlTemp.Data;					
+
+	IF CONTAINS(SYSTEM_CODES_ERROR_VALIDACION, CAST (messageNumber AS CHARACTER)) THEN
+		--Mapeo en caso de error de validación mensaje de entrada		
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1].(XMLNSC.Attribute)name  = 'X-Original-HTTP-Status-Line';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1] = DESCRIPCIONDEVALIDACIONREST;
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2].(XMLNSC.Attribute)name  = 'X-Original-HTTP-Status-Code';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2] = CODIGODEVALIDACIONREST;
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[3].(XMLNSC.Attribute)name  = 'Content-Type';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[3] = RESTAPLICATION;
+		
+		SET refBodyOut1.codeError = CODIGODEVALIDACION;
+		SET refBodyOut1.descriptionError = DESCRIPCIONDEVALIDACION;
+		
+		--Error de timeout
+	ELSEIF CONTAINS(SYSTEM_CODES_ERROR_TIME, refInMsg.Body.MessageException.Code) THEN
+		
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1].(XMLNSC.Attribute)name  = 'X-Original-HTTP-Status-Code';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1] = CODIGODEERRORTIMEOUTREST;
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2].(XMLNSC.Attribute)name  = 'Content-Type';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2] = RESTAPLICATION;
+		
+		SET refBodyOut1.codeError = CODIGODEERRORTIMEOUT;
+		SET refBodyOut1.descriptionError = DESCRIPCIONDEERRORTIMEOUT;
+
+		
+		--Error de conexion
+	ELSEIF CONTAINS(SYSTEM_CODES_ERROR_CONEXION, refInMsg.Body.MessageException.Code) THEN
+		
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1].(XMLNSC.Attribute)name  = 'X-Original-HTTP-Status-Code';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1] = CODIGODEERRORCONEXIONREST;
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2].(XMLNSC.Attribute)name  = 'Content-Type';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2] = RESTAPLICATION;
+		
+		SET refBodyOut1.codeError = CODIGODEERRORCONEXION;
+		SET refBodyOut1.descriptionError = DESCRIPCIONDEERRORCONEXION;
+		
+		
+		--Error de homologacion
+	ELSEIF CONTAINS(SYSTEM_CODES_ERROR_HOMOLOGACION, CAST (messageNumber AS CHARACTER)) THEN  
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1].(XMLNSC.Attribute)name  = 'X-Original-HTTP-Status-Code';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1] = CODIGODEVALIDACIONREST;
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2].(XMLNSC.Attribute)name  = 'Content-Type';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2] = RESTAPLICATION;
+		
+		SET refBodyOut1.codeError = CODIGODEERRORHOMOLOGACION;
+		SET refBodyOut1.descriptionError = DESCRIPCIONDEERRORHOMOLOGACION;
+		SET refBodyOut1.subCode.codeError				= messageNumber;
+		SET refBodyOut1.subCode.descriptionError		= messageText;
+		
+		--Error retornado por el Backend
+	ELSEIF CONTAINS(SYSTEM_CODES_ERROR_BACKEND, CAST (messageNumber AS CHARACTER)) THEN  
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1].(XMLNSC.Attribute)name  = 'X-Original-HTTP-Status-Line';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1] = DESCRIPCIONNEGOCIOJSON;
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2].(XMLNSC.Attribute)name  = 'X-Original-HTTP-Status-Code';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2] = CODIGOERRORNEGOCIOJSON;
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[3].(XMLNSC.Attribute)name  = 'Content-Type';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[3] = RESTAPLICATION;
+		
+		SET refBodyOut1.codeError = CODIGODEERRORBACKEND;
+		SET refBodyOut1.descriptionError = DESCRIPCIONDEERRORBACKEND;
+		SET refBodyOut1.subCode.codeError				= messageNumber;
+		SET refBodyOut1.subCode.descriptionError		= messageText;
+		
+	ELSE
+		--Mapeo en caso de error de DataSource
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1].(XMLNSC.Attribute)name  = 'X-Original-HTTP-Status-Code';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1] = CODIGODEERRORBUSREST;
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2].(XMLNSC.Attribute)name  = 'Content-Type';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2] = RESTAPLICATION;
+		
+		SET refBodyOut1.codeError = CODIGODEERRORBUS;
+		SET refBodyOut1.descriptionError = DESCRIPCIONDEERRORBUS;
+		SET refBodyOut1.subCode.codeError				= messageNumber;
+		SET refBodyOut1.subCode.descriptionError		= messageText;
+
+	END IF;		
+			
+END;

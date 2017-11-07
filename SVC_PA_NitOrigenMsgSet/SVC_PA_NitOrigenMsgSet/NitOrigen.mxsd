@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:complexType name="DataType">
+    <xsd:sequence>
+	  
+	  <xsd:element minOccurs="0" name="idTransaccion" type="xsd:string"/>
+	  <xsd:element minOccurs="0" name="idSesion" type="xsd:string"/>
+	  <xsd:element minOccurs="0" name="codIdioma" type="xsd:string"/>
+	  <xsd:element minOccurs="0" name="valOrigen" type="xsd:string"/>
+	  <xsd:element minOccurs="0" name="valVersionApp" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="razonSocial" type="xsd:string"/>	  
+      <xsd:element name="archivoContinuacion" type="xsd:string"/>
+      <xsd:element name="numeroDeCuenta" type="xsd:long"/>
+      <xsd:element name="fechaInicioDeConsulta" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="horaSistema" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="tipoDeMovimiento" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="talon" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="oficinaDeRecaudo" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="jornadaData" type="xsd:int"/>
+      <xsd:element name="fechaFinDeConsulta" type="xsd:int"/>
+      <xsd:element name="codigoDeProductoDeCuenta" type="xsd:int"/>
+	  <xsd:element minOccurs="0" name="codMoneda" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="ciudadDeFiltro" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="referenciaInicialDeFiltro" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="referenciaFinalDeFiltro" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="numeroDeMovimientosFiltro" type="xsd:short"/>
+      <xsd:element minOccurs="0" name="tipoMovimientoParaFiltro" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="motivo" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="fechaInicial" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="cantidadRegistros" type="xsd:int"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="RequestType">
+    <xsd:sequence>
+      <xsd:element name="DataHeader" type="DataHeaderType"/>
+      <xsd:element name="Data" type="DataType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:element name="NitOrigen" type="NitOrigenType">
+        <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/NitOrigen;XSDElementDeclaration$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+    </xsd:element>
+    <xsd:complexType name="NitOrigenResponseType">
+    <xsd:sequence>
+      <xsd:element name="Response" type="ResponseType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:element name="NitOrigenResponse" type="NitOrigenResponseType">
+        <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/NitOrigenResponse;XSDElementDeclaration=1$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+    </xsd:element>
+    <xsd:complexType name="DataHeaderType">
+    <xsd:sequence>
+      <xsd:element default="NitOrigen" name="nombreOperacion" type="xsd:string"/>
+      <xsd:element name="total" type="xsd:int"/>
+      <xsd:element name="jornada" type="xsd:short"/>
+      <xsd:element name="canal" type="xsd:short"/>
+      <xsd:element name="modoDeOperacion" type="xsd:short"/>
+      <xsd:element name="usuario" type="xsd:string"/>
+      <xsd:element name="perfil" type="xsd:short"/>
+      <xsd:element default="2.0.0" name="versionServicio" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="NitOrigenType">
+    <xsd:sequence>
+      <xsd:element name="Request" type="RequestType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="ResponseType">
+    <xsd:sequence>
+      <xsd:element name="DataHeader" type="DataHeaderResponseType"/>
+      <xsd:element minOccurs="0" name="Data" type="DataResponseType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="DataHeaderResponseType">
+    <xsd:sequence>
+      <xsd:element name="nombreOperacion" type="xsd:string"/>
+      <xsd:element name="total" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="caracterAceptacion" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="ultimoMensaje" type="xsd:short"/>
+      <xsd:element name="codMsgRespuesta" type="xsd:short"/>
+      <xsd:element minOccurs="0" name="msgRespuesta" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="DataResponseType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="razonSocial" type="xsd:string"/>
+      <xsd:element name="archivoContinuacion" type="xsd:int"/>
+      <xsd:element name="numeroDeCuenta" type="xsd:long"/>
+      <xsd:element minOccurs="0" name="fechaInicioDeConsulta" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="horaSistema" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="tipoDeMovimiento" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="talonData" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="oficinaDeRecaudo" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="jornadaData" type="xsd:short"/>
+      <xsd:element minOccurs="0" name="fechaFinDeConsulta" type="xsd:int"/>
+      <xsd:element name="codigoDeProductoDeLaCuenta" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="ciudadDeFiltro" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="referenciaInicialDeFiltro" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="referenciaFinalDeFiltro" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="numeroDeMovimientosParaElFiltro" type="xsd:short"/>
+	  <xsd:element minOccurs="0" name="codMoneda" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="cantidadDeRegistrosAContinuacion" type="xsd:short"/>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="RegistrosRepetitivos" type="RegistrosRepetitivosResponseType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="RegistrosRepetitivosResponseType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="fechaDeSistema" type="xsd:int"/>
+      <xsd:element name="talonRegistro" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="horaSistemaRegistro" type="xsd:int"/>
+      <xsd:element name="tipoDeMovimientoRegistro" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="jornadaRegistro" type="xsd:short"/>
+      <xsd:element name="referencia1" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="referencia2" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valorDelCheque" type="xsd:decimal"/>
+      <xsd:element minOccurs="0" name="oficinaDeRecaudoRegistro" type="xsd:int"/>
+      <xsd:element name="valorTotal" type="xsd:decimal"/>
+      <xsd:element name="motivo" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="terminalRegistro" type="xsd:int"/>
+      <xsd:element name="fechaMovimiento" type="xsd:int"/>
+	  <xsd:element minOccurs="0" name="codMoneda" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="valorUnidades" type="xsd:decimal"/>
+      <xsd:element minOccurs="0" name="saldoAnterior" type="xsd:decimal"/>
+      <xsd:element minOccurs="0" name="flagDeAdenda" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="nitOriginador" type="xsd:long"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:element name="DataType" type="DataType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/DataType;XSDElementDeclaration=2$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="RequestType" type="RequestType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/RequestType;XSDElementDeclaration=3$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="NitOrigenResponseType" type="NitOrigenResponseType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/NitOrigenResponseType;XSDElementDeclaration=4$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="DataHeaderType" type="DataHeaderType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/DataHeaderType;XSDElementDeclaration=5$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="NitOrigenType" type="NitOrigenType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/NitOrigenType;XSDElementDeclaration=6$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="ResponseType" type="ResponseType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ResponseType;XSDElementDeclaration=7$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="DataHeaderResponseType" type="DataHeaderResponseType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/DataHeaderResponseType;XSDElementDeclaration=8$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="DataResponseType" type="DataResponseType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/DataResponseType;XSDElementDeclaration=9$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="RegistrosRepetitivosResponseType" type="RegistrosRepetitivosResponseType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/RegistrosRepetitivosResponseType;XSDElementDeclaration=10$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+</xsd:schema>

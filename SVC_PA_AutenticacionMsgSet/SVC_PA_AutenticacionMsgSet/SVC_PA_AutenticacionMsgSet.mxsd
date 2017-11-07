@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.2.6b02  svn-revision#14033.--><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+	<xsd:complexType name="AutenticacionType">
+		<xsd:sequence>
+			<xsd:element name="Request" type="AutenticacionRequestType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Autenticacion" type="AutenticacionType">
+		<xsd:annotation>
+			<xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/Autenticacion;XSDElementDeclaration$MRObject"/>
+      </xsd:appinfo>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:complexType name="AutenticacionRequestType">
+		<xsd:sequence maxOccurs="1" minOccurs="1">
+			<xsd:element name="DataHeader" type="AutenticacionDataHeaderType"/>
+			<xsd:element name="Data" type="AutenticacionDataType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="AutenticacionDataHeaderType">
+		<xsd:sequence maxOccurs="1" minOccurs="1">
+			<xsd:element name="nombreOperacion" type="xsd:string"/>
+			<xsd:element name="total" type="xsd:int"/>
+			<xsd:element name="jornada" type="xsd:short"/>
+			<xsd:element name="canal" type="xsd:short"/>
+			<xsd:element name="modoDeOperacion" type="xsd:short"/>
+			<xsd:element name="usuario" type="xsd:string"/>
+			<xsd:element name="perfil" type="xsd:short"/>
+			<xsd:element name="versionServicio" type="xsd:string"/>
+			<xsd:element name="idTransaccion" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="AutenticacionDataType">
+		<xsd:sequence maxOccurs="1" minOccurs="1">
+			<xsd:element name="idSesion" type="xsd:string"/>
+			<xsd:element name="codIdioma" type="xsd:string"/>
+			<xsd:element name="valOrigen" type="xsd:string"/>
+			<xsd:element name="valVersionApp" type="xsd:string"/>
+			<xsd:element name="codTipoIdentificacion" type="xsd:short"/>
+			<xsd:element name="valNumeroIdentificacion" type="xsd:string"/>
+			<xsd:element name="valClaveDinamica" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="MjsSolValidarClaveCanalVirtual">
+		<xsd:sequence>
+			<xsd:element maxOccurs="1" minOccurs="0" name="contextoSolicitud" type="ContextoSolicitudTipo"/>
+			<xsd:element name="clienteNatural" type="ClienteNaturalTipo"/>
+			<xsd:element name="seguridadTokenTipo" type="SeguridadTokenTipo"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ContextoSolicitudTipo">
+		<xsd:sequence>
+			<xsd:element maxOccurs="1" minOccurs="0" name="servicio" type="ServicioTipo"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="operacionCanal" type="OperacionCanalTipo"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="consumidor" type="ConsumidorTipo"/>
+			<xsd:element minOccurs="0" name="huellaDigitalDispositivo" type="HuellaDigitalDispositivoTipo"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="criteriosOrdenamiento">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="criterioOrdenamiento" nillable="true" type="CriterioOrdenamientoTipo"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element minOccurs="0" name="paginacion" type="PaginacionTipo"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ClienteNaturalTipo">
+		<xsd:complexContent>
+			<xsd:extension base="PersonaNaturalTipo">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="codEmpresaAsociada" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="valNombreEmpresaAsociada" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="SeguridadTokenTipo">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="idSesionToken" type="xsd:string"/>
+			<xsd:element minOccurs="0" name="valClavePersonal" type="xsd:string"/>
+			<xsd:element minOccurs="0" name="valClaveDinamica" type="xsd:string"/>
+			<xsd:element minOccurs="0" name="esSesionUnica" type="xsd:boolean"/>
+			<xsd:element minOccurs="0" name="esSesionPorCanal" type="xsd:boolean"/>
+			<xsd:element minOccurs="0" name="esTokenAutenticado" type="xsd:boolean"/>
+			<xsd:element minOccurs="0" name="esSiguienteToken" type="xsd:boolean"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ServicioTipo">
+		<xsd:sequence>
+			<xsd:element name="idServicio" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="OperacionCanalTipo">
+		<xsd:sequence>
+			<xsd:element maxOccurs="1" minOccurs="0" name="idSesion" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="idTransaccion" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="fecOperacion" type="xsd:dateTime"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="valJornada" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="codMoneda" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="codPais" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="codIdioma" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ConsumidorTipo">
+		<xsd:sequence>
+			<xsd:element maxOccurs="1" minOccurs="0" name="idConsumidor" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="aplicacion" type="AplicacionTipo"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="canal" type="CanalTipo"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="terminal" type="TerminalTipo"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="HuellaDigitalDispositivoTipo">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="idBeacon" type="xsd:string"/>
+			<xsd:element minOccurs="0" name="valHuellaDispositivo" type="xsd:string"/>
+			<xsd:element minOccurs="0" name="valTokenCookie" type="xsd:string"/>
+			<xsd:element minOccurs="0" name="valTokenFSO" type="xsd:string"/>
+			<xsd:element minOccurs="0" name="valHttpAccept" type="xsd:string"/>
+			<xsd:element minOccurs="0" name="valHttpAcceptChars" type="xsd:string"/>
+			<xsd:element minOccurs="0" name="valHttpAcceptEncoding" type="xsd:string"/>
+			<xsd:element minOccurs="0" name="valHttpAcceptLanguage" type="xsd:string"/>
+			<xsd:element minOccurs="0" name="valHttpReferrer" type="xsd:string"/>
+			<xsd:element minOccurs="0" name="valIpAddress" type="xsd:string"/>
+			<xsd:element minOccurs="0" name="valUserAgent" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="CriterioOrdenamientoTipo">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="valColumna" type="xsd:string"/>
+			<xsd:element minOccurs="0" name="valOrden" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="PaginacionTipo">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="valCantidadRegistrosLote" type="xsd:int"/>
+			<xsd:element minOccurs="0" name="valNumeroLote" type="xsd:int"/>
+			<xsd:element minOccurs="0" name="valTotalRegistros" type="xsd:int"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="PersonaNaturalTipo">
+		<xsd:complexContent>
+			<xsd:extension base="PersonaTipo">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="0" name="valPrimerNombre" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="valSegundoNombre" type="xsd:string"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="valPrimerApellido" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="valSegundoApellido" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="codSexo" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="codEstadoCivil" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="valLoginAutoservicio" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="codNivelEducativo" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="valFechaNacimiento" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="PersonaTipo">
+		<xsd:sequence>
+			<xsd:element name="codTipoIdentificacion" type="xsd:string"/>
+			<xsd:element name="valNumeroIdentificacion" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="valNombre" type="xsd:string"/>
+			<xsd:element minOccurs="0" name="contacto" type="ContactoPersonaTipo"/>
+			<xsd:element minOccurs="0" name="valNaturaleza" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ContactoPersonaTipo">
+		<xsd:sequence>
+			<xsd:element name="telefonos">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="telefono" nillable="true" type="TelefonoTipo"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="correosElectronicos">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="valCorreoElectronico" nillable="true" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element minOccurs="0" name="esAutorizaNotificacionElectronica" type="xsd:boolean"/>
+			<xsd:element name="ubicaciones">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="ubicacion" nillable="true" type="UbicacionPersonaTipo"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TelefonoTipo">
+		<xsd:sequence>
+			<xsd:element name="codTipoTelefono" type="xsd:string"/>
+			<xsd:element name="valNumeroTelefono" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="UbicacionPersonaTipo">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="municipio" type="MunicipioTipo"/>
+			<xsd:element minOccurs="0" name="valDireccion" type="xsd:string"/>
+			<xsd:element minOccurs="0" name="codTipoDireccion" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="MunicipioTipo">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="idMunicipio" type="xsd:string"/>
+			<xsd:element minOccurs="0" name="codMunicipio" type="xsd:string"/>
+			<xsd:element minOccurs="0" name="valNombre" type="xsd:string"/>
+			<xsd:element name="departamento" type="DepartamentoTipo"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="DepartamentoTipo">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="idDepartamento" type="xsd:string"/>
+			<xsd:element minOccurs="0" name="codDepartamento" type="xsd:string"/>
+			<xsd:element minOccurs="0" name="valNombre" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="AplicacionTipo">
+		<xsd:sequence>
+			<xsd:element name="idAplicacion" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="CanalTipo">
+		<xsd:sequence>
+			<xsd:element name="idCanal" type="xsd:short"/>
+			<xsd:element name="idHost" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TerminalTipo">
+		<xsd:sequence>
+			<xsd:element maxOccurs="1" minOccurs="0" name="idTerminal" type="xsd:int"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="valOrigenPeticion" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="codUsuario" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="valPerfil" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="MjsSolValidarTokenOTP">
+		<xsd:sequence>
+			<xsd:element maxOccurs="1" minOccurs="1" name="contextoSolicitud" type="ContextoSolicitudTipo"/>
+			<xsd:element name="clienteNatural" type="ClienteNaturalTipo"/>
+			<xsd:element name="seguridadTokenTipo" type="SeguridadTokenTipo"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="MjsSolCerrarSesion">
+		<xsd:sequence>
+			<xsd:element name="contextoSolicitud" type="ContextoSolicitudTipo"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="clienteNatural" type="ClienteNaturalTipo"/>
+			<xsd:element name="seguridadTokenTipo" type="SeguridadTokenTipo"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="mjsValidarClaveCanalVirtual" type="MjsSolValidarClaveCanalVirtual">
+		<xsd:annotation>
+			<xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/mjsValidarClaveCanalVirtual;XSDElementDeclaration=1$MRObject"/>
+      </xsd:appinfo>
+		</xsd:annotation>
+	</xsd:element>
+    <xsd:element name="MjsSolValidarClaveCanalVirtual" type="MjsSolValidarClaveCanalVirtual"/>
+    <xsd:element name="mjsSolCerrarSesion" type="MjsSolCerrarSesion">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/mjsSolCerrarSesion;XSDElementDeclaration=3$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="mjsSolValidarTokenOTP" type="MjsSolValidarTokenOTP">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/mjsSolValidarTokenOTP;XSDElementDeclaration=4$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+</xsd:schema>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MRMessageSet id="FT6NJE0002001"
+  name="SVC_PA_ActualizacionParametrosNotificaciones_MsgSet" parser="XMLNSC">
+  <MRMsgCollection
+    href="platform:/resource/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/com/davivienda/www/xml/actualizacionparametrosnotificaciones/ActualizacionParametrosNotificaciones.mxsd"
+    prefix="tns" targetNamespace="http://www.davivienda.com/xml/ActualizacionParametrosNotificaciones">
+    <message
+      href="platform:/resource/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/com/davivienda/www/xml/actualizacionparametrosnotificaciones/ActualizacionParametrosNotificaciones.mxsd#/0/ActualizacionParametrosNotificaciones;XSDElementDeclaration$MRMessage" name="ActualizacionParametrosNotificaciones"/>
+    <element
+      href="platform:/resource/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/com/davivienda/www/xml/actualizacionparametrosnotificaciones/ActualizacionParametrosNotificaciones.mxsd#/0/ActualizacionParametrosNotificaciones;XSDElementDeclaration"
+      name="ActualizacionParametrosNotificaciones" type="mset://SVC_PA_ActualizacionParametrosNotificaciones_MsgSet#/-/complexType{http://www.davivienda.com/xml/ActualizacionParametrosNotificaciones}ActualizacionParametrosNotificacionesType"/>
+    <element
+      href="platform:/resource/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/com/davivienda/www/xml/actualizacionparametrosnotificaciones/ActualizacionParametrosNotificaciones.mxsd#/0/ActualizacionParametrosNotificacionesResponse;XSDElementDeclaration=1"
+      name="ActualizacionParametrosNotificacionesResponse" type="mset://SVC_PA_ActualizacionParametrosNotificaciones_MsgSet#/-/complexType{http://www.davivienda.com/xml/ActualizacionParametrosNotificaciones}ActualizacionParametrosNotificacionesResponseType"/>
+    <complexType
+      baseType="mset://SVC_PA_ActualizacionParametrosNotificaciones_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/com/davivienda/www/xml/actualizacionparametrosnotificaciones/ActualizacionParametrosNotificaciones.mxsd#/0/ActualizacionParametrosNotificacionesType;XSDComplexTypeDefinition" name="ActualizacionParametrosNotificacionesType"/>
+    <complexType
+      baseType="mset://SVC_PA_ActualizacionParametrosNotificaciones_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/com/davivienda/www/xml/actualizacionparametrosnotificaciones/ActualizacionParametrosNotificaciones.mxsd#/0/RequestType;XSDComplexTypeDefinition=1" name="RequestType"/>
+    <complexType
+      baseType="mset://SVC_PA_ActualizacionParametrosNotificaciones_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/com/davivienda/www/xml/actualizacionparametrosnotificaciones/ActualizacionParametrosNotificaciones.mxsd#/0/ActualizacionParametrosNotificacionesDataHeaderReqType;XSDComplexTypeDefinition=2" name="ActualizacionParametrosNotificacionesDataHeaderReqType"/>
+    <complexType
+      baseType="mset://SVC_PA_ActualizacionParametrosNotificaciones_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/com/davivienda/www/xml/actualizacionparametrosnotificaciones/ActualizacionParametrosNotificaciones.mxsd#/0/ActualizacionParametrosNotificacionesDataReqType;XSDComplexTypeDefinition=3" name="ActualizacionParametrosNotificacionesDataReqType"/>
+    <complexType
+      baseType="mset://SVC_PA_ActualizacionParametrosNotificaciones_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/com/davivienda/www/xml/actualizacionparametrosnotificaciones/ActualizacionParametrosNotificaciones.mxsd#/0/ParametrosNotificacionesReqType;XSDComplexTypeDefinition=4" name="ParametrosNotificacionesReqType"/>
+    <complexType
+      baseType="mset://SVC_PA_ActualizacionParametrosNotificaciones_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/com/davivienda/www/xml/actualizacionparametrosnotificaciones/ActualizacionParametrosNotificaciones.mxsd#/0/ParametrosNotificacionReqType;XSDComplexTypeDefinition=5" name="ParametrosNotificacionReqType"/>
+    <complexType
+      baseType="mset://SVC_PA_ActualizacionParametrosNotificaciones_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/com/davivienda/www/xml/actualizacionparametrosnotificaciones/ActualizacionParametrosNotificaciones.mxsd#/0/ParametrosAdicionalesReqType;XSDComplexTypeDefinition=6" name="ParametrosAdicionalesReqType"/>
+    <complexType
+      baseType="mset://SVC_PA_ActualizacionParametrosNotificaciones_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/com/davivienda/www/xml/actualizacionparametrosnotificaciones/ActualizacionParametrosNotificaciones.mxsd#/0/ParametroAdicionalReqType;XSDComplexTypeDefinition=7" name="ParametroAdicionalReqType"/>
+    <complexType
+      baseType="mset://SVC_PA_ActualizacionParametrosNotificaciones_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/com/davivienda/www/xml/actualizacionparametrosnotificaciones/ActualizacionParametrosNotificaciones.mxsd#/0/ArchivosReqType;XSDComplexTypeDefinition=8" name="ArchivosReqType"/>
+    <complexType
+      baseType="mset://SVC_PA_ActualizacionParametrosNotificaciones_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/com/davivienda/www/xml/actualizacionparametrosnotificaciones/ActualizacionParametrosNotificaciones.mxsd#/0/ArchivoReqType;XSDComplexTypeDefinition=9" name="ArchivoReqType"/>
+    <complexType
+      baseType="mset://SVC_PA_ActualizacionParametrosNotificaciones_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/com/davivienda/www/xml/actualizacionparametrosnotificaciones/ActualizacionParametrosNotificaciones.mxsd#/0/PoliticasReqType;XSDComplexTypeDefinition=10" name="PoliticasReqType"/>
+    <complexType
+      baseType="mset://SVC_PA_ActualizacionParametrosNotificaciones_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/com/davivienda/www/xml/actualizacionparametrosnotificaciones/ActualizacionParametrosNotificaciones.mxsd#/0/ActualizacionParametrosNotificacionesResponseType;XSDComplexTypeDefinition=11" name="ActualizacionParametrosNotificacionesResponseType"/>
+    <complexType
+      baseType="mset://SVC_PA_ActualizacionParametrosNotificaciones_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/com/davivienda/www/xml/actualizacionparametrosnotificaciones/ActualizacionParametrosNotificaciones.mxsd#/0/ResponseType;XSDComplexTypeDefinition=12" name="ResponseType"/>
+    <complexType
+      baseType="mset://SVC_PA_ActualizacionParametrosNotificaciones_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/com/davivienda/www/xml/actualizacionparametrosnotificaciones/ActualizacionParametrosNotificaciones.mxsd#/0/ActualizacionParametrosNotificacionesDataHeaderRespType;XSDComplexTypeDefinition=13" name="ActualizacionParametrosNotificacionesDataHeaderRespType"/>
+    <complexType
+      baseType="mset://SVC_PA_ActualizacionParametrosNotificaciones_MsgSet#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/SVC_PA_ActualizacionParametrosNotificaciones_MsgSet/com/davivienda/www/xml/actualizacionparametrosnotificaciones/ActualizacionParametrosNotificaciones.mxsd#/0/ActualizacionParametrosNotificacionesDataRespType;XSDComplexTypeDefinition=14" name="ActualizacionParametrosNotificacionesDataRespType"/>
+  </MRMsgCollection>
+</MRMessageSet>

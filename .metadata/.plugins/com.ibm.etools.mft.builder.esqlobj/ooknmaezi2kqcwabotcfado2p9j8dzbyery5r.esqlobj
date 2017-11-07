@@ -1,0 +1,18 @@
+CREATE FUNCTION RemoveEspCharacter (IN refInputTree REFERENCE, INOUT refOutputTree REFERENCE)
+BEGIN
+
+	DECLARE blobmsgin BLOB ASBITSTREAM(refInputTree);
+	
+	DECLARE apos   CHARACTER;
+
+	SET apos 	=  CAST(CAST(x'27' AS BLOB CCSID 1208 ENCODING 546) AS CHAR CCSID 1208 ENCODING 546);
+	
+	SET blobmsgin = REPLACE (blobmsgin,CAST('&amp;gt;' AS BLOB CCSID 819),CAST('>' AS BLOB CCSID 819));
+	SET blobmsgin = REPLACE (blobmsgin,CAST('&amp;apos;' AS BLOB CCSID 819),CAST(apos AS BLOB CCSID 819));
+	SET blobmsgin = REPLACE (blobmsgin,CAST('&amp;quot;' AS BLOB CCSID 819),CAST('"' AS BLOB CCSID 819));
+	
+	CREATE LASTCHILD OF refOutputTree DOMAIN ('XMLNSC') PARSE (blobmsgin);
+	
+	SET refInputTree VALUE = NULL;
+	
+END;

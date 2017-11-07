@@ -1,0 +1,676 @@
+BROKER SCHEMA com.ibm.ams.framework.adapters.rpg
+PATH com.davivienda.utils;
+/*
+ * File name: SPIntegrationAdapter.esql
+ *
+ * Purpose:   Esquema ESQL que define los modulos utilizados para el flujo de mensajes
+ *			  del adaptador de integración de Stored Procedure. Componente que consume 
+ *			  procedimientos almacenados de una base de datos
+ *
+ * Authors:  Miguel Castillo Camacho
+ *                 
+ * Date      31 de Julio de 2012
+ * Version:  1.0
+ */
+
+-- variable UDP para identificar la instancia del adaptador
+DECLARE faultactor EXTERNAL CHARACTER '';
+-- variable UDP para la configuración del código de DefaultException
+DECLARE DefaultCode EXTERNAL CHARACTER 'DefaultCode';
+-- variable UDP para la configuración de la descripción de DefaultException
+DECLARE DefaultDescription EXTERNAL CHARACTER 'DefaultDescription';
+-- variable UDP para la configuración del código de TimeoutException
+DECLARE TimeoutCode EXTERNAL CHARACTER 'TimeoutCode';
+-- variable UDP para la configuración de la descripción de TimeoutException
+DECLARE TimeoutDescription EXTERNAL CHARACTER 'TimeoutDescription';
+-- variable UDP para la configuración del código de ProviderException
+DECLARE ProviderCode EXTERNAL CHARACTER 'ProviderCode';
+-- variable UDP para la configuración de la descripción de ProviderException
+DECLARE ProviderDescription EXTERNAL CHARACTER 'ProviderDescription';
+ /*
+ *	Module name: RemoveEnvelope_Compute
+ *	Purpose: Remuieve el envolvente del mensaje de entrada.
+ */
+CREATE COMPUTE MODULE RemoveEnvelope_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- mantener correlId
+		CALL CopyMessageHeaders();
+		-- remover envolvente esbXML
+		SET OutputRoot.XMLNSC = InputRoot.XMLNSC.esbXML:esbXML.Body;
+		-- almacenar en Environment el header:esbXML
+		SET Environment.Variables.MsgRequest.Header = InputRoot.XMLNSC.esbXML:esbXML.Header;
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+END MODULE;	
+
+ /*
+ *	Module name: ProcessErrorMessageRequest
+ *	Purpose: Nodo que se encarga de generar los mensajes de error en 
+ *				la etapa de Request.
+ */
+CREATE COMPUTE MODULE ProcessErrorMessageRequest
+	-- referencias al mensaje de entrada
+	DECLARE InputMessage 	REFERENCE TO InputRoot.XMLNSC;
+	DECLARE InputHeader		REFERENCE TO InputMessage.esbXML:esbXML.Header;
+	DECLARE InputBody		REFERENCE TO InputMessage.esbXML:esbXML.Body;
+	
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- mantener el correlid
+		CALL CopyMessageHeaders();
+		
+		-- construcción del mensaje de salida
+		DECLARE OutputMessage REFERENCE TO OutputRoot.XMLNSC;
+		
+		-- configurar la notificación para error de sistema
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML.Header;
+		DECLARE OutputHeader REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML.Header;
+		
+		SET OutputHeader = InputHeader; 
+		CALL BuildHeaderSystemException(OutputHeader,InputExceptionList,'PA.ADP.INT.RPG.REQ.' || faultactor);
+		
+		-- construcción del mensaje de excepción
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML.Body;
+		DECLARE OutputBody		REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML.Body;
+			
+		CALL BuildMessageException (OutputBody, DefaultCode, DefaultDescription);
+		
+		-- enrutar la respuesta al componente de servicio que invocó el adaptador
+		CREATE FIELD OutputLocalEnvironment.Destination.MQDestinationList;
+		DECLARE destination REFERENCE TO OutputLocalEnvironment.Destination.MQDestinationList;
+		
+		SET destination.DestinationData[1].queueName =  InputHeader.internalRoutingData.replyToQueue.queueName;
+		SET destination.DestinationData[1].queueManagerName =  InputHeader.internalRoutingData.replyToQueue.queueManagerName;
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+END MODULE;
+
+/*
+ *	Module name: ProcessErrorMessageResponse
+ *	Purpose: Nodo que se encarga de generar los mensajes de error en
+ *				la etapa de Response.
+ */
+CREATE COMPUTE MODULE ProcessErrorMessageResponse
+	-- Referencias al mensaje de entrada
+	DECLARE InputMessage 	REFERENCE TO InputRoot.XMLNSC;
+	DECLARE InputHeader		REFERENCE TO InputMessage.esbXML:esbXML.Header;
+	DECLARE InputBody		REFERENCE TO InputMessage.esbXML:esbXML.Body;
+	
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- mantener correlid
+		CALL CopyMessageHeaders();
+		
+		-- construcción del mensaje de salida
+		DECLARE OutputMessage REFERENCE TO OutputRoot.XMLNSC;
+		
+		-- construcción notificación de excepción de sistema
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML.Header;
+		DECLARE OutputHeader REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML.Header;
+		
+		SET OutputHeader = InputHeader; 
+		CALL BuildHeaderSystemException(OutputHeader,InputExceptionList,'PA.ADP.INT.RPG.REQ.' || faultactor);
+		
+		-- construcción del mensaje de excepción 
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML.Body;
+		DECLARE OutputBody		REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML.Body;
+
+		CALL BuildMessageException (OutputBody, DefaultCode, DefaultDescription);
+		
+		-- enrutar la respuesta al componente de servicio que invocó al adaptador
+		CREATE FIELD OutputLocalEnvironment.Destination.MQDestinationList;
+		DECLARE destination REFERENCE TO OutputLocalEnvironment.Destination.MQDestinationList;
+		
+		SET destination.DestinationData[1].queueName =  InputHeader.internalRoutingData.replyToQueue.queueName;
+		SET destination.DestinationData[1].queueManagerName =  InputHeader.internalRoutingData.replyToQueue.queueManagerName;
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+END MODULE;
+
+
+ /*
+ *	Module name: ProcessRequestData
+ *	Purpose: Nodo que procesa el mensaje de entrada, construye un arbol con el nombre del procedimiento
+ *  almacenado a consumir y sus parametros.
+ */ 
+CREATE COMPUTE MODULE ProcessRequestData
+	-- referencias al mensaje de entrada
+	DECLARE InputMessage REFERENCE TO InputRoot.XMLNSC;
+	DECLARE InputHeader REFERENCE TO InputMessage.esbXML:esbXML.Header;
+	DECLARE InputBody REFERENCE TO InputMessage.esbXML:esbXML.Body;
+	-- constante que identifica el tag Parameter
+	DECLARE PARAMETERCONS CONSTANT CHARACTER 'Parameter';
+	
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- mantener CorrelationId
+		CALL CopyMessageHeaders();
+		--- construcción mensaje de salida
+		CREATE FIELD OutputRoot.XMLNSC.TransactionRequest;
+		DECLARE txrequest REFERENCE TO OutputRoot.XMLNSC.TransactionRequest;
+		
+		SET Environment.Variables.MsgRequest.Header = InputHeader;
+		SET Environment.Variables.MsgRequest.Transaction = FIELDNAME(InputBody.*[1]);
+	
+		/* Obtener los valores de mensajes de entrada y de caché */
+		DECLARE refConfig REFERENCE TO Environment.Variables.ConfigXML;
+		DECLARE refInputMessage REFERENCE TO  InputBody;
+		
+		/*Mapear los parametros del archivo de configuracion con el valor que trae cada parametro*/
+		DECLARE fdTransaction ROW;
+		
+		/* Buscar la transacción en el XML de configuración y cargar arreglo con la informacion del 
+		 * Procedimiento almacenado 
+		 */
+		SET  fdTransaction.Transaction[] = 
+				(
+					SELECT *
+					FROM refConfig.Transaction[] as S 
+					WHERE 
+						S.Name = Environment.Variables.MsgRequest.Header.requestData.endpointReference.serviceId
+				);
+		
+		/*Cargar el mensaje de salida con el nombre del procedimiento, sus parametros y valores */
+		IF fdTransaction.Transaction.Code IS NOT NULL THEN
+			
+			DECLARE connref REFERENCE TO refConfig.ConnectionDetail;
+			SET txrequest.ConnectionDetails = connref;
+			-- nombre programa RPG a ejecutar
+			SET txrequest.ConnectionDetails.ProgramName = fdTransaction.Transaction[1].ProgramName;
+			-- datos adicionales de conexión para stored procedure
+			SET txrequest.ConnectionDetails.OperationLibrary = fdTransaction.Transaction[1].OperationLibrary;
+			SET txrequest.ConnectionDetails.OperationName = fdTransaction.Transaction[1].OperationName;
+			
+			DECLARE txref REFERENCE TO fdTransaction.Transaction[1];
+			
+			DECLARE txrefParameters ROW;
+			DECLARE txrefRequest ROW;
+			SET  txrefRequest.ConnectionDetails = txrequest.ConnectionDetails;
+			
+			-- referenciar el arbol de parametros de entrada
+			
+			DECLARE existsInputParams BOOLEAN TRUE;
+			DECLARE i_cont 	   INTEGER 1;
+			DECLARE i_cont_str CHARACTER '';
+			
+			WHILE existsInputParams DO
+				SET i_cont_str = CAST(i_cont AS CHARACTER);
+				DECLARE nameIn		 CHARACTER 'InputParameters' ||	i_cont_str;
+				DECLARE inputparam 	 REFERENCE TO txref.{nameIn};
+				MOVE inputparam FIRSTCHILD;
+				DECLARE existsInput 	 BOOLEAN SINGULAR(fdTransaction.Transaction[1].{nameIn}[]);				
+				-- obtener los valores de los parametros de entrada
+				IF existsInput THEN
+					WHILE LASTMOVE(inputparam) DO
+						SET inputparam.value = COALESCE(refInputMessage.*.Header.{inputparam.name},
+											   refInputMessage.*.Body.{inputparam.name});
+						MOVE inputparam NEXTSIBLING;
+					END WHILE;
+				ELSE
+					SET existsInputParams = FALSE;
+				END IF;		
+				SET i_cont = i_cont + 1;
+			END WHILE;
+			
+			SET  txrefParameters = txref;
+			DELETE FIELD txrefParameters.Code;
+			DELETE FIELD txrefParameters.Name;
+			DELETE FIELD txrefParameters.ProgramName;
+			
+			SET txrefParameters.ConnectionDetails = txrefRequest.ConnectionDetails;
+			
+			SET txrequest  		=  txrefParameters;
+
+			-- adicionar la cardinalidad de los requerimientos
+			DECLARE inputCardinality REFERENCE TO fdTransaction.Transaction[1].inputCardinality;
+			IF LASTMOVE(inputCardinality) THEN
+				SET txrequest.inputCardinality = fdTransaction.Transaction[1].inputCardinality;
+			END IF;
+			DECLARE outputCardinality REFERENCE TO fdTransaction.Transaction[1].outputCardinality;
+			IF LASTMOVE(outputCardinality) THEN
+				SET txrequest.outputCardinality = fdTransaction.Transaction[1].outputCardinality;
+			END IF;
+			DECLARE responseIndex REFERENCE TO fdTransaction.Transaction[1].responseIndex;
+			IF LASTMOVE(responseIndex) THEN
+				SET txrequest.responseIndex = fdTransaction.Transaction[1].responseIndex;
+			END IF;
+			DECLARE validationTagIndex REFERENCE TO fdTransaction.Transaction[1].validationTagIndex;
+			IF LASTMOVE(validationTagIndex) THEN
+				SET txrequest.validationTagIndex = fdTransaction.Transaction[1].validationTagIndex;
+			END IF;
+			DECLARE validationValue REFERENCE TO fdTransaction.Transaction[1].validationValue;
+			IF LASTMOVE(validationValue) THEN
+				SET txrequest.validationValue = fdTransaction.Transaction[1].validationValue;
+			END IF;
+			--20160511 - Enviar en el mensaje el messageId para traza.
+			SET txrequest.messageId = InputHeader.messageId;			
+			
+		END IF;
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+END MODULE;
+
+
+ /*
+ *	Module name: StoreEnvironment
+ *	Purpose: Guarda el environment para que sea restaurado en el modulo
+ *  RestoreEnvironment_Compute
+ */
+CREATE COMPUTE MODULE StoreEnvironment
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyMessageHeaders();
+		
+		SET OutputRoot.XMLNSC = Environment;
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+END MODULE;
+
+ /*
+ *	Module name: RestoreEnvironment
+ *	Purpose: Modulo que se encarga de restaurar el environment guardado en
+ *  el modulo SAFIntegrationAdapter_StoreEnvironment
+ */
+CREATE COMPUTE MODULE RestoreEnvironment
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- dejar pasar el mensaje de respuesta
+		SET OutputRoot = InputRoot;
+		
+		PROPAGATE TO TERMINAL 'out' MESSAGE OutputRoot DELETE DEFAULT;
+		
+		-- construir mensaje de cancelar timeout
+		SET OutputRoot.XMLNSC.TimeoutCancel.Action = Environment.Variables.TimeoutCancel.Action;
+		SET OutputRoot.XMLNSC.TimeoutCancel.Identifier = Environment.Variables.TimeoutCancel.Identifier;
+		
+		PROPAGATE TO TERMINAL 'out1' MESSAGE OutputRoot DELETE NONE;
+		
+		RETURN FALSE;
+	END;
+
+	END MODULE;
+ 
+/*
+ *	Module name: BuildNotificationMessage
+ *	Purpose: Configura el tiempo de 'timeout' para la instancia desde la propiedad MQMD.Expiry
+ */
+CREATE COMPUTE MODULE BuildNotificationMessage
+	
+	-- referenciar el mensaje de entrada
+	DECLARE msgin REFERENCE TO InputRoot.XMLNSC.esbXML:esbXML;
+	DECLARE headerIn REFERENCE TO msgin.Header;
+	DECLARE bodyIn REFERENCE TO msgin.Body;
+	
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- mantener el CorrelId
+        CALL CopyMessageHeaders();
+		
+		-- construcción del mensaje de salida
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML.Header;
+        DECLARE headerOut REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML.Header;
+       
+        SET headerOut = headerIn;
+        
+        -- statuscode de excepción
+        CREATE FIELD headerOut.responseData.status.statusCode;
+        SET headerOut.responseData.status.statusCode = SYSEXCEPTION;
+        -- metadata de excepción
+		CREATE FIELD headerOut.responseData.status.systemException;
+		DECLARE sysException REFERENCE TO headerOut.responseData.status.systemException;
+		
+		SET sysException.faultcode 	 = TimeoutCode;
+		SET sysException.faultstring = TimeoutDescription;
+		SET sysException.faultactor  = 'ADP.INT.SP.RESP.' || faultactor;
+		SET sysException.detail 	 = TimeoutDescription;
+         
+        -- creación del mensaje de timeout  
+        CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML.Body;
+        DECLARE OutputBody REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML.Body;
+       
+       	CALL BuildMessageException (OutputBody, TimeoutCode, TimeoutDescription);
+        
+        PROPAGATE TO TERMINAL 'out' MESSAGE OutputRoot DELETE DEFAULT;
+        
+		RETURN FALSE;
+	END;
+	
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+END MODULE;
+
+/*
+ *	Module name: ProcessErrorMessageStoredProcedureExecute
+ *	Purpose: Nodo que se encarga de generar los mensajes de error.
+ */
+CREATE COMPUTE MODULE ProcessErrorMessageStoredProcedureExecute
+	
+	DECLARE InputMessage 	REFERENCE TO InputRoot.XMLNSC;
+	DECLARE InputHeader		REFERENCE TO InputMessage.esbXML:esbXML.Header;
+	DECLARE InputBody		REFERENCE TO InputMessage.esbXML:esbXML.Body;
+	
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+
+		-- mantener correlid
+		CALL CopyMessageHeaders();
+		
+		-- declaración variables de descripción error
+		DECLARE messageText 			CHARACTER '';
+		DECLARE parentName 				CHARACTER '';
+		DECLARE catlgName 				CHARACTER '';
+		DECLARE errorText 				CHARACTER '';
+		DECLARE messageNumber 			INTEGER 0;
+		
+		-- obtener mensaje de error
+		CALL com.davivienda.utils.getLastExceptionDetail(InputExceptionList,messageNumber,
+													messageText, parentName, catlgName);
+		
+		-- construcción del mensaje de salida
+		DECLARE OutputMessage REFERENCE TO OutputRoot.XMLNSC;
+		
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML.Header;
+		DECLARE OutputHeader REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML.Header;
+		
+		SET OutputHeader = Environment.Variables.MsgRequest.Header; 
+		
+		-- construcción status para notificar la excepción de proveedor
+		CREATE FIELD OutputHeader.responseData.status;
+		SET OutputHeader.responseData.status.statusCode = PROVEXCEPTION;
+	
+		CREATE FIELD OutputHeader.responseData.status.providerException;
+		DECLARE proException REFERENCE TO OutputHeader.responseData.status.providerException;
+		
+		SET proException.providerCode = ProviderCode;
+		SET proException.providerMessage = ProviderDescription;
+		SET proException.providerLocation = 'ADP.INT.RPG.EXECUTE.' || faultactor;
+		SET proException.providerDetail = InputExceptionList; 
+		
+		PROPAGATE TO TERMINAL 'out1' MESSAGE OutputRoot DELETE NONE;
+	
+		-- construcción del mensaje de excepción
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML.Body;
+		DECLARE OutputBody		REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML.Body;
+		
+		CALL BuildMessageException (OutputBody, ProviderCode, ProviderDescription);
+		
+		-- enrutar la respuesta al componente de servicio que invocó al adaptador
+		CREATE FIELD OutputLocalEnvironment.Destination.MQDestinationList;
+		DECLARE destination REFERENCE TO OutputLocalEnvironment.Destination.MQDestinationList;
+		
+		SET destination.DestinationData[1].queueName =  OutputHeader.internalRoutingData.replyToQueue.queueName;
+		SET destination.DestinationData[1].queueManagerName =  OutputHeader.internalRoutingData.replyToQueue.queueManagerName;
+
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+END MODULE;
+
+/*
+ *	Module name: MessageExceptionFilter
+ *	Purpose: Detectar los mensajes de MessageException.
+ */
+CREATE FILTER MODULE MessageExceptionFilter
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		IF FIELDTYPE(Root.XMLNSC.esbXML:esbXML.Body.MessageException) IS NOT NULL THEN
+			RETURN TRUE;
+		ELSE
+			RETURN FALSE;
+		END IF;
+	END;
+
+END MODULE;
+
+/*
+ *	Module name: ProcessResponseData
+ *	Purpose: Nodo que recibe los parametros de salida del procedimiento almacenado y genera el mensaje
+ *  de respuesta.
+ */
+CREATE COMPUTE MODULE ProcessResponseData
+		
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		-- mantener el CorrelId
+		CALL CopyMessageHeaders();
+		
+		-- referencia al mensaje de entrada
+		DECLARE InputMessage REFERENCE TO InputRoot.XMLNSC;
+		
+		-- construcción del mensaje de salida
+		DECLARE OutputMessage REFERENCE TO OutputRoot.XMLNSC;
+		
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML.Header;
+		DECLARE OutputHeader REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML.Header;
+		
+		SET OutputHeader = Environment.Variables.MsgRequest.Header;
+		
+		CREATE FIELD OutputRoot.XMLNSC.esbXML:esbXML.Body;
+		DECLARE OutputBody		REFERENCE TO OutputRoot.XMLNSC.esbXML:esbXML.Body;
+
+		-- modificar nombre de padre para el mensaje de respuesta
+		DECLARE transactionName CHARACTER Environment.Variables.MsgRequest.Transaction;
+		SET transactionName = REPLACE(transactionName,'REQ','RESP');
+		
+		-- crear el tag que tiene el nombre de la transaccion y su namespace
+		CREATE FIRSTCHILD OF OutputBody NAME transactionName;
+		MOVE OutputBody FIRSTCHILD;
+	
+		-- reportar success en el esbXML:Header
+		SET OutputHeader.responseData.status.statusCode = 'Success';
+			
+		-- Crear Header de la respuesta del backend
+		CREATE FIELD OutputBody.Header;
+		DECLARE dataheaderref REFERENCE TO OutputBody.Header;
+		
+		-- iteración sobre el árbol de la respuesta estandar
+		DECLARE standHeaderRef REFERENCE TO InputMessage.TransactionResponse.Standard.Header;
+		MOVE standHeaderRef FIRSTCHILD;
+		
+		WHILE LASTMOVE(standHeaderRef) DO
+			CREATE LASTCHILD OF dataheaderref NAME FIELDNAME(standHeaderRef) VALUE FIELDVALUE(standHeaderRef);
+		
+			MOVE standHeaderRef NEXTSIBLING;
+		END WHILE;
+		
+		-- Crear Header de la respuesta del backend
+		CREATE FIELD OutputBody.Body;
+		DECLARE dataBodyRef REFERENCE TO OutputBody.Body;
+		
+		-- iteración sobre el árbol de la respuesta estandar
+		DECLARE standBodyRef REFERENCE TO InputMessage.TransactionResponse.Standard.Body;
+		MOVE standBodyRef FIRSTCHILD;
+		
+		WHILE LASTMOVE(standBodyRef) DO
+			CREATE LASTCHILD OF dataBodyRef NAME FIELDNAME(standBodyRef) VALUE FIELDVALUE(standBodyRef);
+		
+			MOVE standBodyRef NEXTSIBLING;
+		END WHILE;		
+		DELETE FIELD dataBodyRef.Registers;
+		
+		-- Validamos si existen campos repetitivos para responder.
+		IF EXISTS(InputMessage.TransactionResponse.Standard.Body.Registers.Register[]) THEN
+			-- iteración sobre el árbol de registros (respuesta)
+			CREATE FIELD dataBodyRef.Registros;
+			DECLARE registrosref REFERENCE TO dataBodyRef.Registros;
+			
+			DECLARE registersref REFERENCE TO InputMessage.TransactionResponse.Standard.Body.Registers;
+			MOVE registersref FIRSTCHILD;
+			
+			WHILE LASTMOVE(registersref) DO
+				CREATE LASTCHILD OF registrosref NAME 'Registro';
+				
+				DECLARE registroref_ REFERENCE TO registrosref;
+				MOVE registroref_ LASTCHILD;
+				
+				SET registroref_ = registersref;
+				
+				MOVE registersref NEXTSIBLING;
+			END WHILE;		
+		END IF;			
+		
+		--- enrutar la respuesta al componente de servicio que invocó al adaptador
+		CREATE FIELD OutputLocalEnvironment.Destination.MQDestinationList;
+		DECLARE destination REFERENCE TO OutputLocalEnvironment.Destination.MQDestinationList;
+		
+		SET destination.DestinationData[1].queueName =  OutputRoot.XMLNSC.esbXML:esbXML.Header.internalRoutingData.replyToQueue.queueName;
+		SET destination.DestinationData[1].queueManagerName =  OutputRoot.XMLNSC.esbXML:esbXML.Header.internalRoutingData.replyToQueue.queueManagerName;
+		
+		PROPAGATE TO TERMINAL 'out' MESSAGE OutputRoot DELETE NONE;
+				
+		RETURN FALSE;
+		
+END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+END MODULE;
+
+/*
+ *	Module name: ProcessMessageException
+ *	Purpose: Nodo que recibe un mensaje de excepción y lo reporta al flujo de error
+ */
+CREATE COMPUTE MODULE ProcessMessageException
+		
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		-- mantener el correlid
+		SET OutputRoot = InputRoot;
+			 			
+		-- notificar al flujo de error que hubo una respuesta por mensaje de excepción
+		PROPAGATE TO TERMINAL 'out1' MESSAGE OutputRoot DELETE NONE;
+		
+		--- enrutar la respuesta al componente de servicio que invocó al adaptador
+		CREATE FIELD OutputLocalEnvironment.Destination.MQDestinationList;
+		DECLARE destination REFERENCE TO OutputLocalEnvironment.Destination.MQDestinationList;
+		
+		SET destination.DestinationData[1].queueName =  OutputRoot.XMLNSC.esbXML:esbXML.Header.internalRoutingData.replyToQueue.queueName;
+		SET destination.DestinationData[1].queueManagerName =  OutputRoot.XMLNSC.esbXML:esbXML.Header.internalRoutingData.replyToQueue.queueManagerName;
+		
+		PROPAGATE TO TERMINAL 'out' MESSAGE OutputRoot DELETE NONE;
+				
+		RETURN FALSE;
+		
+	END;
+
+END MODULE;
+
+/*
+ *	Module name: IgnoreException
+ *	Purpose: Maneja el error del nodo Timeout Control.
+ */
+CREATE COMPUTE MODULE IgnoreException
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		/* ******************************************************************
+		**  NOTA: Este modulo es utilizado para controlar la excepción     **
+		**  del nodo Timeout Control cuando no encuentre el identificador  **
+		********************************************************************/
+		-- declaración de constantes
+		DECLARE MsgExc CHARACTER 'Timeout Set Identifier not in store';
+		-- referencia a la lista de excepciones
+		DECLARE ExcList REFERENCE TO InputExceptionList;
+		
+		WHILE LASTMOVE(ExcList) DO
+			
+			MOVE ExcList LASTCHILD NAME 'RecoverableException';
+			
+		END WHILE;
+		-- verificar si el error no es por no encontrar identificador de timeout
+		IF NOT CONTAINS(FIELDVALUE(ExcList.Text),MsgExc) THEN
+			
+			THROW USER EXCEPTION CATALOG 'ESB' MESSAGE 003100 VALUES ('TimeoutCancelException');
+			
+		END IF;
+		
+		RETURN FALSE;
+	END;
+END MODULE;

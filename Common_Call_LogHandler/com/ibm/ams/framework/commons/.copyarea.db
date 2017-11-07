@@ -1,0 +1,12 @@
+ClearCase CopyAreaDB|4
+vFramework\IIB9CoreComp\Common_Call_LogHandler\com\ibm\ams\framework\commons
+2
+8
+13:ErrorTraceFlow.esql|1|15e7cf55cfb|15bb|b57988bf|83e4dffd969d4cf7a93c41b95d7087a2|0
+12:TraceAndAudit.esql|1|15e7cf55cfb|1773|bdb34221|fb8ce64f5e304deb9fcfe7cd547d90fe|0
+14:TraceBckEndFlow.esql|1|15e7cf55cec|1084|91d7090d|a51c7fd49b6b408ea306847f7d52e7c6|0
+11:TraceFlow.subflow|1|15e7cf55cfb|1d76|94de11fb|cb9d2d0516a94e87a0c6afe9126a4732|0
+e:TraceFlow.esql|1|15e7cf55cec|1293|24e18304|4d097f11b6b241b6bdd56a546b0313df|0
+17:TraceBckEndFlow.subflow|1|15e7cf55cfb|1db2|3ec2765|a2d145b70b5844c7a6e50704bce871c5|0
+16:ErrorTraceFlow.subflow|1|15e7cf55cfb|1d9b|88692223|7ff6758e37d7415db8af0fd993a6167d|0
+19:TraceAndAuditFlow.subflow|1|15e7cf55cfb|242e|3e55601e|9413581d749e429f8336eb0c562095ee|0

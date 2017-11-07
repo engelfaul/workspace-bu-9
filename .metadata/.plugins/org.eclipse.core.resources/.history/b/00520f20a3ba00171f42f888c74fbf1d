@@ -1,0 +1,257 @@
+package com.ibm.gbs.ams.integration.adapters.rpg;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.ibm.as400.access.AS400;
+import com.ibm.as400.access.AS400Message;
+import com.ibm.as400.access.AS400SecurityException;
+import com.ibm.as400.access.AS400Text;
+import com.ibm.as400.access.ConnectionPoolException;
+import com.ibm.as400.access.ErrorCompletingRequestException;
+import com.ibm.as400.access.ObjectDoesNotExistException;
+import com.ibm.as400.access.ProgramCall;
+import com.ibm.as400.access.ProgramParameter;
+import com.ibm.as400.access.Trace;
+import com.ibm.broker.plugin.MbElement;
+import com.ibm.broker.plugin.MbException;
+import com.ibm.broker.plugin.MbJavaException;
+import com.ibm.broker.plugin.MbMessage;
+import com.ibm.gbs.ams.integration.adapters.IseriesInvocationException;
+import com.ibm.gbs.ams.integration.adapters.common.schema.RPGParameter;
+import com.ibm.gbs.ams.integration.pooling.AS400ConnectionPoolManager;
+
+public class CallRPGProgram {
+
+	@SuppressWarnings("unchecked")
+	public List<RPGParameter> callRPGprogram(MbMessage inMessage,
+			List<RPGParameter> rpgParameters) throws MbJavaException,
+			MbException, IseriesInvocationException {
+		// String con el nombre del programa a ejecutar.
+		// Se utiliza si ocurre una Excepción en la ejecución
+		String programNameReference = "";
+		// Variable utilizada para obtener los parametros de configuración
+		MbElement commodity_ = null;
+		// Declaración Global de la clase para ejecutar programas RPG
+		AS400 server = null;
+		ProgramParameter[] pgmParameters = null;
+		List<RPGParameter> rpgParametersResponse = rpgParameters;
+		try {
+			// obtener información del mensaje de entrada
+			MbElement inputBody = inMessage.getRootElement().getLastChild()
+					.getFirstElementByPath("TransactionRequest");
+
+			MbElement connectionDetail = inputBody
+					.getFirstElementByPath("ConnectionDetails");
+
+			commodity_ = connectionDetail.getFirstElementByPath("ProgramName");
+			String programName = commodity_.getValueAsString();
+			programNameReference = programName;
+
+			commodity_ = connectionDetail.getFirstElementByPath("LenghtValue");
+			String lenghtValue = commodity_.getValueAsString();
+
+			commodity_ = connectionDetail.getFirstElementByPath("Enconding");
+			String enconding = commodity_.getValueAsString();
+			
+			commodity_ = connectionDetail.getFirstElementByPath("TraceOn");
+			String traceOn = commodity_ != null?commodity_.getValueAsString():null;
+			
+			if(traceOn != null){
+				MbElement fileName = connectionDetail.getFirstElementByPath("TraceFileName");
+				Trace.setTraceAllOn(true);
+				Trace.setFileName("/ESB/log/trace/PA/mqsitransit/" + fileName.getValueAsString());
+				Trace.setTraceOn(traceOn.equals("true"));
+			}
+			
+			AS400Text msgTxt = new AS400Text(Integer.valueOf(lenghtValue),enconding);
+			
+			int contParametros = rpgParameters.size();
+			// valores de programa
+			ProgramCall pgm = null;
+
+			pgmParameters = new ProgramParameter[contParametros];
+			int contParams = 0;
+			// Carga de parametros para llamar a RPG
+			for (RPGParameter programParameter : rpgParameters) {
+				// Contruir arrglo de parametros para enviar al programa RPG.
+				pgmParameters[contParams] = new ProgramParameter(
+						msgTxt.toBytes(programParameter.getValue()),
+						Integer.parseInt(lenghtValue));
+				contParams++;
+			}
+
+			server = getPoolServerAS400(inputBody);
+			// conexión con el servidor iSeries
+			pgm = new ProgramCall(server, programName, pgmParameters);
+			// verificar sí la ejecución de programa en AS400 fue satisfactoria
+			if (pgm.run()) {
+
+				int indexParameters = 0;
+				// Obtener los parametros de salida para parsear la trama.
+				for (RPGParameter rpgParameterOut : rpgParametersResponse) {
+					if (rpgParameterOut.getType().equals("OUT")) {
+						rpgParameterOut.setValue(msgTxt.toObject(
+								pgmParameters[indexParameters].getOutputData()).toString());
+					}
+					indexParameters++;
+				}
+
+			}
+			// la ejecución del programa en AS400 no fue satisfactoria
+			else {
+				// obtener los parametros de salida de la ejecución
+				AS400Message[] messagelist = pgm.getMessageList();
+				// reportar excepción en la ejecución del programa
+				String MsgException = new String(
+						"Ha ocurrido una excepción al ejecutar el programa RPG. Detalle : ");
+				for (int i = 0; i < messagelist.length; ++i) {
+					MsgException = MsgException + " " + messagelist[i] + ";";
+				}
+				new IseriesInvocationException(MsgException);
+
+			}
+		}
+		/*
+		 * ************************************* Manejo de Excepciones conocidas
+		 * *************************************
+		 */
+		catch (ConnectionPoolException e) {
+			String MsgException = new String(
+					"Ha ocurrido un Error en el Pool de Conexiones con el servidor.");
+			throw new IseriesInvocationException(MsgException, e.getCause());
+		} catch (ObjectDoesNotExistException e) {
+			String MsgException = new String("El programa "
+					+ programNameReference + " no existe en el servidor.");
+			throw new IseriesInvocationException(MsgException, e.getCause());
+		} catch (InterruptedException e) {
+			String MsgException = new String(
+					"La ejecución fue interrumpida al ejecutar el programa "
+							+ programNameReference + ".");
+			throw new IseriesInvocationException(MsgException, e.getCause());
+		} catch (IOException e) {
+			String MsgException = new String(
+					"Error de comunicación con el servidor al ejecutar el programa "
+							+ programNameReference + ".");
+			throw new IseriesInvocationException(MsgException, e.getCause());
+		} catch (ErrorCompletingRequestException e) {
+			String MsgException = new String(
+					"No se alcanzó a completar la ejecución del programa "
+							+ programNameReference + ".");
+			throw new IseriesInvocationException(MsgException, e.getCause());
+		} catch (AS400SecurityException e) {
+			String MsgException = new String(
+					"Error de Seguridad al ejecutar el Programa"
+							+ programNameReference + ".");
+			throw new IseriesInvocationException(MsgException, e.getCause());
+		}
+
+		// Manejo de otro tipo de excepciones no conocidas
+		catch (Exception e) {
+			String MsgException = new String(
+					"Ha ocurrido un Error No Esperado en la Ejecución (callRPGprogram)");
+			throw new IseriesInvocationException(MsgException, e.getCause());
+		}
+		// Mantener la conexión con el servidor iSeries
+		finally {
+
+			if (server != null)
+				AS400ConnectionPoolManager.getInstance().returnConnection(
+						server);
+
+		}
+
+		return rpgParametersResponse;
+	}
+
+	/**
+	 * @param inputTransRequest
+	 * @return
+	 * @throws MbException
+	 * @throws ConnectionPoolException
+	 */
+	private AS400 getPoolServerAS400(MbElement inputTransRequest)
+			throws MbException, ConnectionPoolException {
+		AS400 server = null;
+		MbElement commodity_ = null;
+		MbElement connectionDetail = inputTransRequest
+				.getFirstElementByPath("ConnectionDetails");
+
+		commodity_ = connectionDetail.getFirstElementByPath("ServerName");
+		String serverName = commodity_.getValueAsString();
+
+		commodity_ = connectionDetail.getFirstElementByPath("UserName");
+		String userName = commodity_.getValueAsString();
+
+		commodity_ = connectionDetail.getFirstElementByPath("Password");
+		String password = commodity_.getValueAsString();
+		MbElement configProperties = connectionDetail
+				.getFirstElementByPath("ConnectionPool");
+
+		commodity_ = configProperties.getFirstElementByPath("MinSize");
+		String minSize = commodity_.getValueAsString();
+
+		commodity_ = configProperties.getFirstElementByPath("MaxSize");
+		String maxSize = commodity_.getValueAsString();
+
+		commodity_ = configProperties.getFirstElementByPath("Maintance");
+		String maintance = commodity_.getValueAsString();
+
+		commodity_ = configProperties.getFirstElementByPath("MaxInactivity");
+		String maxinactivity = commodity_.getValueAsString();
+
+		commodity_ = configProperties.getFirstElementByPath("TimeInterval");
+		String timeInterval = commodity_.getValueAsString();
+
+		commodity_ = configProperties.getFirstElementByPath("MaxLifeTime");
+		String maxLifetime = commodity_.getValueAsString();
+
+		commodity_ = configProperties.getFirstElementByPath("MaxUseCount");
+		String maxUsecount = commodity_.getValueAsString();
+
+		commodity_ = configProperties.getFirstElementByPath("MaxUseTime");
+		String maxUsetime = commodity_.getValueAsString();
+
+		commodity_ = configProperties
+				.getFirstElementByPath("PretestConnection");
+		String pretestConnection = commodity_.getValueAsString();
+
+		// Obtener Pool de conexión al iSeries
+		server = AS400ConnectionPoolManager.getInstance().getConnection(
+				serverName, userName, password, minSize, maxSize, maintance,
+				maxinactivity, timeInterval, maxLifetime, maxUsecount,
+				maxUsetime, pretestConnection);
+		return server;
+	}
+	
+	public List<RPGParameter> callRPGprogramDummy(MbMessage inMessage,
+			List<RPGParameter> rpgParameters) throws MbJavaException,
+			MbException, IseriesInvocationException {
+		// String con el nombre del programa a ejecutar.
+		// Se utiliza si ocurre una Excepción en la ejecución
+		String programNameReference = "";
+		// Variable utilizada para obtener los parametros de configuración
+		MbElement commodity_ = null;
+		// Declaración Global de la clase para ejecutar programas RPG
+		AS400 server = null;
+		ProgramParameter[] pgmParameters = null;
+		List<RPGParameter> rpgParametersResponse = rpgParameters;
+		try {
+			String value1 = "B00000000OK                                                                                                                                                                                                                                                             ";
+			//String value3 = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+			rpgParametersResponse.get(2).setValue(value1);
+			//rpgParametersResponse.get(3).setValue(value3);
+		}
+
+		// Manejo de otro tipo de excepciones no conocidas
+		catch (Exception e) {
+			String MsgException = new String(
+					"Ha ocurrido un Error No Esperado en la Ejecución (callRPGprogram)");
+			throw new IseriesInvocationException(MsgException, e.getCause());
+		}
+
+		return rpgParametersResponse;
+	}	
+
+}

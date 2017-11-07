@@ -1,0 +1,33 @@
+CREATE PROCEDURE SetDestinationListAssociateServiceResponse (IN refHeader REFERENCE, INOUT lcEnv REFERENCE)
+BEGIN
+	-- referencia al endpoint del requestData
+	-- referencia al arbol de destino de MQ
+	CREATE FIELD lcEnv.Destination.MQ.DestinationData;
+	DECLARE lcEnvMq REFERENCE TO lcEnv.Destination.MQ.DestinationData[1];
+
+	-- referencia al ID del canal
+	DECLARE systemId CHARACTER FIELDVALUE(refHeader.systemId);
+	
+	DECLARE serviceId CHARACTER FIELDVALUE(refHeader.requestData.endpointReference.serviceId);
+
+	DECLARE endpoint REFERENCE TO refHeader.requestData.endpointReference;
+	
+	-- incialmente se asigna la cola principal de respuesta
+	SET lcEnvMq.queueName = endpoint.routingData.responseQueueEndpoint.queueName;
+
+	-- obtener el nombre del servicio compuesto
+	DECLARE service ROW THE(SELECT asvc.associatedServiceName
+								    FROM endpoint.associatedService[] as asvc
+									  WHERE asvc.associatedServiceId = serviceId AND asvc.associatedSystemId = systemId);
+
+	-- Si es diferente de vacio es por que es un servicio compuesto
+	IF COALESCE(service.associatedServiceName, VACIO) <> VACIO THEN
+		-- Se obtiene la cola de repuesta al servicio compuesto
+		DECLARE responseQueue ROW THE(SELECT asvc.associatedRoutingData.responseQueueEndpoint
+									FROM endpoint.associatedService[] as asvc
+										WHERE asvc.associatedServiceId = serviceId AND asvc.associatedSystemId = systemId);
+		
+		-- pasar la lista de destino
+		SET lcEnvMq.queueName = responseQueue.responseQueueEndpoint.queueName;
+	END IF;
+END;

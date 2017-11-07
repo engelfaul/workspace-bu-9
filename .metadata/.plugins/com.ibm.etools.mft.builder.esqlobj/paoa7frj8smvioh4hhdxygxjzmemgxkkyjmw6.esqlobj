@@ -1,0 +1,10 @@
+CREATE PROCEDURE SetDestinationList (IN queueName CHARACTER, IN qMgrName CHARACTER, INOUT lcEnv REFERENCE )
+BEGIN
+	-- referencia al arbol de destino de MQ
+	CREATE FIELD lcEnv.Destination.MQ.DestinationData;
+	DECLARE lcEnvMq REFERENCE TO lcEnv.Destination.MQ.DestinationData[1];
+	
+	-- pasar la lista de destino
+	SET lcEnvMq.queueName = queueName;		
+		
+END;

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ComIbmCompute.msgnode="ComIbmCompute.msgnode" xmlns:ComIbmTimeoutControl.msgnode="ComIbmTimeoutControl.msgnode" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow" xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="com/ibm/ams/framework/commons/timeout/TimeoutFlowConfig.subflow"
+    nsPrefix="com_ibm_ams_framework_commons_timeout_TimeoutFlowConfig.subflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.TimeoutIdentifier" name="TimeoutIdentifier" lowerBound="1" defaultValueLiteral="*">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <translation xmi:type="utility:TranslatableString" key="TimeoutFlowConfig" bundleName="com/ibm/ams/framework/commons/timeout/TimeoutFlowConfig" pluginId="Common_Call_TimeHandler"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Common_Call_TimeHandler/icons/full/obj16/TimeoutFlowConfig.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Common_Call_TimeHandler/icons/full/obj30/TimeoutFlowConfig.gif"/>
+    <version xmi:type="utility:ConstantString" string="1.0"/>
+    <composition>
+      <nodes xmi:type="eflow:FCMSource" xmi:id="InTerminal.Input" location="153,180">
+        <translation xmi:type="utility:TranslatableString" key="InTerminal.Input" bundleName="com/ibm/ams/framework/commons/timeout/TimeoutFlowConfig" pluginId="Common_Call_TimeHandler"/>
+      </nodes>
+      <nodes xmi:type="eflow:FCMSink" xmi:id="OutTerminal.Output" location="468,185">
+        <translation xmi:type="utility:TranslatableString" key="OutTerminal.Output" bundleName="com/ibm/ams/framework/commons/timeout/TimeoutFlowConfig" pluginId="Common_Call_TimeHandler"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="243,180" computeExpression="esql://routine/com.ibm.ams.framework.commons.timeout#SetTimeout.Main" computeMode="destinationAndMessage">
+        <translation xmi:type="utility:ConstantString" string="SetTimeout"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTimeoutControl.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_2" location="331,181" requestLocation="InputLocalEnvironment.TimeoutRequest" requestPersistence="no" messageDomain="XMLNSC">
+        <translation xmi:type="utility:ConstantString" string="Timeout Control"/>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_1" sourceNode="InTerminal.Input" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_2" targetNode="FCMComposite_1_2" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_3" targetNode="OutTerminal.Output" sourceNode="FCMComposite_1_2" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+    </composition>
+    <propertyOrganizer>
+      <propertyDescriptor groupName="Group.Timeout" configurable="true" describedAttribute="Property.TimeoutIdentifier">
+        <propertyName xmi:type="utility:TranslatableString" key="Property.TimeoutIdentifier" bundleName="com/ibm/commons/timeout/TimeoutFlowConfig" pluginId="CoreCom_MsgFlow"/>
+      </propertyDescriptor>
+    </propertyOrganizer>
+    <attributeLinks promotedAttribute="Property.TimeoutIdentifier" overriddenNodes="FCMComposite_1_2">
+      <overriddenAttribute href="ComIbmTimeoutControl.msgnode#Property.uniqueIdentifier"/>
+    </attributeLinks>
+    <stickyBoard/>
+  </eClassifiers>
+</ecore:EPackage>

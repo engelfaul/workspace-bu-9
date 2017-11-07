@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:complexType name="CambioUsuarioYClaveType">
+    <xsd:sequence>
+      <xsd:element name="Request" type="CambioUsuarioYClaveReqType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="CambioUsuarioYClave" type="CambioUsuarioYClaveType">
+        <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CambioUsuarioYClave;XSDElementDeclaration$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+    </xsd:element>
+  <xsd:complexType name="CambioUsuarioYClaveReqType">
+    <xsd:sequence maxOccurs="1" minOccurs="1">
+      <xsd:element name="DataHeader" type="DataHeaderReqType"/>
+            <xsd:element name="Data" type="CambioUsuarioYClaveRequestType"/>
+        </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="DataHeaderReqType">
+    <xsd:sequence maxOccurs="1" minOccurs="1">
+       <xsd:element default="CambioUsuarioYClave" name="nombreOperacion" type="xsd:string"/>
+      <xsd:element name="total" type="xsd:int"/>
+      <xsd:element name="jornada" type="xsd:short"/>
+      <xsd:element name="canal" type="xsd:short"/>
+      <xsd:element name="modoDeOperacion" type="xsd:short"/>
+      <xsd:element name="usuario" type="xsd:string"/>
+      <xsd:element name="perfil" type="xsd:short"/>
+      <xsd:element default="1.0.0" name="versionServicio" type="xsd:string"/>
+      <xsd:element name="idTransaccion" type="xsd:string"/>
+      
+        </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="CambioUsuarioYClaveRequestType">
+    <xsd:sequence maxOccurs="1" minOccurs="1">
+      <xsd:element maxOccurs="1" minOccurs="0" name="idSesion" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="codIdioma" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="valOrigenPeticion" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="valVersionApp" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="1" name="codTipoIdentificacion" type="xsd:short"/>
+	  <xsd:element maxOccurs="1" minOccurs="1" name="valNumeroIdentificacion" type="xsd:string"/>
+
+	  <xsd:element maxOccurs="1" minOccurs="1" name="valUsuarioCanalVirtualAnterior" type="xsd:string"/>
+	  <xsd:element maxOccurs="1" minOccurs="1" name="valUsuarioCanalVirtualNueva" type="xsd:string"/>
+	  <xsd:element maxOccurs="1" minOccurs="1" name="valClaveCanalVirtualAnterior" type="xsd:string"/>
+	  <xsd:element maxOccurs="1" minOccurs="1" name="valClaveCanalVirtualNueva" type="xsd:string"/>
+
+	  
+      
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="CambioUsuarioYClaveResponse">
+    <xsd:sequence>
+      <xsd:element name="DataHeader" type="DataHeaderRespType"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="Data" type="DataRespType"/>
+        </xsd:sequence>
+  </xsd:complexType>
+    <xsd:element name="CambioUsuarioYClaveResponse" type="CambioUsuarioYClaveResponse">
+        <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CambioUsuarioYClaveResponse;XSDElementDeclaration=1$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+    </xsd:element>
+    <xsd:complexType name="DataHeaderRespType">
+    <xsd:sequence maxOccurs="1" minOccurs="1">
+      <xsd:element default="CambioUsuarioYClave" name="nombreOperacion" type="xsd:string"/>
+      <xsd:element name="total" type="xsd:int"/>
+      <xsd:element name="caracterAceptacion" type="xsd:string"/>
+      <xsd:element name="ultimoMensaje" type="xsd:short"/>
+      <xsd:element name="idTransaccion" type="xsd:string"/>
+      <xsd:element name="codMsgRespuesta" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="msgRespuesta" type="xsd:string"/>
+      
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="DataRespType">
+    <xsd:sequence maxOccurs="1" minOccurs="1">
+      <xsd:element maxOccurs="1" minOccurs="1" name="codMsjRespuestaBackend" type="xsd:string"/>
+      <xsd:element maxOccurs="1" minOccurs="1" name="valMsjRespuestaBackend" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:element name="CambioUsuarioYClaveType" type="CambioUsuarioYClaveType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CambioUsuarioYClaveType;XSDElementDeclaration=2$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="CambioUsuarioYClaveReqType" type="CambioUsuarioYClaveReqType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CambioUsuarioYClaveReqType;XSDElementDeclaration=3$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="DataHeaderReqType" type="DataHeaderReqType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/DataHeaderReqType;XSDElementDeclaration=4$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="CambioUsuarioYClaveRequestType" type="CambioUsuarioYClaveRequestType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CambioUsuarioYClaveRequestType;XSDElementDeclaration=5$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="DataHeaderRespType" type="DataHeaderRespType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/DataHeaderRespType;XSDElementDeclaration=6$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="DataRespType" type="DataRespType">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/DataRespType;XSDElementDeclaration=7$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+</xsd:schema>

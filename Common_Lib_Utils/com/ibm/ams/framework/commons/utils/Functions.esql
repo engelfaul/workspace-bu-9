@@ -1,0 +1,618 @@
+BROKER SCHEMA com.ibm.ams.framework.commons.utils
+PATH com.davivienda.utils;
+
+/*
+ *
+ * File name: Functions.esql
+ *
+ * Purpose:   Esquema ESQL que define los modulos utilizados para las funciones
+ *				generales utilizadas en el ESB.
+ *
+ * Authors:  IBM AMS TAC Colombia
+ *                 
+ * Date      28 de Enero de 2014
+ * Version:  1.0
+ * 
+ *
+ */ 
+
+CREATE FUNCTION  HomologError(IN errorCode CHARACTER, IN errorTable REFERENCE)
+	RETURNS CHARACTER
+	BEGIN
+  	
+    DECLARE result ROW;
+    DECLARE descripcionErrorhomolog CHARACTER;
+    DECLARE homolog CHARACTER;
+	
+    SET result.datos  = THE(			   
+		   SELECT T.DESCRIPCIONERROR
+		   FROM errorTable.row[] AS T --Database.TABLA_HOMOLOGACION_ERROR as T 
+		   WHERE T.CODIGOSTATUS = errorCode
+		   );
+	SET descripcionErrorhomolog=result.datos.DESCRIPCIONERROR;
+    SET homolog = COALESCE(FIELDVALUE(result.datos.DESCRIPCIONERROR),'0');
+	
+    RETURN homolog;
+END;
+ 
+/*
+	* Name : BuildHeaderProviderException
+ 	* Purpose: Construir un ProviderException en el esbXML:Header
+ 	* Parameters:
+ 	* IN: REFERENCE header - Referencia a esbXML:Header
+ 	* IN: REFERENCE listexception - Referencia a InputExceptionList
+ 	* IN: CHARACTER componentname - Identificados del componente (faultactor)
+ 	*
+ */
+CREATE FUNCTION BuildHeaderProviderException(IN header REFERENCE, IN listexception REFERENCE, IN componentname CHARACTER) 
+BEGIN
+		--Declaración de los campos de salida del manejo de Excepciones en el data Header
+		SET header.responseData.status.statusCode = 'ProviderException';
+		
+		--Creación de los campos del mensaje de salida para posteriormente mapear.
+		CREATE FIELD header.responseData.status.providerException;
+		DECLARE proException REFERENCE TO header.responseData.status.providerException;
+		
+		--Declaración de los tres parámetros de entrada para la función de manejo del ExceptionList
+		DECLARE messageText 	CHARACTER '';
+		DECLARE parentName 		CHARACTER '';
+		DECLARE catlgName 		CHARACTER '';
+		DECLARE messageNumber 	INTEGER   0;
+		
+		--Llamado a la función de detalles de excepción
+   	    CALL getLastExceptionDetail(listexception,messageNumber,messageText,parentName,catlgName);
+		
+		SET proException.providerCode = catlgName ||  CAST(messageNumber AS CHARACTER);
+		SET proException.providerMessage = 'An Exception has ocurred: ' || parentName || '. With the following Inserts:' || messageText;
+		SET proException.providerLocation = componentname;
+		SET proException.providerDetail = listexception;
+END;
+
+/*
+	* Name : BuildMessageException
+ 	* Purpose: Construir un MessageException en el esbXML:Body
+ 	* Parameters:
+ 	* IN: REFERENCE body - Referencia al esbXML:Body
+ 	* IN: CHARACTER code - Identificador del código de error
+ 	* IN: CHARACTER description - Descripción del error
+ 	*
+ */
+CREATE FUNCTION BuildMessageException (IN body REFERENCE, IN code CHARACTER, IN description CHARACTER)
+BEGIN
+		CREATE FIRSTCHILD OF body NAME 'MessageException';
+		MOVE body FIRSTCHILD;
+		
+		CREATE LASTCHILD OF body NAME 'Code' VALUE code;
+		CREATE LASTCHILD OF body NAME 'Description' VALUE description;
+END;
+
+/*
+* Function checkIdHomologChannel
+* Devuelve el resultado de verificar si existen registros en la vista de homologación, 
+* referentes a un canal y un idHomologacion específicos
+* Parameters:
+* IN: CHARACTER idCanal			 - Id del canal que invoca la transacción
+* IN: CHARACTER idHomologacion	 - Identificador de la homologación que se va a realizar.
+* IN: REFERENCE refHomologView	 - Reference a la variable donde se almacena en memoria la vista de homologación.
+* RETURNS: CHARACTER 			 - Devuelve el valor homologado o nulo si no existe la homologación en la tabla.
+*
+*/
+CREATE FUNCTION checkIdHomologChannel( IN idCanal			CHARACTER,
+										IN idHomologacion	CHARACTER,
+										IN refHomologView	REFERENCE )	RETURNS CHARACTER	
+BEGIN	
+    DECLARE result				ROW NULL;
+   	DECLARE resultCheck		CHARACTER '';
+
+    SET result.datos  = THE(   SELECT *
+							   FROM refHomologView.row[] AS T 
+							   WHERE T.ID_CANAL			= idCanal
+							   AND T.ID_HOMOLOGACION	= idHomologacion
+							   );
+	
+	--Se asigna a la variable resultCheck el valor 0- cuando no hay filas en el vista que cumplan con la condición  o 1 cuando ya existen filas que cumplen con la condición.
+	
+	IF CARDINALITY(result.datos[]) = 0 THEN
+		SET resultCheck= '0';
+	ELSE
+		SET resultCheck= '1';
+	END IF;	
+	
+    RETURN resultCheck	;
+END;
+
+
+/*
+ 	* Function: Creación de mensaje de error técnico del componente de servicio
+ 	*           de Establecimientos flujo de entrada cuando el canal es REST.
+ 	*	
+ 	* Parameters:
+ 	* IN:  REFERENCE refInMsg 		  - Referencia al árbol de entrada de error técnico.
+ 	* IN:  REFERENCE refEnvVar		  - Referencia al árbol de Environment.
+ 	* INOUT: REFERENCE msgOut 		  - Referencia al árbol del mensaje de salida.
+ 	* IN:  REFERENCE messageNumber	  - Referencia al código de error del árbol de Excepción.
+ */           
+
+CREATE FUNCTION ProcessErrorTransformationDataHeaderJSON(IN refInMsg REFERENCE, IN refEnvVar  REFERENCE, INOUT msgOut REFERENCE, IN messageNumber INTEGER, IN messageText CHARACTER)
+BEGIN
+	IF CONTAINS(SYSTEM_CODES_ERROR_VALIDACION, CAST (messageNumber AS CHARACTER)) THEN
+		--Mapeo en caso de error de validación mensaje de entrada		
+		SET msgOut.HTTPHeaders.HTTPHeader[1].(XMLNSC.Attribute)name  = 'X-Original-HTTP-Status-Line';
+		SET msgOut.HTTPHeaders.HTTPHeader[1] = DESCRIPCIONDEVALIDACIONREST;
+		SET msgOut.HTTPHeaders.HTTPHeader[2].(XMLNSC.Attribute)name  = 'X-Original-HTTP-Status-Code';
+		SET msgOut.HTTPHeaders.HTTPHeader[2] = CODIGODEVALIDACIONREST;
+		SET msgOut.HTTPHeaders.HTTPHeader[3].(XMLNSC.Attribute)name  = 'Content-Type';
+		SET msgOut.HTTPHeaders.HTTPHeader[3] = RESTAPLICATION;
+		
+		--Error de timeout
+	ELSEIF CONTAINS(SYSTEM_CODES_ERROR_TIME, refInMsg.Body.MessageException.Code) THEN
+		SET msgOut.Code							= CODIGODEERRORTIMEOUT;
+		SET msgOut.Description					= DESCRIPCIONDEERRORTIMEOUT;
+		
+		--Error de conexion
+	ELSEIF CONTAINS(SYSTEM_CODES_ERROR_CONEXION, refInMsg.Body.MessageException.Code) THEN
+		SET msgOut.Code							= CODIGODEERRORCONEXION;
+		SET msgOut.Description					= DESCRIPCIONDEERRORCONEXION;
+		
+		--Error de homologacion
+	ELSEIF CONTAINS(SYSTEM_CODES_ERROR_HOMOLOGACION, CAST (messageNumber AS CHARACTER)) THEN  
+		SET msgOut.Code							= CODIGODEERRORHOMOLOGACION;
+		SET msgOut.Description					= DESCRIPCIONDEERRORHOMOLOGACION;
+		SET msgOut.subCode.codigo				= messageNumber;
+		SET msgOut.subCode.descripcion			= messageText;
+		
+		--Error retornado por el Backend
+	ELSEIF CONTAINS(SYSTEM_CODES_ERROR_BACKEND, CAST (messageNumber AS CHARACTER)) THEN  
+		SET msgOut.Code							= CODIGODEERRORBACKEND;
+		SET msgOut.Description					= DESCRIPCIONDEERRORBACKEND; 
+		SET msgOut.subCode.codigo				= messageNumber;
+		SET msgOut.subCode.descripcion			= messageText;
+	
+	ELSE
+		--Mapeo en caso de error de DataSource
+		SET msgOut.Code						   = CODIGODEERRORBUS;
+		SET msgOut.Description					= DESCRIPCIONDEERRORBUS;
+		SET msgOut.subCode.codigo				= messageNumber;
+		SET msgOut.subCode.descripcion			= messageText;
+	END IF;		
+			
+END;
+
+/*
+ 	* Function: Creación de mensaje de error técnico del componente de servicio
+ 	*           de Establecimientos flujo de entrada cuando el canal es REST.
+ 	*	
+ 	* Parameters:
+ 	* IN:  REFERENCE refInMsg 		  - Referencia al árbol de entrada de error técnico.
+ 	* IN:  REFERENCE refEnvVar		  - Referencia al árbol de Environment.
+ 	* INOUT: REFERENCE msgOut 		  - Referencia al árbol del mensaje de salida.
+ 	* IN:  REFERENCE messageNumber	  - Referencia al código de error del árbol de Excepción.
+ */           
+
+CREATE FUNCTION ProcessErrorTransformationDataHeaderJSON2(IN refInMsg REFERENCE, IN refEnvVar  REFERENCE, INOUT msgOut REFERENCE, IN messageNumber INTEGER, IN messageText CHARACTER)
+BEGIN
+	--Crear cuerpo salida
+		CREATE FIELD refEnvVar.xmlTemp.Data;
+		DECLARE refBodyOut1			REFERENCE TO  refEnvVar.xmlTemp.Data;					
+
+	IF CONTAINS(SYSTEM_CODES_ERROR_VALIDACION, CAST (messageNumber AS CHARACTER)) THEN
+		--Mapeo en caso de error de validación mensaje de entrada		
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1].(XMLNSC.Attribute)name  = 'X-Original-HTTP-Status-Line';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1] = DESCRIPCIONDEVALIDACIONREST;
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2].(XMLNSC.Attribute)name  = 'X-Original-HTTP-Status-Code';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2] = CODIGODEVALIDACIONREST;
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[3].(XMLNSC.Attribute)name  = 'Content-Type';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[3] = RESTAPLICATION;
+		
+		SET refBodyOut1.codeError = CODIGODEVALIDACION;
+		SET refBodyOut1.descriptionError = DESCRIPCIONDEVALIDACION;
+		
+		--Error de timeout
+	ELSEIF CONTAINS(SYSTEM_CODES_ERROR_TIME, refInMsg.Body.MessageException.Code) THEN
+		
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1].(XMLNSC.Attribute)name  = 'X-Original-HTTP-Status-Code';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1] = CODIGODEERRORTIMEOUTREST;
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2].(XMLNSC.Attribute)name  = 'Content-Type';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2] = RESTAPLICATION;
+		
+		SET refBodyOut1.codeError = CODIGODEERRORTIMEOUT;
+		SET refBodyOut1.descriptionError = DESCRIPCIONDEERRORTIMEOUT;
+
+		
+		--Error de conexion
+	ELSEIF CONTAINS(SYSTEM_CODES_ERROR_CONEXION, refInMsg.Body.MessageException.Code) THEN
+		
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1].(XMLNSC.Attribute)name  = 'X-Original-HTTP-Status-Code';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1] = CODIGODEERRORCONEXIONREST;
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2].(XMLNSC.Attribute)name  = 'Content-Type';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2] = RESTAPLICATION;
+		
+		SET refBodyOut1.codeError = CODIGODEERRORCONEXION;
+		SET refBodyOut1.descriptionError = DESCRIPCIONDEERRORCONEXION;
+		
+		
+		--Error de homologacion
+	ELSEIF CONTAINS(SYSTEM_CODES_ERROR_HOMOLOGACION, CAST (messageNumber AS CHARACTER)) THEN  
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1].(XMLNSC.Attribute)name  = 'X-Original-HTTP-Status-Code';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1] = CODIGODEVALIDACIONREST;
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2].(XMLNSC.Attribute)name  = 'Content-Type';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2] = RESTAPLICATION;
+		
+		SET refBodyOut1.codeError = CODIGODEERRORHOMOLOGACION;
+		SET refBodyOut1.descriptionError = DESCRIPCIONDEERRORHOMOLOGACION;
+		SET refBodyOut1.subCode.codeError				= messageNumber;
+		SET refBodyOut1.subCode.descriptionError		= messageText;
+		
+		--Error retornado por el Backend
+	ELSEIF CONTAINS(SYSTEM_CODES_ERROR_BACKEND, CAST (messageNumber AS CHARACTER)) THEN  
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1].(XMLNSC.Attribute)name  = 'X-Original-HTTP-Status-Line';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1] = DESCRIPCIONNEGOCIOJSON;
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2].(XMLNSC.Attribute)name  = 'X-Original-HTTP-Status-Code';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2] = CODIGOERRORNEGOCIOJSON;
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[3].(XMLNSC.Attribute)name  = 'Content-Type';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[3] = RESTAPLICATION;
+		
+		SET refBodyOut1.codeError = CODIGODEERRORBACKEND;
+		SET refBodyOut1.descriptionError = DESCRIPCIONDEERRORBACKEND;
+		SET refBodyOut1.subCode.codeError				= messageNumber;
+		SET refBodyOut1.subCode.descriptionError		= messageText;
+		
+	ELSE
+		--Mapeo en caso de error de DataSource
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1].(XMLNSC.Attribute)name  = 'X-Original-HTTP-Status-Code';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[1] = CODIGODEERRORBUSREST;
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2].(XMLNSC.Attribute)name  = 'Content-Type';
+		SET msgOut.HTTPResponse.HTTPHeaders.HTTPHeader[2] = RESTAPLICATION;
+		
+		SET refBodyOut1.codeError = CODIGODEERRORBUS;
+		SET refBodyOut1.descriptionError = DESCRIPCIONDEERRORBUS;
+		SET refBodyOut1.subCode.codeError				= messageNumber;
+		SET refBodyOut1.subCode.descriptionError		= messageText;
+
+	END IF;		
+			
+END;
+
+/*
+ 	* Function: Creación de mensaje de errores del componente de servicio
+ 	*           de Establecimientos flujo de entrada par el backend REST.
+ 	*	
+ 	* Parameters:
+ 	* IN:  REFERENCE refInMsg 		  - Referencia al árbol de entrada de error técnico.
+ 	* INOUT: REFERENCE msgOut 		  - Referencia al árbol del mensaje de salida.
+ 	* IN:  INTEGER messageNumber	  - Referencia al código de error del árbol de Excepción.
+ 	* IN:  CHARACTER messageText	  - Referencia al mensaje de error del árbol de Excepción.
+ */           
+
+CREATE FUNCTION ProcessErrorTransformationREST(IN refInMsg REFERENCE, INOUT msgOut REFERENCE, IN messageNumber INTEGER, IN messageText CHARACTER)
+BEGIN
+	IF CONTAINS(SYSTEM_CODES_ERROR_VALIDACION, CAST (messageNumber AS CHARACTER)) THEN
+		--Mapeo en caso de error de validación mensaje de entrada
+		SET msgOut.Code							= CODIGODEVALIDACION;
+		SET msgOut.Description					= DESCRIPCIONDEVALIDACION;
+		SET msgOut.subCode.codigo				= messageNumber;
+		SET msgOut.subCode.descripcion			= messageText;
+		
+		--Error de timeout
+	ELSEIF CONTAINS(SYSTEM_CODES_ERROR_TIME, CAST (messageNumber AS CHARACTER)) THEN
+		SET msgOut.Code							= CODIGODEERRORTIMEOUT;
+		SET msgOut.Description					= DESCRIPCIONDEERRORTIMEOUT;
+		
+		--Error de conexion
+	ELSEIF CONTAINS(SYSTEM_CODES_ERROR_CONEXION, CAST (messageNumber AS CHARACTER)) THEN
+		SET msgOut.Code							= CODIGODEERRORCONEXION;
+		SET msgOut.Description					= DESCRIPCIONDEERRORCONEXION;
+		
+		--Error de homologacion
+	ELSEIF CONTAINS(SYSTEM_CODES_ERROR_HOMOLOGACION, CAST (messageNumber AS CHARACTER)) THEN  
+		SET msgOut.Code							= CODIGODEERRORHOMOLOGACION;
+		SET msgOut.Description					= DESCRIPCIONDEERRORHOMOLOGACION;
+		SET msgOut.subCode.codigo				= messageNumber;
+		SET msgOut.subCode.descripcion			= messageText;
+		
+		--Error retornado por el Backend
+	ELSEIF CONTAINS(SYSTEM_CODES_ERROR_BACKEND, CAST (messageNumber AS CHARACTER)) THEN  
+		SET msgOut.Code							= CODIGODEERRORBACKEND;
+		SET msgOut.Description					= DESCRIPCIONDEERRORBACKEND; 
+		SET msgOut.subCode.codigo				= messageNumber;
+		SET msgOut.subCode.descripcion			= messageText;
+	
+	ELSE
+		--Mapeo en caso de error de DataSource
+		SET msgOut.Code	   					    = CODIGODEERRORBUS;
+		SET msgOut.Description					= DESCRIPCIONDEERRORBUS;
+		SET msgOut.subCode.codigo				= messageNumber;
+		SET msgOut.subCode.descripcion			= messageText;
+	END IF;		
+			
+END;
+
+CREATE FUNCTION  HomologationType(IN VAL_IN CHARACTER,IN ID_DOMINIO CHARACTER,IN SIS_ORI CHARACTER, IN SIS_DES CHARACTER, IN HOMOLOGATION_TABLE REFERENCE)
+	RETURNS CHARACTER
+	BEGIN  	 
+    DECLARE result ROW;
+    DECLARE resultHomologation ROW;
+    DECLARE target ROW;
+    DECLARE nomTransaccion CHARACTER;
+    DECLARE homolog CHARACTER;
+	DECLARE temp ROW;
+	DECLARE temps int 0;
+	
+    SET temp = THE(SELECT H.VAL_IN FROM HOMOLOGATION_TABLE.row[] AS H WHERE H.ID_DOMINIO = ID_DOMINIO
+			            AND H.VAL_IN = VAL_IN AND H.SISTEMA_ORIGEN = SIS_ORI AND H.SISTEMA_DESTINO =SIS_DES );
+		
+	set temps = CARDINALITY(temp.[]); 					
+      IF CARDINALITY(temp.[]) = ZERO_INT THEN
+        SET resultHomologation.row[] = SELECT TBL_APL_DOM.ID_DOMINIO, 
+								      TBL_APL_DOM.SISTEMA_ORIGEN,
+								      TBL_APL_DOM.SISTEMA_DESTINO, 
+								      TBL_HOMOLOGACION.VAL_IN, 
+								      TBL_HOMOLOGACION.VAL_OUT,
+								      TBL_HOMOLOGACION.DESCRIPCION
+							FROM Database.IIBSCHM.TBL_APL_DOM, 
+								 Database.IIBSCHM.TBL_HOMOLOGACION 
+							WHERE TBL_HOMOLOGACION.ID_APL_DOM = TBL_APL_DOM.ID_APL_DOM
+							AND  TBL_APL_DOM.SISTEMA_DESTINO = SIS_DES
+							AND  TBL_APL_DOM.ID_DOMINIO  = ID_DOMINIO
+							AND  TBL_HOMOLOGACION.VAL_IN = VAL_IN ;	
+							
+		IF CARDINALITY(HOMOLOGATION_TABLE.row[]) <> ZERO_INT THEN
+			DECLARE targetcursor REFERENCE TO HOMOLOGATION_TABLE.row[<];			
+			CREATE NEXTSIBLING OF targetcursor AS targetcursor REPEAT;
+			SET HOMOLOGATION_TABLE.[<].[]  = resultHomologation.row[1].[];
+		ELSE
+			SET HOMOLOGATION_TABLE.row[] = resultHomologation.row[];
+		END IF;
+	END IF;
+	   	
+	    SET result.datos  = THE(	   
+			   SELECT T.VAL_OUT
+			   FROM HOMOLOGATION_TABLE.row[] AS T 
+			   WHERE T.ID_DOMINIO = ID_DOMINIO
+			   AND T.VAL_IN = VAL_IN
+			   AND T.SISTEMA_ORIGEN = SIS_ORI
+			   AND T.SISTEMA_DESTINO =SIS_DES
+			   );
+	    		   
+		SET nomTransaccion = result.datos.VAL_OUT;
+	    SET homolog = COALESCE(FIELDVALUE(result.datos.VAL_OUT),'null');
+	    IF 	homolog = 'null' THEN
+	    	THROW USER EXCEPTION CATALOG '00000' MESSAGE 10012 VALUES ('Error en homologacion en componente en Dominio: '|| ID_DOMINIO);
+	    ELSE 		
+	    	RETURN homolog;
+	    END IF;
+  
+END;
+
+CREATE FUNCTION LoadConstantReq (IN ID_REQ CHARACTER ,INOUT CONSTANTS_TABLE REFERENCE)
+
+BEGIN
+	
+SET CONSTANTS_TABLE.row[] = SELECT TBL_CONSTANTES_REQ.NOMBRE_CONST, 
+								      TBL_CONSTANTES_REQ.VALOR_CONST								     								     
+							FROM Database.IIBSCHM.TBL_CONSTANTES_REQ								 
+							WHERE TBL_CONSTANTES_REQ.ID_REQ = ID_REQ;
+							
+END;
+
+CREATE FUNCTION  GetConstant(IN NOMBRE_CONST CHARACTER, IN CONSTANTS_TABLE REFERENCE)
+	RETURNS CHARACTER
+	BEGIN  	
+    DECLARE result ROW;
+    DECLARE nomTransaccion CHARACTER;
+    DECLARE homolog CHARACTER;
+	
+    SET result.datos  = THE(			   
+		   SELECT T.VALOR_CONST
+		   FROM CONSTANTS_TABLE.row[] AS T 
+		   WHERE T.NOMBRE_CONST =NOMBRE_CONST		  
+		   );
+		   
+	SET nomTransaccion = result.datos.VALOR_CONST;
+    SET homolog = COALESCE(FIELDVALUE(result.datos.VALOR_CONST),'NULL');	
+    IF 	homolog = 'NULL' THEN
+    	THROW USER EXCEPTION CATALOG '00000' MESSAGE 10012 VALUES ('Error en homologacion de constante en con valor: ' || NOMBRE_CONST);
+    ELSE 		
+    	RETURN homolog;
+    END IF;
+END;
+/****************************************************************
+ * 	FUNCTION GetRepetitiveTreeXPath
+ *	obtiene un arbol repetitivo
+ *	IN TreeReference : arbol en donde se va a retornar el árbol
+ * 	IN FieldPath : ruta del campo en el arbol de referencia.
+ *				los campos deben estar separados por punto
+****************************************************************/
+CREATE FUNCTION GetRepetitiveTreeXPath(INOUT TreeReference REFERENCE, IN FieldPath CHARACTER )
+BEGIN
+		-- carácter de separador del FieldPath
+		DECLARE separator CHARACTER '.';
+		-- representación del árbol de referencia
+		DECLARE cursor    	ROW;
+		-- constante de la posición inicial
+		DECLARE ini 		INTEGER 1;
+		-- posición del separador inicial
+		DECLARE posi INTEGER position(separator IN FieldPath);
+
+		WHILE posi <> 0 DO
+
+			DECLARE token 	CHARACTER SUBSTRING(FieldPath from ini for posi - ini);
+			MOVE TreeReference FIRSTCHILD TYPE Name NAMESPACE * NAME token;
+			SET FieldPath = SUBSTRING(FieldPath FROM posi+1);
+			SET posi = POSITION(separator IN FieldPath);
+
+		END WHILE;
+
+		SET cursor.{FieldPath}[] = SELECT *
+									 FROM TreeReference.{FieldPath}[] AS rep;
+		SET TreeReference = cursor;
+END;
+
+
+	/****************************************************************
+ * 	FUNCTION searchQueueAssociateServices
+ *	Seta la cola de requestQueue del servicio asociado y la cola de ReplyToQueue
+ *	INOUT refMsgOut : arbol en donde se va a retornar los cambios
+ * 	IN servicesId : serviceId del servicio compuesto
+ * 	IN servicesIdAssociate : serviceId del servicio Asociado
+ * 	IN order : orden en q es invocado el servicio asociado
+ * 	INOUT lcEnv : referncia del localEnviroment
+****************************************************************/
+CREATE FUNCTION  searchQueueAssociateServices( INOUT refMsgOut REFERENCE, IN servicesId CHARACTER, IN servicesIdAssociate CHARACTER, IN order CHARACTER, INOUT lcEnv REFERENCE, IN UDPRequestQueue CHARACTER)
+	BEGIN
+		
+    CREATE FIELD lcEnv.Destination.MQ.DestinationData;
+    DECLARE serviceAssociateTemp CHARACTER '';
+    FOR refenpoint AS refMsgOut.Header.requestData.endpointReference[] DO
+    	IF refenpoint.serviceId = servicesId THEN
+    			FOR refAssociServices AS refenpoint.associatedService[] DO
+    				IF servicesIdAssociate <> '' THEN
+    					IF refAssociServices.invocationOrder = order AND refAssociServices.associatedServiceId = servicesIdAssociate THEN
+    						SET serviceAssociateTemp = FIELDVALUE(refAssociServices.associatedServiceId); 
+    					END IF;
+    				ELSE
+    					IF refAssociServices.invocationOrder = order THEN
+    						SET serviceAssociateTemp = FIELDVALUE(refAssociServices.associatedServiceId); 
+    					END IF;
+    				END IF;
+    			END FOR;
+    			
+    			FOR refenpoint2 AS refMsgOut.Header.requestData.endpointReference[] DO
+    				IF refenpoint2.serviceId = serviceAssociateTemp THEN
+    					SET lcEnv.Destination.MQ.DestinationData.queueName = FIELDVALUE(refenpoint2.routingData.requestQueueEndpoint.requestQueue); 
+    				END IF;
+    			END FOR;
+    			SET refMsgOut.Header.internalRoutingData.replyToQueue.queueName = refenpoint.routingData.responseQueueEndpoint.responseQueue;
+    	END IF;
+    END FOR;
+	END;
+	
+/****************************************************************
+ * 	FUNCTION searchEndpointAssociateServices
+ *	busca el endPoint del servicio asociado   
+ *	INOUT refMsgOut : arbol en donde se va a retornar los cambios
+ * 	IN servicesId : serviceId del servicio compuesto
+ * 	IN servicesIdAssociate : serviceId del servicio Asociado
+ * 	IN order : orden en q es invocado el servicio asociado
+ * 	INOUT lcEnv : referncia del localEnviroment
+****************************************************************/
+CREATE FUNCTION  searchEndpointAssociateServices( INOUT refMsgOut REFERENCE, IN servicesId CHARACTER, IN servicesIdAssociate CHARACTER, IN order CHARACTER, INOUT lcEnv REFERENCE)
+	BEGIN
+		
+    CREATE FIELD lcEnv.Destination.MQ.DestinationData;
+    DECLARE serviceAssociateTemp CHARACTER '';
+    
+    FOR refenpoint AS refMsgOut.Header.requestData.endpointReference[] DO
+    	IF refenpoint.serviceId = servicesId THEN
+    			FOR refAssociServices AS refenpoint.associatedService[] DO
+    				IF servicesIdAssociate <> '' THEN
+    					IF refAssociServices.invocationOrder = order AND refAssociServices.associatedServiceId = servicesIdAssociate THEN
+    						SET serviceAssociateTemp = refAssociServices.associatedServiceId; 
+    					END IF;
+    				ELSE
+    					IF refAssociServices.invocationOrder = order THEN
+    						SET serviceAssociateTemp = refAssociServices.associatedServiceId; 
+    					END IF;
+    				END IF;
+    			END FOR;
+    			
+    			FOR refenpoint2 AS refMsgOut.Header.requestData.endpointReference[] DO
+    				IF refenpoint2.serviceId = serviceAssociateTemp THEN
+    					SET refMsgOut.Header.requestData.endpointReference[1].routingData.endpoint = refenpoint2.routingData.endpoint; 
+    				END IF;
+    			END FOR;
+    	END IF;
+    END FOR;
+	END;
+	
+CREATE FUNCTION  HomologationTypeDescr(IN VAL_IN CHARACTER,IN ID_DOMINIO CHARACTER,IN SIS_ORI CHARACTER, IN SIS_DES CHARACTER, IN HOMOLOGATION_TABLE REFERENCE)
+	RETURNS CHARACTER
+	BEGIN  	
+    DECLARE result ROW;
+    DECLARE nomTransaccion CHARACTER;
+    DECLARE homolog CHARACTER;	
+    SET result.datos  = THE(			   
+		   SELECT T.DESCRIPCION
+		   FROM HOMOLOGATION_TABLE.row[] AS T 
+		   WHERE T.ID_DOMINIO =ID_DOMINIO
+		   AND T.VAL_IN = VAL_IN
+		   AND T.SISTEMA_ORIGEN = SIS_ORI
+		   AND T.SISTEMA_DESTINO =SIS_DES
+		   );		   
+	SET nomTransaccion = result.datos.DESCRIPCION;
+    SET homolog = COALESCE(FIELDVALUE(result.datos.DESCRIPCION),'null');
+    IF 	homolog = 'null' THEN
+    	THROW USER EXCEPTION CATALOG '00000' MESSAGE 10012 VALUES ('Error en homologacion en componente en Dominio: '|| ID_DOMINIO);
+    ELSE 		
+    	RETURN homolog;
+    END IF;
+	END;
+	
+/****************************************************************
+ * 	FUNCTION SoapAction
+ *	busca el SoapAction enviado en MessageContex, si esta lo reemplaza sino lo crea como ultimo hijo   
+ * 	IN refHeaderIn : Estructura del Header que contienen los propertys del MessageContext 
+ * 	IN ID_SOAPACTION : Valor del sopa action recibdo a travez de la Variable UDP creada en el Serv.
+****************************************************************/
+	
+CREATE FUNCTION SoapAction(IN refHeaderIn REFERENCE,IN ID_SOAPACTION CHARACTER )
+BEGIN
+	DECLARE count Int 0;
+		SET count = CARDINALITY(refHeaderIn.messageContext.property[]); 
+		DECLARE i INTEGER 1;  
+		DECLARE flag CHARACTER '0';
+	    
+	    
+	    WHILE (i <= count) DO
+			IF (refHeaderIn.messageContext.property[i].key = 'SOAPAction') THEN	
+			 	SET refHeaderIn.messageContext.property[i].key= 'SOAPAction';
+				SET refHeaderIn.messageContext.property[i].type= 'HTTPRequest';
+			 	SET refHeaderIn.messageContext.property[i].value= ID_SOAPACTION;
+			 	SET flag = '1';
+			END IF;	
+			SET i = i + 1;
+		END WHILE;
+		IF (flag = '0') THEN
+				CREATE LASTCHILD OF refHeaderIn.messageContext NAME 'property'; 
+				DECLARE refProperty REFERENCE TO refHeaderIn.messageContext.property[i];
+				SET refProperty.key = 'SOAPAction';
+				SET refProperty.type = 'HTTPRequest';
+				SET refProperty.value = ID_SOAPACTION;
+			END IF;
+END;	
+	
+/****************************************************************
+ * 	FUNCTION putHeaderInMessageContext
+ *	busca el header enviado en MessageContex, si esta lo reemplaza sino lo crea como ultimo hijo   
+ * 	IN refHeaderIn : Estructura del Header que contienen los propertys del MessageContext 
+ * 	IN HEADERVALUE : Valor del HEADER recibdo
+ * 	IN HEADERKEY   : Nombre de la header a subir
+****************************************************************/
+	
+CREATE FUNCTION putHeaderInMessageContext(IN refHeaderIn REFERENCE,IN HEADERVALUE CHARACTER,IN HEADERKEY CHARACTER)
+BEGIN
+	DECLARE count Int 0;
+		SET count = CARDINALITY(refHeaderIn.messageContext.property[]); 
+		DECLARE i INTEGER 1;  
+		DECLARE flag CHARACTER '0';
+	    
+	    
+	    WHILE (i <= count) DO
+			IF (refHeaderIn.messageContext.property[i].key = HEADERKEY) THEN	
+			 	SET refHeaderIn.messageContext.property[i].key= HEADERKEY;
+				SET refHeaderIn.messageContext.property[i].type= 'HTTPInputHeader';
+			 	SET refHeaderIn.messageContext.property[i].value= HEADERVALUE;
+			 	SET flag = '1';
+			END IF;	
+			SET i = i + 1;
+		END WHILE;
+		IF (flag = '0') THEN
+				CREATE LASTCHILD OF refHeaderIn.messageContext NAME 'property'; 
+				DECLARE refProperty REFERENCE TO refHeaderIn.messageContext.property[i];
+				SET refProperty.key = HEADERKEY;
+				SET refProperty.type = 'HTTPInputHeader';
+				SET refProperty.value = HEADERVALUE;
+			END IF;
+END;	
+	
+	

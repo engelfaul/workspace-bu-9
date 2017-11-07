@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MessageBroker name="SVC_PA_ConsultaClientesPorUsuario">
+  <XSDCollection
+    href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/org/w3/www/xml/_1998/namespace/xml.xsd"
+    prefix="xml" targetNamespace="http://www.w3.org/XML/1998/namespace">
+    <attribute
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/org/w3/www/xml/_1998/namespace/xml.xsd#//lang;XSDAttributeDeclaration" name="lang"/>
+    <attribute
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/org/w3/www/xml/_1998/namespace/xml.xsd#//space;XSDAttributeDeclaration=1" name="space"/>
+    <attribute
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/org/w3/www/xml/_1998/namespace/xml.xsd#//base;XSDAttributeDeclaration=2" name="base"/>
+    <attributeGroup
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/org/w3/www/xml/_1998/namespace/xml.xsd#//specialAttrs;XSDAttributeGroupDefinition" name="specialAttrs"/>
+  </XSDCollection>
+  <XSDCollection
+    href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/ConsultaClientesPorUsuario.xsd"
+    prefix="tns" targetNamespace="http://www.davivienda.com/xml/ConsultaClientesPorUsuario">
+    <element
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/ConsultaClientesPorUsuario.xsd#//ConsultaClientesPorUsuario;XSDElementDeclaration"
+      name="ConsultaClientesPorUsuario" type="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://www.davivienda.com/xml/ConsultaClientesPorUsuario}ConsultaClientesPorUsuarioType"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/ConsultaClientesPorUsuario.xsd#//ConsultaClientesPorUsuarioResponse;XSDElementDeclaration=1"
+      name="ConsultaClientesPorUsuarioResponse" type="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://www.davivienda.com/xml/ConsultaClientesPorUsuario}ConsultaClientesPorUsuarioResponseType"/>
+    <complexType
+      baseType="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/ConsultaClientesPorUsuario.xsd#//ConsultaClientesPorUsuarioType;XSDComplexTypeDefinition" name="ConsultaClientesPorUsuarioType"/>
+    <complexType
+      baseType="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/ConsultaClientesPorUsuario.xsd#//RequestType;XSDComplexTypeDefinition=1" name="RequestType"/>
+    <complexType
+      baseType="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/ConsultaClientesPorUsuario.xsd#//DataHeaderReqType;XSDComplexTypeDefinition=2" name="DataHeaderReqType"/>
+    <complexType
+      baseType="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/ConsultaClientesPorUsuario.xsd#//DataReqType;XSDComplexTypeDefinition=3" name="DataReqType"/>
+    <complexType
+      baseType="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/ConsultaClientesPorUsuario.xsd#//ConsultaClientesPorUsuarioResponseType;XSDComplexTypeDefinition=4" name="ConsultaClientesPorUsuarioResponseType"/>
+    <complexType
+      baseType="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/ConsultaClientesPorUsuario.xsd#//ResponseType;XSDComplexTypeDefinition=5" name="ResponseType"/>
+    <complexType
+      baseType="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/ConsultaClientesPorUsuario.xsd#//DataHeaderRespType;XSDComplexTypeDefinition=6" name="DataHeaderRespType"/>
+    <complexType
+      baseType="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/ConsultaClientesPorUsuario.xsd#//DataRespType;XSDComplexTypeDefinition=7" name="DataRespType"/>
+    <complexType
+      baseType="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/ConsultaClientesPorUsuario.xsd#//ClientesRepRespType;XSDComplexTypeDefinition=8" name="ClientesRepRespType"/>
+    <complexType
+      baseType="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/ConsultaClientesPorUsuario.xsd#//ClienteRespType;XSDComplexTypeDefinition=9" name="ClienteRespType"/>
+  </XSDCollection>
+  <XSDCollection
+    href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/ConsultaClientesPorUsuarioService_1.xsd"
+    prefix="tns" targetNamespace="http://www.davivienda.com/xml/ConsultaClientesPorUsuario">
+    <include
+      name="/SVC_PA_ConsultaClientesPorUsuario/ConsultaClientesPorUsuario.xsd" targetNamespace="http://www.davivienda.com/xml/ConsultaClientesPorUsuario"/>
+  </XSDCollection>
+  <XSDCollection
+    href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/soap.xsd"
+    prefix="" targetNamespace="">
+    <element
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/soap.xsd#//SOAP_Domain_Msg;XSDElementDeclaration"
+      name="SOAP_Domain_Msg" type="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{}SOAP_Msg_type"/>
+    <complexType
+      baseType="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/soap.xsd#//MIME_Headers_type;XSDComplexTypeDefinition" name="MIME_Headers_type"/>
+    <complexType
+      baseType="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/soap.xsd#//Attachment_type;XSDComplexTypeDefinition=1" name="Attachment_type"/>
+    <complexType
+      baseType="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/soap.xsd#//SOAP_Msg_type;XSDComplexTypeDefinition=2" name="SOAP_Msg_type"/>
+    <group
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/soap.xsd#//MIME_header_fields;XSDModelGroupDefinition" name="MIME_header_fields"/>
+  </XSDCollection>
+  <XSDCollection
+    href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/org/xmlsoap/schemas/soap/envelope/soapenv11.xsd"
+    prefix="tns" targetNamespace="http://schemas.xmlsoap.org/soap/envelope/">
+    <import name="IBMdefined/org/w3/www/xml/_1998/namespace/xml.xsd" targetNamespace="http://www.w3.org/XML/1998/namespace"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/org/xmlsoap/schemas/soap/envelope/soapenv11.xsd#//Envelope;XSDElementDeclaration"
+      name="Envelope" type="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://schemas.xmlsoap.org/soap/envelope/}Envelope"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/org/xmlsoap/schemas/soap/envelope/soapenv11.xsd#//Header;XSDElementDeclaration=1"
+      name="Header" type="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://schemas.xmlsoap.org/soap/envelope/}Header"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/org/xmlsoap/schemas/soap/envelope/soapenv11.xsd#//Body;XSDElementDeclaration=2"
+      name="Body" type="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://schemas.xmlsoap.org/soap/envelope/}Body"/>
+    <element
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/org/xmlsoap/schemas/soap/envelope/soapenv11.xsd#//Fault;XSDElementDeclaration=3"
+      name="Fault" type="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://schemas.xmlsoap.org/soap/envelope/}Fault"/>
+    <complexType
+      baseType="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/org/xmlsoap/schemas/soap/envelope/soapenv11.xsd#//Envelope;XSDComplexTypeDefinition" name="Envelope"/>
+    <complexType
+      baseType="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/org/xmlsoap/schemas/soap/envelope/soapenv11.xsd#//Header;XSDComplexTypeDefinition=1" name="Header"/>
+    <complexType
+      baseType="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/org/xmlsoap/schemas/soap/envelope/soapenv11.xsd#//Body;XSDComplexTypeDefinition=2" name="Body"/>
+    <complexType
+      baseType="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/org/xmlsoap/schemas/soap/envelope/soapenv11.xsd#//Fault;XSDComplexTypeDefinition=3" name="Fault"/>
+    <complexType
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/org/xmlsoap/schemas/soap/envelope/soapenv11.xsd#//FaultString;XSDComplexTypeDefinition=4" name="FaultString"/>
+    <complexType
+      baseType="mlib://SVC_PA_ConsultaClientesPorUsuario#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType"
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/org/xmlsoap/schemas/soap/envelope/soapenv11.xsd#//detail;XSDComplexTypeDefinition=5" name="detail"/>
+    <simpleType
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/org/xmlsoap/schemas/soap/envelope/soapenv11.xsd#//encodingStyle;XSDSimpleTypeDefinition"
+      name="encodingStyle" variety="list"/>
+    <attribute
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/org/xmlsoap/schemas/soap/envelope/soapenv11.xsd#//mustUnderstand;XSDAttributeDeclaration" name="mustUnderstand"/>
+    <attribute
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/org/xmlsoap/schemas/soap/envelope/soapenv11.xsd#//actor;XSDAttributeDeclaration=1" name="actor"/>
+    <attribute
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/org/xmlsoap/schemas/soap/envelope/soapenv11.xsd#//encodingStyle;XSDAttributeDeclaration=2" name="encodingStyle"/>
+    <attributeGroup
+      href="platform:/resource/SVC_PA_ConsultaClientesPorUsuario/IBMdefined/org/xmlsoap/schemas/soap/envelope/soapenv11.xsd#//encodingStyle;XSDAttributeGroupDefinition" name="encodingStyle"/>
+  </XSDCollection>
+</MessageBroker>

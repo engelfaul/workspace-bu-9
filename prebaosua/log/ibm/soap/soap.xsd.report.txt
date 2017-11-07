@@ -1,0 +1,12 @@
+
+
+Se está importando el archivo: C:\Program Files (x86)\IBM\IntegrationToolkit90\configuration\org.eclipse.osgi\bundles\1470\1\.cp\ibm\soap\soap.xsd
+
+
+Tiempo transcurrido para procesar este archivo de definición de mensajes: 0.258 segundos
+Número de avisos para este archivo de definición de mensajes: 0
+
+
+Número de archivos procesados: 1
+
+
